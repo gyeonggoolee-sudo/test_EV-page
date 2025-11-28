@@ -86,4 +86,56 @@ $(document).ready(function() {
     } else {
         $('#div_jnInfo').hide();
     }
+
+    // 사회계층 여부' 라디오 버튼 변경 시 이벤트 처리
+    $('input[name="social_yn"]').on('change', function() {
+        if (this.value === 'Y') {
+            $('#social_kind').prop('disabled', false);
+        } else {
+            $('#social_kind').prop('disabled', true);
+            $('#social_kind').val(''); // 값을 초기화합니다.
+        }
+    });
+
+    // 페이지 로드 시 '사회계층 여부' 초기 상태 확인
+    if ($('input[name="social_yn"]:checked').val() === 'N') {
+        $('#social_kind').prop('disabled', true);
+    }
+
+    // '사회계층 유형' 변경 시 이벤트 처리
+    $('#social_kind').on('change', function() {
+        if ($(this).val() === '3') {
+            $('#children_cnt').show();
+        } else {
+            $('#children_cnt').hide();
+            $('#children_cnt').val(''); // 값을 초기화합니다.
+        }
+    });
+
+    // 페이지 로드 시 '사회계층 유형' 초기 상태 확인
+    if ($('#social_kind').val() !== '3') {
+        $('#children_cnt').hide();
+    }
+
+    // 우선순위 배정·집행 선택을 업데이트하는 함수
+    function updatePrioritySelection() {
+        const isImproveFd = $('input[name="improve_fd_yn"]:checked').val() === 'Y';
+        const isFirstBuy = $('input[name="first_buy_yn"]:checked').val() === 'Y';
+        const isSocial = $('input[name="social_yn"]:checked').val() === 'Y';
+
+        if (isImproveFd || isFirstBuy || isSocial) {
+            $('#priority_type1').prop('disabled', false).prop('checked', true);
+        } else {
+            $('#priority_type1').prop('disabled', true);
+            $('#priority_type4').prop('checked', true);
+        }
+    }
+
+    // 조건 변경 시 우선순위 업데이트
+    $('input[name="improve_fd_yn"], input[name="first_buy_yn"], input[name="social_yn"]').on('change', function() {
+        updatePrioritySelection();
+    });
+
+    // 페이지 로드 시 초기 상태 설정
+    updatePrioritySelection();
 });

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>신청서 작성</title>
-    
+
     <!-- CSS 파일 -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
 </head>
+
 <body>
     <header class="container-fluid header-wrap">
         <div class="top-title">
@@ -19,7 +21,8 @@
                 <div class="right-wrap">
                     <div class="user-wrap">
                         <div class="user-name">
-                            <img class="user-icon" src="{{ url_for('static', filename='images/icon_account.png') }}" alt="사용자 아이콘">
+                            <img class="user-icon" src="{{ url_for('static', filename='images/icon_account.png') }}"
+                                alt="사용자 아이콘">
                             사용자 님
                         </div>
                         <button class="btn-black">마이페이지</button>
@@ -90,7 +93,8 @@
                                             <td>2025</td>
                                             <th>지자체</th>
                                             <td>
-                                                <input type="text" class="text" name="local_nm" id="local_nm" value="성남시" readonly style="width: 52%;">
+                                                <input type="text" class="text" name="local_nm" id="local_nm"
+                                                    value="성남시" readonly style="width: 52%;">
                                             </td>
                                             <th>신청단계</th>
                                             <td>
@@ -114,7 +118,8 @@
                                             <td></td>
                                             <th>계약일자</th>
                                             <td>
-                                                <input type="text" class="datepicker" style="width: 65%" id="contract_day" name="contract_day" value="" readonly>
+                                                <input type="text" class="datepicker" style="width: 65%"
+                                                    id="contract_day" name="contract_day" value="" readonly>
                                             </td>
                                         </tr>
                                         <tr>
@@ -156,13 +161,16 @@
                                             <th>신청 유형</th>
                                             <td>
                                                 <div class="form-select">
-                                                    <select name="req_kind" id="req_kind" title="신청 유형" class="myselector w60p select">
+                                                    <select name="req_kind" id="req_kind" title="신청 유형"
+                                                        class="myselector w60p select">
                                                         <option value="">==선택==</option>
                                                         <option value="P">개인</option>
                                                         <option value="G">단체</option>
                                                     </select>
                                                     &nbsp;&nbsp;
-                                                    <label class="p_birth2" id="profit_yn_label" style="display: none;">비영리단체<input type="checkbox" id="profit_yn1" value=""></label>
+                                                    <label class="p_birth2" id="profit_yn_label"
+                                                        style="display: none;">비영리단체<input type="checkbox"
+                                                            id="profit_yn1" value=""></label>
                                                     <input type="hidden" id="profit_yn" name="profit_yn" value="N">
                                                 </div>
                                             </td>
@@ -172,12 +180,15 @@
                                             <td>
                                                 <div class="td_lease" style="display:none">
                                                     <div class="form-select">
-                                                        <input type="radio" class="lease_kind" name="lease_kind" id="lease_kind1" value="P">
+                                                        <input type="radio" class="lease_kind" name="lease_kind"
+                                                            id="lease_kind1" value="P">
                                                         <label for="lease_kind1">개인</label>
-                                                        <input type="radio" class="lease_kind" name="lease_kind" id="lease_kind2" value="G">
+                                                        <input type="radio" class="lease_kind" name="lease_kind"
+                                                            id="lease_kind2" value="G">
                                                         <label for="lease_kind2">단체</label>
                                                         <div style="display:none">
-                                                            <input type="radio" class="lease_kind" name="lease_kind" id="lease_kind3" value="">
+                                                            <input type="radio" class="lease_kind" name="lease_kind"
+                                                                id="lease_kind3" value="">
                                                             <label for="lease_kind3">없음</label>
                                                         </div>
                                                     </div>
@@ -189,9 +200,12 @@
                                             </td>
                                         </tr>
                                         <tr class="tr_grp_reqst" style="display: none;" height="60">
-                                            <th><p><label class="reqInput1">*</label>신청구분</p></th>
+                                            <th>
+                                                <p><label class="reqInput1">*</label>신청구분</p>
+                                            </th>
                                             <td colspan="5">
-                                                <select name="grp_reqst_se" id="grp_reqst_se" title="구분" class="myselector w10p">
+                                                <select name="grp_reqst_se" id="grp_reqst_se" title="구분"
+                                                    class="myselector w10p">
                                                     <option value="">==선택==</option>
                                                     <option value="01">공공기관</option>
                                                     <option value="02">지자체</option>
@@ -202,21 +216,26 @@
                                         <tr>
                                             <th>
                                                 <p class="p_birth1" style=""><label class="reqInput1">*</label>성명</p>
-                                                <p class="p_birth2" style="display: none;"><label class="reqInput1">*</label>기관명</p>
+                                                <p class="p_birth2" style="display: none;"><label
+                                                        class="reqInput1">*</label>기관명</p>
                                             </th>
                                             <td>
-                                                <input type="text" class="text w90p" id="req_nm" name="req_nm" value="" maxlength="50" title="성명(기관명)" checknull="true">
+                                                <input type="text" class="text w90p" id="req_nm" name="req_nm" value=""
+                                                    maxlength="50" title="성명(기관명)" checknull="true">
                                             </td>
                                             <th>
                                                 <p class="p_birth1" style=""><label class="reqInput1">*</label>생년월일</p>
-                                                <p class="p_ceo" style="display: none;"><label class="reqInput1">*</label>대표자</p>
+                                                <p class="p_ceo" style="display: none;"><label
+                                                        class="reqInput1">*</label>대표자</p>
                                             </th>
                                             <td>
                                                 <div class="p_birth1" style="">
-                                                    <input type="text" class="datepickerBirth" style="width: 65%" id="birth1" value="" title="생년월일" readonly>
+                                                    <input type="text" class="datepickerBirth" style="width: 65%"
+                                                        id="birth1" value="" title="생년월일" readonly>
                                                 </div>
                                                 <div class="p_ceo" style="display: none;">
-                                                    <input type="text" class="text" id="ceo" name="ceo" value="" maxlength="50" title="대표자">
+                                                    <input type="text" class="text" id="ceo" name="ceo" value=""
+                                                        maxlength="50" title="대표자">
                                                 </div>
                                                 <input type="hidden" class="text" id="birth" name="birth" value="">
                                             </td>
@@ -239,31 +258,38 @@
                                         <tr class="tr_public" style="" id="tr_pri_business" height="60">
                                             <th>
                                                 <p class="p_pri_busi" style="">개인사업자</p>
-                                                <p class="p_birth2" style="display: none;"><label class="reqInput1">*</label>법인등록번호</p>
+                                                <p class="p_birth2" style="display: none;"><label
+                                                        class="reqInput1">*</label>법인등록번호</p>
                                             </th>
                                             <td>
                                                 <div class="p_pri_busi" style="">
                                                     <input type="checkbox" id="pri_business_yn1" value="">
-                                                    <input type="hidden" id="pri_business_yn" name="pri_business_yn" value="N">
+                                                    <input type="hidden" id="pri_business_yn" name="pri_business_yn"
+                                                        value="N">
                                                 </div>
                                                 <div class="p_birth2" style="display: none;">
-                                                    <input type="text" class="text" id="birth2" name="birth2" value="" placeholder="000000-0000000" maxlength="14" title="법인등록번호">
+                                                    <input type="text" class="text" id="birth2" name="birth2" value=""
+                                                        placeholder="000000-0000000" maxlength="14" title="법인등록번호">
                                                 </div>
                                             </td>
                                             <th>
-                                                <p class="p_pri_busi_1" style="display: none;"><label class="reqInput1">*</label>사업자등록번호</p>
+                                                <p class="p_pri_busi_1" style="display: none;"><label
+                                                        class="reqInput1">*</label>사업자등록번호</p>
                                             </th>
                                             <td>
                                                 <div class="p_pri_busi_1" style="display: none;">
-                                                    <input type="text" class="text" id="busi_no" name="busi_no" value="" placeholder="000-00-00000" maxlength="12" title="사업자등록번호">
+                                                    <input type="text" class="text" id="busi_no" name="busi_no" value=""
+                                                        placeholder="000-00-00000" maxlength="12" title="사업자등록번호">
                                                 </div>
                                             </td>
                                             <th>
-                                                <p class="p_pri_busi_1" style="display: none;"><label class="reqInput1">*</label>개인사업장명</p>
+                                                <p class="p_pri_busi_1" style="display: none;"><label
+                                                        class="reqInput1">*</label>개인사업장명</p>
                                             </th>
                                             <td>
                                                 <div class="p_pri_busi_1" style="display: none;">
-                                                    <input type="text" class="text" id="pri_busi_nm" name="pri_busi_nm" value="" maxlength="50" title="개인사업장명">
+                                                    <input type="text" class="text" id="pri_busi_nm" name="pri_busi_nm"
+                                                        value="" maxlength="50" title="개인사업장명">
                                                 </div>
                                             </td>
                                         </tr>
@@ -271,41 +297,56 @@
                                             <th>신청차종</th>
                                             <td>
                                                 <div class="form-select w90p">
-                                                    <select name="model_cd" id="model_cd" title="신청차종" class="myselector select">
+                                                    <select name="model_cd" id="model_cd" title="신청차종"
+                                                        class="myselector select">
                                                         <option value="">=======선택=======</option>
                                                         <option value="MODEL3LR_C">Model 3 Long Range / 일반승용</option>
                                                         <option value="MODEL3P_C">Model 3 Performance / 일반승용</option>
                                                         <option value="MODEL3RWD">Model 3 RWD / 일반승용</option>
                                                         <option value="NEW_MODELYRWD">New Model Y RWD / 일반승용</option>
-                                                        <option value="NEW_MODELYLR2">New Model Y Long Range(배터리변경) / 일반승용</option>
-                                                        <option value="MODEL3LR_C1">Model 3 Long Range(배터리변경) / 일반승용</option>
+                                                        <option value="NEW_MODELYLR2">New Model Y Long Range(배터리변경) /
+                                                            일반승용</option>
+                                                        <option value="MODEL3LR_C1">Model 3 Long Range(배터리변경) / 일반승용
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </td>
                                             <th>신청대수</th>
                                             <td>
-                                                <input type="text" class="text intCheck" id="req_cnt" name="req_cnt" value="" maxlength="8" title="신청대수" checknull="true">
+                                                <input type="text" class="text intCheck" id="req_cnt" name="req_cnt"
+                                                    value="" maxlength="8" title="신청대수" checknull="true">
                                             </td>
                                             <th>출고예정일자</th>
                                             <td>
-                                                <input type="text" class="datepicker" style="width: 65%" id="delivery_sch_day" name="delivery_sch_day" value="" title="출고예정일자" readonly checknull="true">
+                                                <input type="text" class="datepicker" style="width: 65%"
+                                                    id="delivery_sch_day" name="delivery_sch_day" value=""
+                                                    title="출고예정일자" readonly checknull="true">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><label class="reqInput1">*</label>주소<br>(등록주소지)</th>
                                             <td colspan="3">
-                                                <input type="text" class="text w100" name="zipno" id="zipno" value="" title="(필수입력)우편번호" readonly="readonly">
-                                                <button type="button" class="type1 btn-black" onclick="popupAddress(); return false;">
+                                                <input type="text" class="text w100" name="zipno" id="zipno" value=""
+                                                    title="(필수입력)우편번호" readonly="readonly">
+                                                <button type="button" class="type1 btn-black"
+                                                    onclick="popupAddress(); return false;">
                                                     주소입력
                                                 </button>
-                                                    
-                                                <input style="width:95%;" type="text" class="text mt5" id="addr" name="addr" value="" maxlength="200" title="주소(등록주소지)" checknull="true" readonly="readonly"><br>
-                                                <input style="width:95%;" type="text" class="text mt5" id="addr_detail" name="addr_detail" value="" maxlength="300" title="주소(등록주소지)" checknull="true">
+
+                                                <input style="width:95%;" type="text" class="text mt5" id="addr"
+                                                    name="addr" value="" maxlength="200" title="주소(등록주소지)"
+                                                    checknull="true" readonly="readonly"><br>
+                                                <input style="width:95%;" type="text" class="text mt5" id="addr_detail"
+                                                    name="addr_detail" value="" maxlength="300" title="주소(등록주소지)"
+                                                    checknull="true">
                                             </td>
                                             <th>보조금신청액</th>
                                             <td>
-                                                <input type="text" class="text intCheck" id="req_total_amt_1" name="req_total_amt_1" value="" maxlength="12" title="신청 총 금액" readonly="readonly" style="width:70%;"> 원
-                                                <input type="hidden" id="req_total_amt" name="req_total_amt" value="" maxlength="12" title="신청 총 금액" readonly="readonly">
+                                                <input type="text" class="text intCheck" id="req_total_amt_1"
+                                                    name="req_total_amt_1" value="" maxlength="12" title="신청 총 금액"
+                                                    readonly="readonly" style="width:70%;"> 원
+                                                <input type="hidden" id="req_total_amt" name="req_total_amt" value=""
+                                                    maxlength="12" title="신청 총 금액" readonly="readonly">
                                                 <br>
                                                 <p class="req_total_amt_han"></p>
                                             </td>
@@ -314,16 +355,22 @@
                                             <th><label class="reqInput1">*</label>연락처</th>
                                             <td colspan="5">
                                                 <div style="width:33%; float:left;">
-                                                    <label class="reqInput2">*</label>전화 : 
-                                                    <input type="text" class="text" id="phone" name="phone" value="" maxlength="30" title="전화번호" checknull="true" style="width: 70%;">
+                                                    <label class="reqInput2">*</label>전화 :
+                                                    <input type="text" class="text" id="phone" name="phone" value=""
+                                                        maxlength="30" title="전화번호" checknull="true"
+                                                        style="width: 70%;">
                                                 </div>
                                                 <div style="width:33%; float:left;">
-                                                    <label class="reqInput2">*</label>휴대폰 : 
-                                                    <input type="text" class="text" id="mobile" name="mobile" value="" maxlength="13" placeholder="010-0000-0000" title="휴대폰" checknull="true" style="width: 70%;">
+                                                    <label class="reqInput2">*</label>휴대폰 :
+                                                    <input type="text" class="text" id="mobile" name="mobile" value=""
+                                                        maxlength="13" placeholder="010-0000-0000" title="휴대폰"
+                                                        checknull="true" style="width: 70%;">
                                                 </div>
                                                 <div style="width:33%; float:left;">
-                                                    <label class="reqInput2">*</label>이메일 : 
-                                                    <input type="text" class="text" id="email" name="email" value="" maxlength="500" title="EMAIL" checknull="true" style="width: 70%;">
+                                                    <label class="reqInput2">*</label>이메일 :
+                                                    <input type="text" class="text" id="email" name="email" value=""
+                                                        maxlength="500" title="EMAIL" checknull="true"
+                                                        style="width: 70%;">
                                                 </div>
                                             </td>
                                         </tr>
@@ -350,8 +397,12 @@
                                             <th>공동명의자 수</th>
                                             <td>
                                                 <div style="display: flex; align-items: center;">
-                                                    <input type="text" class="text intCheck1" name="jn_cnt" id="jn_cnt" value="0" maxlength="8" title="공동명의자 수" style="width: 100px; margin-right: 5px;">
-                                                    <button type="button" class="type1 btn-black" onclick="createNewJointInfo();return false;" style="margin-right: 10px;">
+                                                    <input type="text" class="text intCheck1" name="jn_cnt" id="jn_cnt"
+                                                        value="0" maxlength="8" title="공동명의자 수"
+                                                        style="width: 100px; margin-right: 5px;">
+                                                    <button type="button" class="type1 btn-black"
+                                                        onclick="createNewJointInfo();return false;"
+                                                        style="margin-right: 10px;">
                                                         확인
                                                     </button>
                                                     <label id="l_jnCount" style="">공동명의자 정보가 없습니다.</label>
@@ -379,9 +430,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="jnBody">
-                                        
-                                        
-                                        
+
+
+
                                     </tbody>
                                 </table>
                             </div>
@@ -401,25 +452,30 @@
                                         <tr>
                                             <th>국비</th>
                                             <td>
-                                                <input type="text" class="text" id="req_gamt_1" name="req_gamt_1" value="" readonly style="width:70%;"> 원
+                                                <input type="text" class="text" id="req_gamt_1" name="req_gamt_1"
+                                                    value="" readonly style="width:70%;"> 원
                                                 <input type="hidden" id="req_gamt" name="req_gamt" value="">
                                             </td>
                                             <th>지방비</th>
                                             <td>
-                                                <input type="text" class="text" id="req_lamt_1" name="req_lamt_1" value="" readonly style="width:70%;"> 원
+                                                <input type="text" class="text" id="req_lamt_1" name="req_lamt_1"
+                                                    value="" readonly style="width:70%;"> 원
                                                 <input type="hidden" id="req_lamt" name="req_lamt" value="">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>추가 지방비<br>(예산지급)</th>
                                             <td>
-                                                <input type="text" class="text" id="req_add_lamt_1" name="req_add_lamt_1" value="" readonly style="width:70%;"> 원
+                                                <input type="text" class="text" id="req_add_lamt_1"
+                                                    name="req_add_lamt_1" value="" readonly style="width:70%;"> 원
                                                 <input type="hidden" id="req_add_lamt" name="req_add_lamt" value="">
                                             </td>
                                             <th>추가 지방비<br>(별도지급)</th>
                                             <td>
-                                                <input type="text" class="text" id="ext_req_add_lamt_1" name="ext_req_add_lamt_1" value="" readonly style="width:70%;"> 원
-                                                <input type="hidden" id="ext_req_add_lamt" name="ext_req_add_lamt" value="">
+                                                <input type="text" class="text" id="ext_req_add_lamt_1"
+                                                    name="ext_req_add_lamt_1" value="" readonly style="width:70%;"> 원
+                                                <input type="hidden" id="ext_req_add_lamt" name="ext_req_add_lamt"
+                                                    value="">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -446,18 +502,22 @@
                                             <th>미세먼지 개선효과가<br>높은 차량 구매자 여부</th>
                                             <td>
                                                 <div class="form-select">
-                                                    <input type="radio" name="improve_fd_yn" id="improve_fd_yn1" value="Y">
+                                                    <input type="radio" name="improve_fd_yn" id="improve_fd_yn1"
+                                                        value="Y">
                                                     <label for="improve_fd_yn1">Y</label>
-                                                    <input type="radio" name="improve_fd_yn" id="improve_fd_yn2" value="N" checked>
+                                                    <input type="radio" name="improve_fd_yn" id="improve_fd_yn2"
+                                                        value="N" checked>
                                                     <label for="improve_fd_yn2">N</label>
                                                 </div>
                                             </td>
                                             <th>생애최초 차량 구매자 여부</th>
                                             <td>
                                                 <div class="form-select">
-                                                    <input type="radio" name="first_buy_yn" id="first_buy_yn1" value="Y">
+                                                    <input type="radio" name="first_buy_yn" id="first_buy_yn1"
+                                                        value="Y">
                                                     <label for="first_buy_yn1">Y</label>
-                                                    <input type="radio" name="first_buy_yn" id="first_buy_yn2" value="N" checked>
+                                                    <input type="radio" name="first_buy_yn" id="first_buy_yn2" value="N"
+                                                        checked>
                                                     <label for="first_buy_yn2">N</label>
                                                 </div>
                                             </td>
@@ -468,7 +528,8 @@
                                                 <div class="form-select">
                                                     <input type="radio" name="social_yn" id="social_yn1" value="Y">
                                                     <label for="social_yn1">Y</label>
-                                                    <input type="radio" name="social_yn" id="social_yn2" value="N" checked>
+                                                    <input type="radio" name="social_yn" id="social_yn2" value="N"
+                                                        checked>
                                                     <label for="social_yn2">N</label>
                                                 </div>
                                             </td>
@@ -485,6 +546,13 @@
                                                         <option value="6">소상공인</option>
                                                         <option value="9">기타 등</option>
                                                     </select>
+                                                    <select class="select" name="children_cnt" id="children_cnt"
+                                                        style="width: 100px; display: none; margin-left: 5px;">
+                                                        <option value="" selected="selected">===선택===</option>
+                                                        <option value="2">2자녀</option>
+                                                        <option value="3">3자녀</option>
+                                                        <option value="4">4자녀 이상</option>
+                                                    </select>
                                                 </div>
                                             </td>
                                         </tr>
@@ -494,16 +562,19 @@
                                                 <div class="form-select">
                                                     <input type="radio" name="exchange_yn" id="exchange_yn1" value="Y">
                                                     <label for="exchange_yn1">Y</label>
-                                                    <input type="radio" name="exchange_yn" id="exchange_yn2" value="N" checked>
+                                                    <input type="radio" name="exchange_yn" id="exchange_yn2" value="N"
+                                                        checked>
                                                     <label for="exchange_yn2">N</label>
                                                 </div>
                                             </td>
                                             <th>어린이 통학차량용 구매자 여부</th>
                                             <td>
                                                 <div class="form-select">
-                                                    <input type="radio" name="school_bus_yn" id="school_bus_yn1" value="Y">
+                                                    <input type="radio" name="school_bus_yn" id="school_bus_yn1"
+                                                        value="Y">
                                                     <label for="school_bus_yn1">Y</label>
-                                                    <input type="radio" name="school_bus_yn" id="school_bus_yn2" value="N" checked>
+                                                    <input type="radio" name="school_bus_yn" id="school_bus_yn2"
+                                                        value="N" checked>
                                                     <label for="school_bus_yn2">N</label>
                                                 </div>
                                             </td>
@@ -512,18 +583,22 @@
                                             <th>공항·항만의 시설 내부 운행 여부</th>
                                             <td>
                                                 <div class="form-select">
-                                                    <input type="radio" name="in_facility_yn" id="in_facility_yn1" value="Y">
+                                                    <input type="radio" name="in_facility_yn" id="in_facility_yn1"
+                                                        value="Y">
                                                     <label for="in_facility_yn1">Y</label>
-                                                    <input type="radio" name="in_facility_yn" id="in_facility_yn2" value="N" checked>
+                                                    <input type="radio" name="in_facility_yn" id="in_facility_yn2"
+                                                        value="N" checked>
                                                     <label for="in_facility_yn2">N</label>
                                                 </div>
                                             </td>
                                             <th>교통사고나 천재지변 등으로 인한 전기차 폐차 여부</th>
                                             <td>
                                                 <div class="form-select">
-                                                    <input type="radio" name="disaster_scrap_yn" id="disaster_scrap_yn1" value="Y">
+                                                    <input type="radio" name="disaster_scrap_yn" id="disaster_scrap_yn1"
+                                                        value="Y">
                                                     <label for="disaster_scrap_yn1">Y</label>
-                                                    <input type="radio" name="disaster_scrap_yn" id="disaster_scrap_yn2" value="N" checked>
+                                                    <input type="radio" name="disaster_scrap_yn" id="disaster_scrap_yn2"
+                                                        value="N" checked>
                                                     <label for="disaster_scrap_yn2">N</label>
                                                 </div>
                                             </td>
@@ -560,11 +635,14 @@
                                             <th>우선순위 배정·집행 선택</th>
                                             <td>
                                                 <div class="form-select">
-                                                    <input type="radio" name="priority_type" id="priority_type1" value="10" disabled>
+                                                    <input type="radio" name="priority_type" id="priority_type1"
+                                                        value="10" disabled>
                                                     <label for="priority_type1">우선순위</label>
-                                                    <input type="radio" name="priority_type" id="priority_type5" value="40" disabled>
+                                                    <input type="radio" name="priority_type" id="priority_type5"
+                                                        value="40" disabled>
                                                     <label for="priority_type5">택시</label>
-                                                    <input type="radio" name="priority_type" id="priority_type4" value="00" checked>
+                                                    <input type="radio" name="priority_type" id="priority_type4"
+                                                        value="00" checked>
                                                     <label for="priority_type4">일반</label>
                                                 </div>
                                             </td>
@@ -602,21 +680,26 @@
                                             <td colspan="3">서울특별시 강남구 테헤란로 134 14층</td>
                                             <th>대리점 연락처</th>
                                             <td>
-                                                <input type="text" class="text" id="seller_phone" name="seller_phone" value="" maxlength="15">
+                                                <input type="text" class="text" id="seller_phone" name="seller_phone"
+                                                    value="" maxlength="15">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>연락담당<br>성명</th>
                                             <td>
-                                                <input type="text" class="text" id="contact_nm" name="contact_nm" value="" maxlength="50">
+                                                <input type="text" class="text" id="contact_nm" name="contact_nm"
+                                                    value="" maxlength="50">
                                             </td>
                                             <th>연락담당<br>휴대폰</th>
                                             <td>
-                                                <input type="text" class="text" id="contact_mobile" name="contact_mobile" value="" placeholder="010-0000-0000" maxlength="13">
+                                                <input type="text" class="text" id="contact_mobile"
+                                                    name="contact_mobile" value="" placeholder="010-0000-0000"
+                                                    maxlength="13">
                                             </td>
                                             <th>제조수입사<br>관리(계약)번호</th>
                                             <td>
-                                                <input type="text" class="text" id="seller_mgrid" name="seller_mgrid" value="" maxlength="20">
+                                                <input type="text" class="text" id="seller_mgrid" name="seller_mgrid"
+                                                    value="" maxlength="20">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -637,13 +720,15 @@
                                         <tr>
                                             <th>신청 메모<br>(지자체 전달)</th>
                                             <td>
-                                                <textarea class="textarea" name="req_memo" id="req_memo" rows="5" cols="65" style="width: 79%" placeholder="지자체 전달 사항"></textarea>
+                                                <textarea class="textarea" name="req_memo" id="req_memo" rows="5"
+                                                    cols="65" style="width: 79%" placeholder="지자체 전달 사항"></textarea>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>신청자 메모<br>(지자체 비공개)</th>
                                             <td>
-                                                <textarea class="textarea" name="seller_memo" id="seller_memo" rows="5" cols="65" style="width: 79%" placeholder="신청자 관리 메모"></textarea>
+                                                <textarea class="textarea" name="seller_memo" id="seller_memo" rows="5"
+                                                    cols="65" style="width: 79%" placeholder="신청자 관리 메모"></textarea>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -675,9 +760,9 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/ui-lightness/jquery-ui.css">
-    
+
     <!-- 커스텀 JavaScript -->
     <script src="{{ url_for('static', filename='js/common.js') }}"></script>
 </body>
-</html>
 
+</html>

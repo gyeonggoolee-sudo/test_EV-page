@@ -626,40 +626,6 @@
                             </div>
                         </div>
 
-                        <!-- 우선순위 배정·집행 섹션 -->
-                        <div class="container-fluid mb25" id="div_priority">
-                            <h1>우선순위 배정·집행</h1>
-                            <div class="table-wrap mb25">
-                                <table id="t_priority">
-                                    <colgroup>
-                                        <col width="20%">
-                                        <col width="30%">
-                                        <col width="20%">
-                                        <col width="30%">
-                                    </colgroup>
-                                    <tbody>
-                                        <tr>
-                                            <th>우선순위 배정·집행 선택</th>
-                                            <td>
-                                                <div class="form-select">
-                                                    <input type="radio" name="priority_type" id="priority_type1"
-                                                        value="10" disabled>
-                                                    <label for="priority_type1">우선순위</label>
-                                                    <input type="radio" name="priority_type" id="priority_type5"
-                                                        value="40" disabled>
-                                                    <label for="priority_type5">택시</label>
-                                                    <input type="radio" name="priority_type" id="priority_type4"
-                                                        value="00" checked>
-                                                    <label for="priority_type4">일반</label>
-                                                </div>
-                                            </td>
-                                            <td colspan="2"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
                         <!-- 제조수입사 정보 섹션 -->
                         <div class="container-fluid mb25" id="div_seller">
                             <h1>제조수입사 정보</h1>
@@ -760,12 +726,15 @@
                                             <th>보조금 구매지원 신청서<br>개인정보 동의 수집이용 및 제3자 위탁 제공 동의서</th>
                                             <td>
                                                 <p class="mt5" style="line-height:22px">
-                                                    <button type="button" class="type1 btn-sky"
-                                                        onclick="alert('첨부파일 등록 기능은 구현되지 않았습니다.');">
+                                                    <button type="button" class="type1 btn-sky allow-edit"
+                                                        onclick="popupAttachFile('A'); return false;">
                                                         첨부파일 등록
                                                     </button>
+                                                    <!-- input type=file은 이제 안 쓰지만, 혹시 모르니 display:none으로 남겨둡니다 -->
+                                                    <input type="file" id="fileInputA" style="display:none;"
+                                                        onchange="handleFiles(this.files, 'A')">
                                                 </p>
-                                                <p class="guide_sty3">* 첨부파일 없음</p>
+                                                <p class="guide_sty3" id="file_desc_A">* 첨부파일 없음</p>
                                             </td>
                                             <th>첨부파일 변경일</th>
                                             <td></td>
@@ -774,12 +743,14 @@
                                             <th>차량 구매계약서</th>
                                             <td>
                                                 <p class="mt5" style="line-height:22px">
-                                                    <button type="button" class="type1 btn-sky"
-                                                        onclick="alert('첨부파일 등록 기능은 구현되지 않았습니다.');">
+                                                    <button type="button" class="type1 btn-sky allow-edit"
+                                                        onclick="popupAttachFile('B'); return false;">
                                                         첨부파일 등록
                                                     </button>
+                                                    <input type="file" id="fileInputB" style="display:none;"
+                                                        onchange="handleFiles(this.files, 'B')">
                                                 </p>
-                                                <p class="guide_sty3">* 첨부파일 없음</p>
+                                                <p class="guide_sty3" id="file_desc_B">* 첨부파일 없음</p>
                                             </td>
                                             <th>첨부파일 변경일</th>
                                             <td></td>
@@ -788,12 +759,14 @@
                                             <th>개인 : 주민등록등본(초본)<br>법인(기업체) : 법인등기부등본 및 사업자등록증</th>
                                             <td>
                                                 <p class="mt5" style="line-height:22px">
-                                                    <button type="button" class="type1 btn-sky"
-                                                        onclick="alert('첨부파일 등록 기능은 구현되지 않았습니다.');">
+                                                    <button type="button" class="type1 btn-sky allow-edit"
+                                                        onclick="popupAttachFile('C'); return false;">
                                                         첨부파일 등록
                                                     </button>
+                                                    <input type="file" id="fileInputC" style="display:none;"
+                                                        onchange="handleFiles(this.files, 'C')">
                                                 </p>
-                                                <p class="guide_sty3">* 첨부파일 없음</p>
+                                                <p class="guide_sty3" id="file_desc_C">* 첨부파일 없음</p>
                                             </td>
                                             <th>첨부파일 변경일</th>
                                             <td></td>
@@ -802,12 +775,14 @@
                                             <th>우선순위 증빙자료</th>
                                             <td>
                                                 <p class="mt5" style="line-height:22px">
-                                                    <button type="button" class="type1 btn-sky"
-                                                        onclick="alert('첨부파일 등록 기능은 구현되지 않았습니다.');">
+                                                    <button type="button" class="type1 btn-sky allow-edit"
+                                                        onclick="popupAttachFile('D'); return false;">
                                                         첨부파일 등록
                                                     </button>
+                                                    <input type="file" id="fileInputD" style="display:none;"
+                                                        onchange="handleFiles(this.files, 'D')">
                                                 </p>
-                                                <p class="guide_sty3">* 첨부파일 없음</p>
+                                                <p class="guide_sty3" id="file_desc_D">* 첨부파일 없음</p>
                                                 <p class="guide_sty3">*취약계층(장애인, 기초생활수급자, 상이유공자, 독립유공자), 다자녀, 소상공인,
                                                     생애최초차량 구매자, 미세먼지 개선효과가 높은 차량 구매자(택시, 노후 경유차를 전기차로 대체 구매) 등을 증빙하는 자료
                                                 </p>
@@ -912,6 +887,22 @@
             } else {
                 alert("보안코드 입력에 실패했습니다.");
             }
+        }
+
+        // 첨부파일 팝업 열기
+        function popupAttachFile(type) {
+            var url = "/popup/attach?type=" + type;
+            var title = "attachPopup";
+            var status = "width=500,height=300,scrollbars=no,resizable=no";
+            window.open(url, title, status);
+        }
+
+        // 팝업에서 호출할 콜백 (파일 업로드 성공 시)
+        function handlePopupResult(type, filename) {
+            // 파일명 업데이트
+            $('#file_desc_' + type).text("선택된 파일: " + filename);
+            $('#file_desc_' + type).css('color', '#254bb5');
+            // 필요하다면 hidden input에 값 설정 등 추가 로직
         }
     </script>
     <script>

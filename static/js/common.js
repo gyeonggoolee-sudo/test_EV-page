@@ -69,6 +69,16 @@ function deleteJNRow(button) {
     }
 }
 
+function handleFiles(files, type) {
+    // 파일 처리 로직 구현
+    // 예: 파일 이름 표시, 업로드 목록에 추가 등
+    console.log(files);
+    console.log(type);
+    if (files.length > 0) {
+        alert(files[0].name + ' 파일이 선택되었습니다.');
+    }
+}
+
 $(document).ready(function() {
     // Datepicker 초기화
     $(".datepicker, .datepickerBirth").datepicker({
@@ -191,12 +201,13 @@ $(document).ready(function() {
     }
 
     // '임시저장' 상태일 때 모든 필드를 비활성화
-    if ($('body').hasClass('status-saved')) {
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.get('status') === 'saved') {
+        // '임시저장' 상태일 때, .allow-edit 클래스가 없는 모든 폼 요소를 비활성화
         $('#editForm').find('input, select, button, textarea').not('.allow-edit').prop('disabled', true).addClass('noedit');
         
-        // 특정 버튼은 활성화 유지 (예: 수정, 삭제, 목록 버튼)
-        $('.order-button-group .btn-gray').prop('disabled', false).removeClass('noedit'); // 목록 버튼
-        // 여기에 '수정', '삭제' 버튼에 대한 예외 처리 클래스(예: .allow-edit)를 추가하면 됩니다.
+        // '목록' 버튼은 항상 활성화
+        $('.order-button-group .btn-gray').prop('disabled', false).removeClass('noedit');
     }
 
     // 우선순위 배정·집행 선택을 업데이트하는 함수

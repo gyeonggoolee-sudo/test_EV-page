@@ -1,8 +1,14 @@
 from flask import Flask, render_template, request, jsonify, session
+from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
+
+# 업로드 폴더 설정
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route('/')
 def index():
@@ -43,6 +49,43 @@ def security_popup():
     """보안코드 입력 팝업창"""
     return render_template('security_popup.html')
 
+@app.route('/popup/attach')
+def attach_popup():
+    """첨부파일 업로드 팝업창"""
+    file_type = request.args.get('type')
+    return render_template('attach_popup.html', file_type=file_type)
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    """파일 업로드 처리"""
+    if 'file' not in request.files:
+        return '<script>alert("파일이 없습니다.");history.back();</script>'
+    file = request.files['file']
+    file_type = request.form.get('file_type')
+    
+    if file.filename == '':
+        return '<script>alert("선택된 파일이 없습니다.");history.back();</script>'
+        
+    if file:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        
+        # 업로드 성공 후 부모창 함수 호출 및 팝업 닫기
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <body>
+            <script>
+                alert('파일이 성공적으로 업로드되었습니다.');
+                if(window.opener && !window.opener.closed) {{
+                    window.opener.handlePopupResult('{file_type}', '{filename}');
+                }}
+                window.close();
+            </script>
+        </body>
+        </html>
+        """
+    return 'Upload failed'
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-

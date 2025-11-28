@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>첨부파일 등록</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <style>
+        body { background: #fff; min-width: 400px; min-height: 250px; padding: 20px; overflow: hidden; }
+        .popup-wrap { width: 100%; }
+        .file-input-box { border: 1px solid #d9d9d9; padding: 30px 20px; margin-bottom: 15px; background: #f8fbfc; text-align: center; }
+        .btn-group { margin-top: 20px; text-align: center; }
+        h1 { font-size: 18px; margin-bottom: 20px; color: #000; text-align: left; border-bottom: 2px solid #0e424f; padding-bottom: 10px; font-weight: bold; }
+        .type1 { padding: 0 20px; height: 34px; line-height: 32px; font-size: 14px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="popup-wrap">
+        <h1>첨부파일 등록</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="file_type" value="{{ file_type }}">
+            
+            <div class="file-input-box">
+                <input type="file" name="file" required style="width: 100%; height: auto; border: none; background: transparent;">
+            </div>
+            
+            <div class="btn-group">
+                <button type="submit" class="type1 btn-blue">등록</button>
+                <button type="button" class="type1 btn-gray" onclick="window.close()">취소</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -507,29 +507,41 @@ input.datepickerBirth:disabled {
 input[type="radio"] {
     display: inline-block;
     appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     outline: 0;
     box-shadow: none;
-    border: none;
+    border: 1px solid #d9d9d9;
+    border-radius: 50%; /* 원형 라디오 버튼 */
     margin-top: 0;
-    height: 23px;
-    padding: 2px 0 0;
-    background: transparent;
-}
-
-input[type="radio"]::after {
-    background: url("../images/radio_no.png") -0.2px 0 / contain no-repeat;
-    content: "";
-    display: inline-block;
     width: 18px;
     height: 18px;
-    vertical-align: middle;
+    padding: 0;
+    background: #fff;
     cursor: pointer;
+    vertical-align: middle;
+    position: relative;
+}
+
+input[type="radio"]:hover {
+    border-color: #254bb5;
+}
+
+input[type="radio"]:checked {
+    background: #254bb5;
+    border-color: #254bb5;
 }
 
 input[type="radio"]:checked::after {
-    width: 18px;
-    height: 18px;
-    background: url("../images/radio_ok.png") center center / contain no-repeat #fff;
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    display: block;
 }
 
 input[type="radio"] + label {

@@ -473,13 +473,7 @@ function formatPhone($input) {
  * 사업자등록번호 포맷팅
  */
 function formatBusinessNumber($input) {
-    let value = $input.val().replace(/[^0-9]/g, '');
-    
-    if (value.length >= 10) {
-        value = value.substring(0, 10);
-        value = value.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3');
-    }
-    
+    let value = $input.val().replace(/[^0-9-]/g, ''); // 숫자와 하이픈만 허용
     $input.val(value);
 }
 

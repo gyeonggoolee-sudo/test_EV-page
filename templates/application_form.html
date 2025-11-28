@@ -336,6 +336,56 @@
                             </div>
                         </div>
 
+                        <!-- 공동명의자 관리 섹션 -->
+                        <div class="container-fluid mb25" id="div_jnInfo" style="display: none;">
+                            <h1>공동명의자 관리</h1>
+                            <div class="table-wrap mb25">
+                                <table id="t_jnInfo1">
+                                    <colgroup>
+                                        <col width="12%">
+                                        <col width="88%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>공동명의자 수</th>
+                                            <td>
+                                                <div style="display: flex; align-items: center;">
+                                                    <input type="text" class="text intCheck1" name="jn_cnt" id="jn_cnt" value="0" maxlength="8" title="공동명의자 수" style="width: 100px; margin-right: 5px;">
+                                                    <button type="button" class="type1 btn-black" onclick="createNewJointInfo();return false;" style="margin-right: 10px;">
+                                                        확인
+                                                    </button>
+                                                    <label id="l_jnCount" style="">공동명의자 정보가 없습니다.</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="table-wrap mb25">
+                                <table class="table-case1" id="t_jnInfo" style="display:none;">
+                                    <colgroup>
+                                        <col width="65px;">
+                                        <col width="150px">
+                                        <col width="100px">
+                                        <col width="80px">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>순번</th>
+                                            <th>공동명의자 성명</th>
+                                            <th>공동명의자 생년월일</th>
+                                            <th>삭제</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="jnBody">
+                                        
+                                        
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         <!-- 신청금액 섹션 -->
                         <div class="container-fluid mb25" id="div_amt">
                             <h1>신청금액</h1>

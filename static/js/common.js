@@ -208,12 +208,51 @@ function initDynamicFields() {
             $('.p_birth1').hide();
             $('.p_ceo').show();
             $('.tr_grp_reqst').show();
-        } else {
+            // 개인사업자 관련 필드 숨김
+            $('.p_pri_busi').hide();
+            $('.p_pri_busi_1').hide();
+            $('#tr_pri_business').show(); // tr은 표시하되 개인사업자 부분만 숨김
+        } else if (reqKind === 'P') {
             // 개인 선택 시
             $('.p_birth1').show();
             $('.p_birth2').hide();
             $('.p_ceo').hide();
             $('.tr_grp_reqst').hide();
+            // 개인사업자 체크박스 표시
+            $('.p_pri_busi').show();
+            $('#tr_pri_business').show();
+            
+            // 신청 유형이 '==선택=='에서 '개인'으로 변경될 때 체크박스 해제
+            $('#pri_business_yn1').prop('checked', false);
+            $('#pri_business_yn').val('N');
+            $('.p_pri_busi_1').hide(); // 사업자등록번호, 개인사업장명 숨김
+            // 입력값 초기화
+            $('#busi_no').val('');
+            $('#pri_busi_nm').val('');
+        } else if (reqKind === '') {
+            // ==선택== (빈 값)일 때
+            $('.p_birth1').show();
+            $('.p_birth2').hide();
+            $('.p_ceo').hide();
+            $('.tr_grp_reqst').hide();
+            // 개인사업자 체크박스 표시
+            $('.p_pri_busi').show();
+            $('#tr_pri_business').show();
+            // 체크박스가 체크되어 있지 않으면 사업자등록번호, 개인사업장명 숨김
+            if (!$('#pri_business_yn1').is(':checked')) {
+                $('.p_pri_busi_1').hide();
+            }
+        } else {
+            // 기타 경우 (없어야 하지만 안전을 위해)
+            $('.p_birth1').hide();
+            $('.p_birth2').hide();
+            $('.p_ceo').hide();
+            $('.tr_grp_reqst').hide();
+            $('.p_pri_busi').show(); // 기본적으로 개인사업자 체크박스는 보임
+            $('#tr_pri_business').show();
+            if (!$('#pri_business_yn1').is(':checked')) {
+                $('.p_pri_busi_1').hide();
+            }
         }
     });
     
@@ -221,12 +260,61 @@ function initDynamicFields() {
     $('#pri_business_yn1').on('change', function() {
         if ($(this).is(':checked')) {
             $('#pri_business_yn').val('Y');
-            $('.p_pri_busi_1').show();
+            $('.p_pri_busi_1').show(); // 사업자등록번호, 개인사업장명 표시
         } else {
             $('#pri_business_yn').val('N');
-            $('.p_pri_busi_1').hide();
+            $('.p_pri_busi_1').hide(); // 사업자등록번호, 개인사업장명 숨김
+            // 입력값 초기화
+            $('#busi_no').val('');
+            $('#pri_busi_nm').val('');
         }
     });
+    
+    // 사업자등록번호 포맷팅
+    $('#busi_no').on('input', function() {
+        formatBusinessNumber($(this));
+    });
+    
+    // 법인등록번호 포맷팅
+    $('#birth2').on('input', function() {
+        formatCorporateNumber($(this));
+    });
+    
+    // 초기 로드 시에도 신청 유형에 따라 표시/숨김 처리
+    const initialReqKind = $('#req_kind').val();
+    if (initialReqKind === 'P') {
+        // 개인일 때 - 체크박스 해제 상태로 시작
+        $('#tr_pri_business').show();
+        $('.p_pri_busi').show();
+        $('.p_birth2').hide();
+        $('#pri_business_yn1').prop('checked', false);
+        $('#pri_business_yn').val('N');
+        $('.p_pri_busi_1').hide();
+    } else if (initialReqKind === '') {
+        // ==선택== 일 때
+        $('#tr_pri_business').show();
+        $('.p_pri_busi').show();
+        $('.p_birth2').hide();
+        if ($('#pri_business_yn1').is(':checked')) {
+            $('.p_pri_busi_1').show();
+        } else {
+            $('.p_pri_busi_1').hide();
+        }
+    } else if (initialReqKind === 'G') {
+        // 단체일 때
+        $('#tr_pri_business').show();
+        $('.p_birth2').show();
+        $('.p_pri_busi').hide();
+        $('.p_pri_busi_1').hide();
+    } else {
+        // 기본값: ==선택== 상태로 처리
+        $('#tr_pri_business').show();
+        $('.p_pri_busi').show();
+        $('.p_birth2').hide();
+        if (!$('#pri_business_yn1').is(':checked')) {
+            $('.p_pri_busi_1').hide();
+        }
+    }
     
     // 사회계층 여부 변경 시
     $('input[name="social_yn"]').on('change', function() {
@@ -428,4 +516,5 @@ window.formatBusinessNumber = formatBusinessNumber;
 window.formatCorporateNumber = formatCorporateNumber;
 window.collectFormData = collectFormData;
 window.resetForm = resetForm;
+
 

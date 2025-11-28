@@ -187,13 +187,36 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <th>개인사업자</th>
+                                        <tr class="tr_public" style="" id="tr_pri_business">
+                                            <th>
+                                                <p class="p_pri_busi" style="">개인사업자</p>
+                                                <p class="p_birth2" style="display: none;"><label class="reqInput1">*</label>법인등록번호</p>
+                                            </th>
                                             <td>
-                                                <input type="checkbox" id="pri_business_yn1" value="">
-                                                <input type="hidden" id="pri_business_yn" name="pri_business_yn" value="N">
+                                                <div class="p_pri_busi" style="">
+                                                    <input type="checkbox" id="pri_business_yn1" value="">
+                                                    <input type="hidden" id="pri_business_yn" name="pri_business_yn" value="N">
+                                                </div>
+                                                <div class="p_birth2" style="display: none;">
+                                                    <input type="text" class="text" id="birth2" name="birth2" value="" placeholder="000000-0000000" maxlength="14" title="법인등록번호">
+                                                </div>
                                             </td>
-                                            <td colspan="4"></td>
+                                            <th>
+                                                <p class="p_pri_busi_1" style="display: none;"><label class="reqInput1">*</label>사업자등록번호</p>
+                                            </th>
+                                            <td>
+                                                <div class="p_pri_busi_1" style="display: none;">
+                                                    <input type="text" class="text" id="busi_no" name="busi_no" value="" placeholder="000-00-00000" maxlength="12" title="사업자등록번호">
+                                                </div>
+                                            </td>
+                                            <th>
+                                                <p class="p_pri_busi_1" style="display: none;"><label class="reqInput1">*</label>개인사업장명</p>
+                                            </th>
+                                            <td>
+                                                <div class="p_pri_busi_1" style="display: none;">
+                                                    <input type="text" class="text" id="pri_busi_nm" name="pri_busi_nm" value="" maxlength="50" title="개인사업장명">
+                                                </div>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th>신청차종</th>

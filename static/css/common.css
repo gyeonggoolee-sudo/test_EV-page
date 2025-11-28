@@ -463,6 +463,11 @@ textarea {
     border: 1px solid #d9d9d9;
 }
 
+input.text {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 textarea {
     min-height: 69px;
     height: 100%;
@@ -540,29 +545,41 @@ input[type="radio"] + label {
 input[type="checkbox"] {
     display: inline-block;
     appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     outline: 0;
     box-shadow: none;
-    border: none;
+    border: 1px solid #d9d9d9;
     margin-top: 0;
-    height: 26px;
-    padding: 2px 0 0;
-    background: unset;
-}
-
-input[type="checkbox"]::after {
-    background: url("../images/chk_no.png") -0.2px 0 / contain no-repeat;
-    content: "";
-    display: inline-block;
     width: 18px;
     height: 18px;
-    vertical-align: middle;
+    padding: 0;
+    background: #fff;
     cursor: pointer;
+    vertical-align: middle;
+    position: relative;
+}
+
+input[type="checkbox"]:hover {
+    border-color: #254bb5;
+}
+
+input[type="checkbox"]:checked {
+    background: #254bb5;
+    border-color: #254bb5;
 }
 
 input[type="checkbox"]:checked::after {
-    width: 18px;
-    height: 18px;
-    background: url("../images/chk_ok.png") center center / contain no-repeat;
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    display: block;
 }
 
 input[type="checkbox"] + label {

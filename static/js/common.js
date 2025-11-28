@@ -203,6 +203,10 @@ function initDynamicFields() {
             $('.p_pri_busi').hide();
             $('.p_pri_busi_1').show(); // 단체일 때는 사업자등록번호, 개인사업장명 항상 표시
             $('#tr_pri_business').show();
+
+            // 필드 초기화 함수 호출
+            resetCommonFields();
+
         } else if (reqKind === 'P') {
             // 개인 선택 시
             $('.p_birth1').show();
@@ -221,6 +225,10 @@ function initDynamicFields() {
             // 입력값 초기화
             $('#busi_no').val('');
             $('#pri_busi_nm').val('');
+
+            // 필드 초기화 함수 호출
+            resetCommonFields();
+
         } else if (reqKind === '') {
             // ==선택== (빈 값)일 때
             $('.p_birth1').show();
@@ -235,6 +243,9 @@ function initDynamicFields() {
             if (!$('#pri_business_yn1').is(':checked')) {
                 $('.p_pri_busi_1').hide();
             }
+            // 필드 초기화 함수 호출
+            resetCommonFields();
+
         } else {
             // 기타 경우 (없어야 하지만 안전을 위해)
             $('.p_birth1').hide();
@@ -246,6 +257,9 @@ function initDynamicFields() {
             if (!$('#pri_business_yn1').is(':checked')) {
                 $('.p_pri_busi_1').hide();
             }
+            // 필드 초기화 함수 호출
+            resetCommonFields();
+
         }
     });
     
@@ -516,6 +530,30 @@ function resetForm() {
     }
 }
 
+/**
+ * 공통 필드 초기화
+ */
+function resetCommonFields() {
+    // 성명 필드 초기화
+    $('#req_nm').val('');
+    // 생년월일 필드 초기화
+    $('#birth').val('');
+    // 성별 필드 초기화
+    $('input[name="req_sex"]:checked').prop('checked', false);
+}
+
+/**
+ * 특정 필드 초기화 (성명, 생년월일, 성별)
+ */
+function resetCommonFields() {
+    $('#req_nm').val(''); // 성명
+    $('#birth1').val(''); // 생년월일 datepicker
+    $('#birth').val(''); // 생년월일 hidden
+    $('input[name="req_sex"]').prop('checked', false); // 성별 라디오 버튼 해제
+    // 단체일 경우 기관명, 대표자도 초기화
+    $('#ceo').val(''); // 대표자
+}
+
 // 전역 함수로 export
 window.popupAddress = popupAddress;
 window.goSave = goSave;
@@ -526,5 +564,6 @@ window.formatBusinessNumber = formatBusinessNumber;
 window.formatCorporateNumber = formatCorporateNumber;
 window.collectFormData = collectFormData;
 window.resetForm = resetForm;
+window.resetCommonFields = resetCommonFields;
 
 

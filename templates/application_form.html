@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신청서 작성</title>
+    
+    <!-- CSS 파일 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+</head>
+<body>
+    <header class="container-fluid header-wrap">
+        <div class="top-title">
+            <div class="top-left">
+                <img class="top-logo" src="{{ url_for('static', filename='images/admin_logo.png') }}" alt="logo">
+            </div>
+            <div class="top-right">
+                <div class="right-wrap">
+                    <div class="user-wrap">
+                        <div class="user-name">
+                            <img class="user-icon" src="{{ url_for('static', filename='images/icon_account.png') }}" alt="사용자 아이콘">
+                            사용자 님
+                        </div>
+                        <button class="btn-black">마이페이지</button>
+                        <button class="btn-black">로그아웃</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="inner">
+            <div class="con-right">
+                <div class="container-fluid content">
+                    <div class="content-title">
+                        <p class="txt-icon">
+                            <span></span>
+                            <span></span>
+                            <span>신청관리</span>
+                            <span></span>
+                            <span class="on">신청서 작성</span>
+                        </p>
+                        <div>
+                            <span>신청서 작성</span>
+                        </div>
+                    </div>
+
+                    <!-- 진행 단계 버튼 -->
+                    <div class="container-fluid mb25">
+                        <div class="order-detail-view mb25">
+                            <button type="button" id="div_step_1">지자체선택</button>
+                            <button type="button" id="div_step_2" class="active">지원신청 등록/보완</button>
+                            <button type="button" id="div_step_3">지원가능확인</button>
+                            <button type="button" id="div_step_4">지급신청 등록/보완</button>
+                            <button type="button" id="div_step_5">지급완료</button>
+                        </div>
+                    </div>
+
+                    <!-- 메인 폼 -->
+                    <form name="editForm" method="post" id="editForm" action="{{ url_for('submit_form') }}">
+                        <!-- Hidden Fields -->
+                        <input type="hidden" name="mode" value="write">
+                        <input type="hidden" id="app_step1" name="app_step1" value="">
+                        <input type="hidden" id="year" name="year" value="2025">
+                        <input type="hidden" id="req_seq" name="req_seq" value="">
+                        <input type="hidden" id="local_cd" name="local_cd" value="4113">
+                        <input type="hidden" id="mem_gubun" name="mem_gubun" value="seller">
+                        <input type="hidden" id="req_gubun" name="req_gubun" value="car">
+                        <input type="hidden" id="car_type" name="car_type" value="11">
+                        <input type="hidden" id="saveGubun" name="saveGubun" value="apply">
+
+                        <!-- 관리정보 섹션 -->
+                        <div class="container-fluid mb25" id="div_local_mng">
+                            <h1>관리정보</h1>
+                            <div class="table-wrap">
+                                <table id="t_local_mng">
+                                    <colgroup>
+                                        <col width="12%">
+                                        <col width="21%">
+                                        <col width="12%">
+                                        <col width="21%">
+                                        <col width="12%">
+                                        <col width="21%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>기준년도</th>
+                                            <td>2025</td>
+                                            <th>지자체</th>
+                                            <td>
+                                                <input type="text" class="text" name="local_nm" id="local_nm" value="성남시" readonly style="width: 52%;">
+                                            </td>
+                                            <th>신청단계</th>
+                                            <td>
+                                                <div class="form-select w50p">
+                                                    <select name="app_step" id="app_step" class="select" disabled>
+                                                        <option value="">=======선택=======</option>
+                                                        <option value="100" selected>신청전</option>
+                                                        <option value="101">신청</option>
+                                                        <option value="102">신청접수</option>
+                                                        <option value="110">신청보완요청</option>
+                                                        <option value="120">신청승인(자격부여)</option>
+                                                        <option value="130">신청승인(지원확정)</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>신청번호</th>
+                                            <td></td>
+                                            <th>신청일자</th>
+                                            <td></td>
+                                            <th>계약일자</th>
+                                            <td>
+                                                <input type="text" class="datepicker" style="width: 65%" id="contract_day" name="contract_day" value="" readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>출고기한</th>
+                                            <td></td>
+                                            <th>지급신청기한</th>
+                                            <td></td>
+                                            <th>자격 부여 일자</th>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th>대기자선정 유형</th>
+                                            <td></td>
+                                            <th>공고구분</th>
+                                            <td>본공고</td>
+                                            <th>차종구분</th>
+                                            <td>전기승용</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 신청정보 섹션 -->
+                        <div class="container-fluid mb25" id="div_req">
+                            <h1>신청정보</h1>
+                            <div class="table-wrap mb25">
+                                <table id="t_req">
+                                    <colgroup>
+                                        <col width="12%">
+                                        <col width="21%">
+                                        <col width="12%">
+                                        <col width="21%">
+                                        <col width="12%">
+                                        <col width="21%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr height="60">
+                                            <th>신청 유형</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <select name="req_kind" id="req_kind" class="select w60p">
+                                                        <option value="">==선택==</option>
+                                                        <option value="P">개인</option>
+                                                        <option value="G">단체</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td colspan="4">
+                                                <p class="guide_sty2">* 차량등록이력조회는 임시저장(저장) 후 가능</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="reqInput1">*</label>성명</th>
+                                            <td>
+                                                <input type="text" class="text w90p" id="req_nm" name="req_nm" value="" maxlength="50" required>
+                                            </td>
+                                            <th><label class="reqInput1">*</label>생년월일</th>
+                                            <td>
+                                                <input type="text" class="datepickerBirth" style="width: 65%" id="birth1" value="" readonly>
+                                                <input type="hidden" id="birth" name="birth" value="">
+                                            </td>
+                                            <th><label class="reqInput1">*</label>성별</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <input type="radio" name="req_sex" id="req_sex1" value="M">
+                                                    <label for="req_sex1">남자</label>
+                                                    <input type="radio" name="req_sex" id="req_sex2" value="F">
+                                                    <label for="req_sex2">여자</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>개인사업자</th>
+                                            <td>
+                                                <input type="checkbox" id="pri_business_yn1" value="">
+                                                <input type="hidden" id="pri_business_yn" name="pri_business_yn" value="N">
+                                            </td>
+                                            <td colspan="4"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>신청차종</th>
+                                            <td>
+                                                <div class="form-select w90p">
+                                                    <select name="model_cd" id="model_cd" class="select">
+                                                        <option value="">=======선택=======</option>
+                                                        <option value="MODEL3LR_C">Model 3 Long Range / 일반승용</option>
+                                                        <option value="MODEL3P_C">Model 3 Performance / 일반승용</option>
+                                                        <option value="MODEL3RWD">Model 3 RWD / 일반승용</option>
+                                                        <option value="NEW_MODELYRWD">New Model Y RWD / 일반승용</option>
+                                                        <option value="NEW_MODELYLR2">New Model Y Long Range(배터리변경) / 일반승용</option>
+                                                        <option value="MODEL3LR_C1">Model 3 Long Range(배터리변경) / 일반승용</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <th>신청대수</th>
+                                            <td>
+                                                <input type="text" class="text intCheck" id="req_cnt" name="req_cnt" value="" maxlength="8">
+                                            </td>
+                                            <th>출고예정일자</th>
+                                            <td>
+                                                <input type="text" class="datepicker" style="width: 65%" id="delivery_sch_day" name="delivery_sch_day" value="" readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="reqInput1">*</label>주소<br>(등록주소지)</th>
+                                            <td colspan="3">
+                                                <input type="text" class="text w100" name="zipno" id="zipno" value="" readonly>
+                                                <button type="button" class="type1 btn-black" onclick="popupAddress(); return false;">주소입력</button>
+                                                <input style="width:95%;" type="text" class="text mt5" id="addr" name="addr" value="" maxlength="200" readonly><br>
+                                                <input style="width:95%;" type="text" class="text mt5" id="addr_detail" name="addr_detail" value="" maxlength="300">
+                                            </td>
+                                            <th>보조금신청액</th>
+                                            <td>
+                                                <input type="text" class="text intCheck" id="req_total_amt_1" name="req_total_amt_1" value="" readonly style="width:70%;"> 원
+                                                <input type="hidden" id="req_total_amt" name="req_total_amt" value="">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="reqInput1">*</label>연락처</th>
+                                            <td colspan="5">
+                                                <div style="width:33%; float:left;">
+                                                    <label class="reqInput2">*</label>전화 : 
+                                                    <input type="text" class="text" id="phone" name="phone" value="" maxlength="30" required>
+                                                </div>
+                                                <div style="width:33%; float:left;">
+                                                    <label class="reqInput2">*</label>휴대폰 : 
+                                                    <input type="text" class="text" id="mobile" name="mobile" value="" maxlength="13" placeholder="010-0000-0000" required>
+                                                </div>
+                                                <div style="width:33%; float:left;">
+                                                    <label class="reqInput2">*</label>이메일 : 
+                                                    <input type="text" class="text" id="email" name="email" value="" maxlength="500" required>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="container-fluid headdesc">
+                                <p>휴대폰 번호는 '010-0000-0000' 형식으로 입력하세요.</p>
+                                <p>* 은 개인정보관련 입력필수 항목입니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- 신청금액 섹션 -->
+                        <div class="container-fluid mb25" id="div_amt">
+                            <h1>신청금액</h1>
+                            <div class="table-wrap mb25">
+                                <table id="t_amt">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="30%">
+                                        <col width="20%">
+                                        <col width="30%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>국비</th>
+                                            <td>
+                                                <input type="text" class="text" id="req_gamt_1" name="req_gamt_1" value="" readonly style="width:70%;"> 원
+                                                <input type="hidden" id="req_gamt" name="req_gamt" value="">
+                                            </td>
+                                            <th>지방비</th>
+                                            <td>
+                                                <input type="text" class="text" id="req_lamt_1" name="req_lamt_1" value="" readonly style="width:70%;"> 원
+                                                <input type="hidden" id="req_lamt" name="req_lamt" value="">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>추가 지방비<br>(예산지급)</th>
+                                            <td>
+                                                <input type="text" class="text" id="req_add_lamt_1" name="req_add_lamt_1" value="" readonly style="width:70%;"> 원
+                                                <input type="hidden" id="req_add_lamt" name="req_add_lamt" value="">
+                                            </td>
+                                            <th>추가 지방비<br>(별도지급)</th>
+                                            <td>
+                                                <input type="text" class="text" id="ext_req_add_lamt_1" name="ext_req_add_lamt_1" value="" readonly style="width:70%;"> 원
+                                                <input type="hidden" id="ext_req_add_lamt" name="ext_req_add_lamt" value="">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="container-fluid headdesc">
+                                <p>추가지방비(별도지급) 금액은 보조금 신청액에 포함되지 않습니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- 신청조건 섹션 -->
+                        <div class="container-fluid mb25" id="div_option">
+                            <h1>신청조건</h1>
+                            <div class="table-wrap mb25">
+                                <table id="t_option">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="30%">
+                                        <col width="20%">
+                                        <col width="30%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>미세먼지 개선효과가<br>높은 차량 구매자 여부</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <input type="radio" name="improve_fd_yn" id="improve_fd_yn1" value="Y">
+                                                    <label for="improve_fd_yn1">Y</label>
+                                                    <input type="radio" name="improve_fd_yn" id="improve_fd_yn2" value="N" checked>
+                                                    <label for="improve_fd_yn2">N</label>
+                                                </div>
+                                            </td>
+                                            <th>생애최초 차량 구매자 여부</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <input type="radio" name="first_buy_yn" id="first_buy_yn1" value="Y">
+                                                    <label for="first_buy_yn1">Y</label>
+                                                    <input type="radio" name="first_buy_yn" id="first_buy_yn2" value="N" checked>
+                                                    <label for="first_buy_yn2">N</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>사회계층 여부</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <input type="radio" name="social_yn" id="social_yn1" value="Y">
+                                                    <label for="social_yn1">Y</label>
+                                                    <input type="radio" name="social_yn" id="social_yn2" value="N" checked>
+                                                    <label for="social_yn2">N</label>
+                                                </div>
+                                            </td>
+                                            <th>사회계층 유형</th>
+                                            <td>
+                                                <div class="form-select w70p">
+                                                    <select name="social_kind" id="social_kind" class="select" disabled>
+                                                        <option value="">=====선택=====</option>
+                                                        <option value="1">국가유공자</option>
+                                                        <option value="2">장애인</option>
+                                                        <option value="3">다자녀가구</option>
+                                                        <option value="4">다문화가족</option>
+                                                        <option value="5">기초생활수급자</option>
+                                                        <option value="6">소상공인</option>
+                                                        <option value="9">기타 등</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>내연기관 폐차 또는 수출말소 지원여부</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <input type="radio" name="exchange_yn" id="exchange_yn1" value="Y">
+                                                    <label for="exchange_yn1">Y</label>
+                                                    <input type="radio" name="exchange_yn" id="exchange_yn2" value="N" checked>
+                                                    <label for="exchange_yn2">N</label>
+                                                </div>
+                                            </td>
+                                            <th>어린이 통학차량용 구매자 여부</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <input type="radio" name="school_bus_yn" id="school_bus_yn1" value="Y">
+                                                    <label for="school_bus_yn1">Y</label>
+                                                    <input type="radio" name="school_bus_yn" id="school_bus_yn2" value="N" checked>
+                                                    <label for="school_bus_yn2">N</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>공항·항만의 시설 내부 운행 여부</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <input type="radio" name="in_facility_yn" id="in_facility_yn1" value="Y">
+                                                    <label for="in_facility_yn1">Y</label>
+                                                    <input type="radio" name="in_facility_yn" id="in_facility_yn2" value="N" checked>
+                                                    <label for="in_facility_yn2">N</label>
+                                                </div>
+                                            </td>
+                                            <th>교통사고나 천재지변 등으로 인한 전기차 폐차 여부</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <input type="radio" name="disaster_scrap_yn" id="disaster_scrap_yn1" value="Y">
+                                                    <label for="disaster_scrap_yn1">Y</label>
+                                                    <input type="radio" name="disaster_scrap_yn" id="disaster_scrap_yn2" value="N" checked>
+                                                    <label for="disaster_scrap_yn2">N</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>BMS 업데이트 불가차량 폐차 후 신차 구매 여부</th>
+                                            <td colspan="3">
+                                                <div class="form-select">
+                                                    <input type="radio" name="bms_yn" id="bms_yn1" value="Y">
+                                                    <label for="bms_yn1">Y</label>
+                                                    <input type="radio" name="bms_yn" id="bms_yn2" value="N" checked>
+                                                    <label for="bms_yn2">N</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 우선순위 배정·집행 섹션 -->
+                        <div class="container-fluid mb25" id="div_priority">
+                            <h1>우선순위 배정·집행</h1>
+                            <div class="table-wrap mb25">
+                                <table id="t_priority">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="30%">
+                                        <col width="20%">
+                                        <col width="30%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>우선순위 배정·집행 선택</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <input type="radio" name="priority_type" id="priority_type1" value="10" disabled>
+                                                    <label for="priority_type1">우선순위</label>
+                                                    <input type="radio" name="priority_type" id="priority_type5" value="40" disabled>
+                                                    <label for="priority_type5">택시</label>
+                                                    <input type="radio" name="priority_type" id="priority_type4" value="00" checked>
+                                                    <label for="priority_type4">일반</label>
+                                                </div>
+                                            </td>
+                                            <td colspan="2"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 제조수입사 정보 섹션 -->
+                        <div class="container-fluid mb25" id="div_seller">
+                            <h1>제조수입사 정보</h1>
+                            <div class="table-wrap mb25">
+                                <table id="t_seller">
+                                    <colgroup>
+                                        <col width="12%">
+                                        <col width="21%">
+                                        <col width="12%">
+                                        <col width="21%">
+                                        <col width="12%">
+                                        <col width="21%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>제조수입사</th>
+                                            <td>테슬라코리아</td>
+                                            <th>대리점</th>
+                                            <td>테슬라코리아 1팀</td>
+                                            <th>작성자</th>
+                                            <td>사용자</td>
+                                        </tr>
+                                        <tr>
+                                            <th>대리점 주소</th>
+                                            <td colspan="3">서울특별시 강남구 테헤란로 134 14층</td>
+                                            <th>대리점 연락처</th>
+                                            <td>
+                                                <input type="text" class="text" id="seller_phone" name="seller_phone" value="" maxlength="15">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>연락담당<br>성명</th>
+                                            <td>
+                                                <input type="text" class="text" id="contact_nm" name="contact_nm" value="" maxlength="50">
+                                            </td>
+                                            <th>연락담당<br>휴대폰</th>
+                                            <td>
+                                                <input type="text" class="text" id="contact_mobile" name="contact_mobile" value="" placeholder="010-0000-0000" maxlength="13">
+                                            </td>
+                                            <th>제조수입사<br>관리(계약)번호</th>
+                                            <td>
+                                                <input type="text" class="text" id="seller_mgrid" name="seller_mgrid" value="" maxlength="20">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 메모정보 섹션 -->
+                        <div class="container-fluid mb25" id="div_memo">
+                            <h1>메모정보</h1>
+                            <div class="table-wrap mb25">
+                                <table id="t_memo">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>신청 메모<br>(지자체 전달)</th>
+                                            <td>
+                                                <textarea class="textarea" name="req_memo" id="req_memo" rows="5" cols="65" style="width: 79%" placeholder="지자체 전달 사항"></textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>신청자 메모<br>(지자체 비공개)</th>
+                                            <td>
+                                                <textarea class="textarea" name="seller_memo" id="seller_memo" rows="5" cols="65" style="width: 79%" placeholder="신청자 관리 메모"></textarea>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 버튼 영역 -->
+                        <div class="order-button-group mb25">
+                            <button type="button" class="btn-blue" onclick="goSave(); return false;">임시저장</button>
+                            <button type="submit" class="btn-blue">신청서 작성</button>
+                            <button type="button" class="btn-gray" onclick="goList(); return false;">목 록</button>
+                        </div>
+                    </form>
+
+                    <div class="container-fluid headdesc">
+                        <p>신청서 진행 단계에 따라 업무에 필요한 버튼이 표시됩니다.</p>
+                        <p>[임시저장] 임시저장하고 제출하지 않은 신청서는 24시간 지난 후 야간에 삭제됩니다.</p>
+                        <p>[임시저장] 후 지원신청 제출 서류를 첨부한 후 신청서를 제출해야 해당 지자체 담당자에게 서류가 접수됩니다.</p>
+                        <p>[목록] 버튼을 클릭하면 신청관리 목록 화면으로 이동합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <!-- jQuery 및 jQuery UI CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/ui-lightness/jquery-ui.css">
+    
+    <!-- 커스텀 JavaScript -->
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+</body>
+</html>
+

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 import os
 
 app = Flask(__name__)
@@ -7,7 +7,17 @@ app.config['SECRET_KEY'] = 'your-secret-key-here'
 @app.route('/')
 def index():
     """메인 페이지 - 신청서 작성 폼"""
-    return render_template('application_form.html')
+    status = request.args.get('status', default='new', type=str)
+    # 세션에서 저장된 데이터 가져오기
+    saved_data = session.get('draft_data', None)
+    return render_template('application_form.html', status=status, data=saved_data)
+
+@app.route('/save-draft', methods=['POST'])
+def save_draft():
+    """폼 데이터를 세션에 임시 저장"""
+    session['draft_data'] = request.form.to_dict()
+    # 최종 제출 시에는 세션 데이터를 삭제할 수 있습니다.
+    return jsonify({"status": "success"})
 
 @app.route('/submit', methods=['POST'])
 def submit_form():

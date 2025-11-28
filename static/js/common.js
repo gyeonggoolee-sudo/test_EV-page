@@ -190,6 +190,15 @@ $(document).ready(function() {
         $('#children_cnt').hide();
     }
 
+    // '임시저장' 상태일 때 모든 필드를 비활성화
+    if ($('body').hasClass('status-saved')) {
+        $('#editForm').find('input, select, button, textarea').not('.allow-edit').prop('disabled', true).addClass('noedit');
+        
+        // 특정 버튼은 활성화 유지 (예: 수정, 삭제, 목록 버튼)
+        $('.order-button-group .btn-gray').prop('disabled', false).removeClass('noedit'); // 목록 버튼
+        // 여기에 '수정', '삭제' 버튼에 대한 예외 처리 클래스(예: .allow-edit)를 추가하면 됩니다.
+    }
+
     // 우선순위 배정·집행 선택을 업데이트하는 함수
     function updatePrioritySelection() {
         const isImproveFd = $('input[name="improve_fd_yn"]:checked').val() === 'Y';

@@ -294,15 +294,20 @@
                                         <tr>
                                             <th><label class="reqInput1">*</label>주소<br>(등록주소지)</th>
                                             <td colspan="3">
-                                                <input type="text" class="text w100" name="zipno" id="zipno" value="" readonly>
-                                                <button type="button" class="type1 btn-black" onclick="popupAddress(); return false;">주소입력</button>
-                                                <input style="width:95%;" type="text" class="text mt5" id="addr" name="addr" value="" maxlength="200" readonly><br>
-                                                <input style="width:95%;" type="text" class="text mt5" id="addr_detail" name="addr_detail" value="" maxlength="300">
+                                                <input type="text" class="text w100" name="zipno" id="zipno" value="" title="(필수입력)우편번호" readonly="readonly">
+                                                <button type="button" class="type1 btn-black" onclick="popupAddress(); return false;">
+                                                    주소입력
+                                                </button>
+                                                    
+                                                <input style="width:95%;" type="text" class="text mt5" id="addr" name="addr" value="" maxlength="200" title="주소(등록주소지)" checknull="true" readonly="readonly"><br>
+                                                <input style="width:95%;" type="text" class="text mt5" id="addr_detail" name="addr_detail" value="" maxlength="300" title="주소(등록주소지)" checknull="true">
                                             </td>
                                             <th>보조금신청액</th>
                                             <td>
-                                                <input type="text" class="text intCheck" id="req_total_amt_1" name="req_total_amt_1" value="" readonly style="width:70%;"> 원
-                                                <input type="hidden" id="req_total_amt" name="req_total_amt" value="">
+                                                <input type="text" class="text intCheck" id="req_total_amt_1" name="req_total_amt_1" value="" maxlength="12" title="신청 총 금액" readonly="readonly" style="width:70%;"> 원
+                                                <input type="hidden" id="req_total_amt" name="req_total_amt" value="" maxlength="12" title="신청 총 금액" readonly="readonly">
+                                                <br>
+                                                <p class="req_total_amt_han"></p>
                                             </td>
                                         </tr>
                                         <tr>

@@ -28,6 +28,11 @@ def juso_popup():
     """주소 입력 팝업창"""
     return render_template('juso_popup.html')
 
+@app.route('/popup/security')
+def security_popup():
+    """보안코드 입력 팝업창"""
+    return render_template('security_popup.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
 

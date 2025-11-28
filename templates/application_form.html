@@ -794,155 +794,26 @@
         });
 
         function goSave() {
-            // 보조금 신청액 유효성 검사 (최우선)
-            const totalSubsidy = parseInt($('#req_total_amt').val()) || 0;
-            if (totalSubsidy === 0) {
-                alert("보조금 신청금액이 0원입니다 차종 및 신청대수를 확인해주세요.");
-                return;
-            }
-
-            // 신청 유형 유효성 검사
-            const reqKind = $('#req_kind').val();
-            if (reqKind === "") {
-                alert("신청유형을 선택해주세요");
-                return;
-            }
-
-            // 신청유형별 유효성 검사
-            if (reqKind === 'G') { // 단체
-                // 1. 신청구분
-                if ($('#grp_reqst_se').val() === '') {
-                    alert("신청 구분을 선택해주세요.");
-                    return;
-                }
-                // 2. 기관명 (req_nm)
-                if ($('#req_nm').val().trim() === "") {
-                    alert("기관명을 입력해주세요.");
-                    return;
-                }
-                // 3. 대표자 (ceo)
-                if ($('#ceo').val().trim() === "") {
-                    alert("대표자를 입력해주세요.");
-                    return;
-                }
-                // 4. 법인등록번호 (birth2) - 형식 검증
-                const birth2 = $('#birth2').val().trim();
-                const birth2Regex = /^\d{6}-\d{7}$/; // 000000-0000000 형식
-                if (birth2 === "") {
-                    alert("법인등록번호를 입력해주세요.");
-                    return;
-                }
-                if (!birth2Regex.test(birth2)) {
-                    alert("법인등록번호 형식이 올바르지 않습니다. (예: 123456-1234567)");
-                    return;
-                }
-                // 5. 사업자등록번호 (busi_no) - 형식 검증
-                const busiNo = $('#busi_no').val().trim();
-                const busiNoRegex = /^\d{3}-\d{2}-\d{5}$/; // 000-00-00000 형식
-                if (busiNo === "") {
-                    alert("사업자등록번호를 입력해주세요.");
-                    return;
-                }
-                if (!busiNoRegex.test(busiNo)) {
-                    alert("사업자등록번호 형식이 올바르지 않습니다. (예: 123-45-67890)");
-                    return;
-                }
-
-            } else if (reqKind === 'P') { // 개인
-                // 성명 (req_nm)
-                if ($('#req_nm').val().trim() === "") {
-                    alert("성명을 입력해주세요.");
-                    return;
-                }
-                // 생년월일 (birth1)
-                if ($('#birth1').val().trim() === '') {
-                    alert("생년월일을 선택해주세요. 예)1997-01-01");
-                    return;
-                }
-            }
-
-            // 계약일자 유효성 검사
-            if ($('#contract_day').val().trim() === '') {
-                alert("계약일자을(를) 입력하십시오");
-                return;
-            }
-
-            // 출고예정일자 유효성 검사
-            if ($('#delivery_sch_day').val().trim() === '') {
-                alert("출고예정일자을(를) 입력하십시오");
-                return;
-            }
-
-            // 주소 유효성 검사 (우편번호, 기본주소만)
-            if ($('#zipno').val().trim() === '' || $('#addr').val().trim() === '') {
-                alert("주소(등록주소지)을(를) 입력하십시오");
-                return;
-            }
-
-            // 전화번호 유효성 검사
-            if ($('#phone').val().trim() === '') {
-                alert("전화번호을(를) 입력하십시오");
-                return;
-            }
-
-            // 휴대폰 유효성 검사 (형식 검증 포함)
-            const mobile = $('#mobile').val().trim();
-            const mobileRegex = /^010-\d{4}-\d{4}$/; // 010-0000-0000 형식
-            if (mobile === '') {
-                alert("휴대폰을(를) 입력하십시오");
-                return;
-            }
-            if (!mobileRegex.test(mobile)) {
-                alert("휴대폰 번호 형식이 올바르지 않습니다. (예: 010-1234-5678)");
-                return;
-            }
-
-            // 이메일 유효성 검사
-            if ($('#email').val().trim() === '') {
-                alert("EMAIL을(를) 입력하십시오");
-                return;
-            }
-
-            // 사회계층 유형 검증 (다자녀가구)
-            const socialYn = $('input[name="social_yn"]:checked').val();
-            const socialKind = $('#social_kind').val();
-            if (socialYn === 'Y' && socialKind === '3') { // 3: 다자녀가구
-                if ($('#children_cnt').val() === '') {
-                    alert("자녀 수를 선택해주세요.");
-                    return;
-                }
-            }
-
-            // 공동명의자 검증
-            const jnCnt = parseInt($('#jn_cnt').val()) || 0;
-            if (jnCnt > 0) {
-                let isValidJn = true;
-                $('#jnBody tr').each(function () {
-                    const name = $(this).find('input[name="jn_name"]').val().trim();
-                    const birth = $(this).find('input[name="jn_birth"]').val().trim();
-
-                    if (name === '') {
-                        alert("공동명의자 성명을 입력해주세요.");
-                        $(this).find('input[name="jn_name"]').focus();
-                        isValidJn = false;
-                        return false; // loop break
-                    }
-                    if (birth === '') {
-                        alert("공동명의자 생년월일을 입력해주세요.");
-                        $(this).find('input[name="jn_birth"]').focus();
-                        isValidJn = false;
-                        return false; // loop break
-                    }
-                });
-                if (!isValidJn) return;
-            }
-
             if (confirm("임시저장을 하시겠습니까?")) {
-                // '확인'을 눌렀을 때의 동작 (현재는 아무 동작 없음)
-                console.log("임시저장 확인");
+                var url = "/popup/security";
+                var title = "securityPopup";
+                var status = "width=600,height=400,scrollbars=no,resizable=no";
+                window.open(url, title, status);
+            }
+        }
+
+        // 보안 팝업창에서 호출할 콜백 함수
+        function tempSaveCallback(isSuccess) {
+            if (isSuccess) {
+                // 여기에 실제 임시저장 로직을 넣으면 됩니다.
+                // 예: 폼 데이터를 서버로 전송
+                alert("보안코드 확인! 임시저장을 진행합니다.");
+
+                // document.editForm.saveGubun.value = 'temp'; 
+                // document.editForm.submit();
+                console.log("임시저장 로직 실행됨");
             } else {
-                // '취소'를 눌렀을 때의 동작 (현재는 아무 동작 없음)
-                console.log("임시저장 취소");
+                alert("보안코드 입력에 실패했습니다.");
             }
         }
     </script>

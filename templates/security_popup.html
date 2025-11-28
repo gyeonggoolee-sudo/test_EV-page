@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>지원신청 확인 코드 입력</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/popup_style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function generateRandomCode(length = 10) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        $(document).ready(function() {
+            const randomCode = generateRandomCode();
+            $('#randomCode').text(randomCode);
+            // Just for testing, show reversed code in a less obvious way
+            // In a real scenario, this would not be in the DOM.
+            $('#reversedCodeHint').text(randomCode.split('').reverse().join('')); 
+        });
+
+        function goCompare() {
+            const originalCode = $('#randomCode').text();
+            const reversedCode = originalCode.split('').reverse().join('');
+            const userInput = $('#randeomChk').val();
+
+            if (userInput === reversedCode) {
+                if (window.opener && typeof window.opener.tempSaveCallback === 'function') {
+                    window.opener.tempSaveCallback(true);
+                }
+                window.close();
+            } else {
+                alert('코드를 잘못 입력했습니다.');
+                $('#randeomChk').val('').focus();
+            }
+        }
+    </script>
+</head>
+<body class="popup-wrap">
+    <div class="container">
+        <form name="frm" method="post" onsubmit="return false;">
+            <div class="container-fluid mb25">
+                <h2>지원신청 확인 코드 입력</h2>
+            </div>
+            <div class="container-fluid mb25">
+                <div class="table-wrap">
+                    <table style="text-align:center; width: 100%;">
+                        <colgroup>
+                            <col width="50%">
+                            <col width="50%">
+                        </colgroup>
+                        <tbody>
+                            <tr height="45px;">
+                                <th><span style="font-size: 25px;">확인코드</span></th>
+                                <th><span style="font-size: 25px;">확인코드(역순입력)</span></th>
+                            </tr>
+                            <tr height="45px;">
+                                <td><span id="randomCode" style="font-size: 35px; color: black; letter-spacing: 2px; font-family: monospace;"></span></td>
+                                <td>
+                                    <input type="text" style="width: 270px; height: 46px; font-size: 35px;" id="randeomChk" maxlength="10">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size: 18px; margin-top: 15px;">* 확인코드는 화면에 표시된 영문자(대소문자)와 숫자를 구분하여 역순으로 입력하세요.</p>
+                    <p id="reversedCodeHint" style="display:none;"></p>
+                </div>
+                <div class="content-button-group mb25" style="justify-content: center; margin-top: 20px;">
+                    <button type="button" onclick="goCompare();return false;" class="btn-blue" style="margin-right: 5px;">확인</button>
+                    <button type="button" onclick="window.close();" class="btn-blue">닫기</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주소정보연계 | 도로명주소 안내시스템</title>
+    <!-- 팝업 전용 스타일 로드 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/popup_style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function init() {
+            // 초기화 로직 (필요 시)
+        }
+
+        // 검색 시뮬레이션
+        function searchUrlJuso(){
+            var keyword = $('#keyword').val();
+            if(!keyword) {
+                alert('검색어를 입력해주세요.');
+                return;
+            }
+            
+            // 더미 검색 결과 표시
+            $('.popSearchNoResult').hide();
+            $('.result-list').show();
+            $('#resultData').hide(); // 상세입력창 숨김
+        }
+
+        // 주소 선택 시뮬레이션
+        function setMaping(idx) {
+            // 상세주소 입력창 표시
+            $('.result-list').hide();
+            $('#resultData').show();
+            
+            // 선택한 주소 정보 세팅 (더미)
+            var addr = "";
+            if(idx === '1') addr = "서울특별시 성동구 동일로 121 (성수동2가)";
+            else if(idx === '2') addr = "경기도 의정부시 동일로 121 (장암동)";
+            else addr = "서울특별시 중랑구 동일로120길 121-" + idx + " (상봉동)";
+            
+            $('#addrPart1').text(addr);
+            $('#rtAddrDetail').val('');
+            $('#rtAddrDetail').focus();
+            
+            // 전역 변수에 저장해두기 (나중에 부모창 전달용)
+            window.selectedAddr = {
+                roadAddrPart1: addr,
+                zipNo: (idx==='1'?'04798':(idx==='2'?'11726':'02091'))
+            };
+        }
+
+        // 부모 창으로 전달
+        function setParent(){
+            var addrDetail = $('#rtAddrDetail').val();
+            
+            if(window.opener && window.opener.jusoCallBack){
+                window.opener.jusoCallBack(
+                    window.selectedAddr.roadAddrPart1, // roadFullAddr
+                    window.selectedAddr.roadAddrPart1, // roadAddrPart1
+                    addrDetail, // addrDetail
+                    "", "", "", 
+                    window.selectedAddr.zipNo // zipNo
+                );
+                window.close();
+            } else {
+                alert("부모 창을 찾을 수 없습니다.");
+            }
+        }
+    </script>
+</head>
+
+<body class="popup-wrap" onload="init();">
+
+	<div class="container mw700">
+		<form name="rtForm" id="rtForm" method="post">
+			<input type="hidden" name="inputYn" id="inputYn" value="Y">
+		</form>
+
+		<div class="container-fluid">
+            <h1>우편번호 검색</h1>
+            
+            <!-- search wrap -->
+            <div class="container-fluid">
+                <div class="address-search-wrap">
+                    <input type="text" placeholder="검색어 예 : 도로명(반포대로 58), 건물명(독립기념관), 지번(삼성동 25)" name="keyword" id="keyword" onkeydown="if(event.keyCode==13) searchUrlJuso();">
+                    <button type="button" onclick="searchUrlJuso();"></button>
+                </div>
+            </div>
+            <!-- // search wrap -->
+
+            <!-- list view (초기: 숨김, 검색후: 표시) -->
+            <div class="container-fluid popSearchNoResult result-list" style="display:none;">
+                <div class="container-fluid">
+                    <p class="guide_sty1">도로명주소 검색 결과 <strong>(2건)</strong></p>
+                    <div class="table-wrap address-view">
+                        <table class="table-case1">
+                            <colgroup>
+                                <col style="width: 11%;">
+                                <col>
+                                <col style="width: 16%;">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>도로명 주소</th>
+                                    <th>우편번호</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td class="tal">
+                                        <a href="javascript:setMaping('1')">
+                                            <div>
+                                                <div><b>서울특별시 성동구 동일로 121 (성수동2가)</b></div>
+                                                <span style="font-size:11px;">[지번] 서울특별시 성동구 성수동2가 19-3 덕수카인테리어</span>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>04798</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td class="tal">
+                                        <a href="javascript:setMaping('2')">
+                                            <div>
+                                                <div><b>경기도 의정부시 동일로 121 (장암동)</b></div>
+                                                <span style="font-size:11px;">[지번] 경기도 의정부시 장암동 160-8 장암역</span>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>11726</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- pagination -->
+                    <div class="content-page-nav">
+                        <div class="pagination">
+                            <a class="active">1</a>
+                            <a href="#">2</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- view wrap (상세주소 입력) -->
+            <div class="container-fluid" id="resultData" style="display:none;">
+                <h2>상세주소 입력</h2>
+                <div class="table-wrap address-view2">
+                    <table>
+                        <colgroup>
+                            <col style="width:20%">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th>도로명주소</th>
+                                <td id="addrPart1"></td>
+                            </tr>
+                            <tr>
+                                <th>상세주소입력</th>
+                                <td class="pt10">
+                                    <input type="text" class="w95p" name="rtAddrDetail" id="rtAddrDetail" title="상세주소">
+                                    <p class="mt5 mb15" id="addrPart2"></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="content-button-group">
+                    <button class="btn-blue" onclick="javascript:setParent();">
+                    주소입력
+                    </button>
+                </div>
+            </div>
+            <!-- // view wrap -->
+
+		</div>
+	</div>
+</body>
+</html>

@@ -946,6 +946,26 @@
             }
         }
     </script>
+    <script>
+        // 주소 팝업 열기
+        function popupAddress() {
+            var url = "/juso/popup";
+            var title = "jusoPopup";
+            var status = "width=570,height=420,scrollbars=yes,resizable=yes";
+            window.open(url, title, status);
+        }
+
+        // 주소 콜백 함수 (팝업에서 호출됨)
+        function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, engAddr, jibunAddr, zipNo) {
+            // 팝업에서 전달받은 값을 입력 필드에 설정
+            document.getElementById('zipno').value = zipNo;
+            document.getElementById('addr').value = roadAddrPart1;
+            document.getElementById('addr_detail').value = addrDetail;
+
+            // 포커스 이동 (선택사항)
+            document.getElementById('addr_detail').focus();
+        }
+    </script>
 </body>
 
 </html>

@@ -23,6 +23,11 @@ def get_local_info():
     # 실제 API 연동 로직 추가
     return jsonify({"local_cd": "4113", "local_nm": "성남시"})
 
+@app.route('/juso/popup')
+def juso_popup():
+    """주소 입력 팝업창"""
+    return render_template('juso_popup.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
 

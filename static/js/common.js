@@ -180,17 +180,7 @@ function isValidEmail(email) {
  * 휴대폰 번호 포맷팅
  */
 function formatPhoneNumber($input) {
-    let value = $input.val().replace(/[^0-9]/g, '');
-    
-    if (value.length >= 11) {
-        value = value.substring(0, 11);
-        value = value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-    } else if (value.length >= 7) {
-        value = value.replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3');
-    } else if (value.length >= 3) {
-        value = value.replace(/(\d{3})(\d+)/, '$1-$2');
-    }
-    
+    let value = $input.val().replace(/[^0-9-]/g, ''); // 숫자와 하이픈만 허용
     $input.val(value);
 }
 

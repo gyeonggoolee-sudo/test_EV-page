@@ -81,6 +81,34 @@ $(document).ready(function() {
     // 신청 유형 변경 시 이벤트 처리
     $('#req_kind').on('change', function() {
         var selectedValue = $(this).val();
+        var previousValue = $(this).data('previous-value');
+        
+        // 이전 값과 다를 때만 초기화 (처음 로드 시에는 초기화 안 함)
+        if (previousValue !== undefined && previousValue !== selectedValue) {
+            // 필드 초기화
+            $('#req_nm').val(''); // 성명/기관명
+            $('#birth1').val(''); // 생년월일 (화면 표시용)
+            $('#birth').val(''); // 생년월일 (hidden)
+            $('#ceo').val(''); // 대표자
+            $('#birth2').val(''); // 법인등록번호
+            $('#busi_no').val(''); // 사업자등록번호
+            $('#pri_busi_nm').val(''); // 개인사업장명
+            $('#grp_reqst_se').val(''); // 신청구분
+            
+            // 라디오 버튼 초기화
+            $('input[name="req_sex"]').prop('checked', false);
+            $('#req_sex3').prop('checked', true); // '없음' 선택
+            
+            // 체크박스 초기화
+            $('#pri_business_yn1').prop('checked', false);
+            $('#pri_business_yn').val('N');
+            $('#profit_yn1').prop('checked', false);
+            $('#profit_yn').val('N');
+        }
+        
+        // 이전 값 저장
+        $(this).data('previous-value', selectedValue);
+        
         if (selectedValue === 'P') { // 개인
             $('#div_jnInfo').show();
             $('.p_birth1').show();
@@ -123,7 +151,10 @@ $(document).ready(function() {
     });
 
     // 페이지 로드 시 초기 상태 설정
-    if ($('#req_kind').val() === 'P') {
+    var initialReqKind = $('#req_kind').val();
+    $('#req_kind').data('previous-value', initialReqKind); // 초기값 저장
+    
+    if (initialReqKind === 'P') {
         $('#div_jnInfo').show();
     } else {
         $('#div_jnInfo').hide();

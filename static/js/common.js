@@ -25,8 +25,8 @@ function createNewJointInfo() {
         tbody.append(newRow);
     }
 
-    // datepicker 적용
-    $('.datepicker').datepicker({
+    // 동적으로 생성된 datepicker에만 datepicker 적용
+    tbody.find('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd',
         changeMonth: true,
         changeYear: true,
@@ -70,6 +70,14 @@ function deleteJNRow(button) {
 }
 
 $(document).ready(function() {
+    // Datepicker 초기화
+    $(".datepicker, .datepickerBirth").datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: 'c-100:c+10'
+    });
+
     // 신청 유형 변경 시 이벤트 처리
     $('#req_kind').on('change', function() {
         var selectedValue = $(this).val();

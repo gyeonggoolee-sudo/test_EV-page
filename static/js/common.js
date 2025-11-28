@@ -81,10 +81,44 @@ $(document).ready(function() {
     // 신청 유형 변경 시 이벤트 처리
     $('#req_kind').on('change', function() {
         var selectedValue = $(this).val();
-        if (selectedValue === 'P') {
+        if (selectedValue === 'P') { // 개인
             $('#div_jnInfo').show();
-        } else {
+            $('.p_birth1').show();
+            $('.p_birth2').hide();
+            $('.p_ceo').hide();
+            $('.p_pri_busi').show();
+            $('.p_pri_busi_1').hide(); // 사업자등록번호, 개인사업장명 숨김
+            $('.tr_grp_reqst').hide();
+            $('#profit_yn_label').hide();
+        } else if (selectedValue === 'G') { // 단체
             $('#div_jnInfo').hide();
+            $('.p_birth1').hide();
+            $('.p_birth2').show();
+            $('.p_ceo').show();
+            $('.p_pri_busi').hide();
+            $('.p_pri_busi_1').show(); // 사업자등록번호, 개인사업장명 표시
+            $('.tr_grp_reqst').show();
+            $('#profit_yn_label').show();
+        } else { // 선택 안함
+            $('#div_jnInfo').hide();
+            $('.p_birth1').show();
+            $('.p_birth2').hide();
+            $('.p_ceo').hide();
+            $('.p_pri_busi').show();
+            $('.p_pri_busi_1').hide(); // 사업자등록번호, 개인사업장명 숨김
+            $('.tr_grp_reqst').hide();
+            $('#profit_yn_label').hide();
+        }
+    });
+
+    // 개인사업자 체크박스 변경 시 이벤트 처리
+    $('#pri_business_yn1').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('.p_pri_busi_1').show();
+            $('#pri_business_yn').val('Y');
+        } else {
+            $('.p_pri_busi_1').hide();
+            $('#pri_business_yn').val('N');
         }
     });
 

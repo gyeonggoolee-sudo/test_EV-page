@@ -156,38 +156,87 @@
                                             <th>신청 유형</th>
                                             <td>
                                                 <div class="form-select">
-                                                    <select name="req_kind" id="req_kind" class="select w60p">
+                                                    <select name="req_kind" id="req_kind" title="신청 유형" class="myselector w60p select">
                                                         <option value="">==선택==</option>
                                                         <option value="P">개인</option>
                                                         <option value="G">단체</option>
                                                     </select>
+                                                    &nbsp;&nbsp;
+                                                    <label class="p_birth2" id="profit_yn_label" style="display: none;">비영리단체<input type="checkbox" id="profit_yn1" value=""></label>
+                                                    <input type="hidden" id="profit_yn" name="profit_yn" value="N">
                                                 </div>
                                             </td>
-                                            <td colspan="4">
+                                            <th>
+                                                <p class="td_lease" style="display:none">리스 유형</p>
+                                            </th>
+                                            <td>
+                                                <div class="td_lease" style="display:none">
+                                                    <div class="form-select">
+                                                        <input type="radio" class="lease_kind" name="lease_kind" id="lease_kind1" value="P">
+                                                        <label for="lease_kind1">개인</label>
+                                                        <input type="radio" class="lease_kind" name="lease_kind" id="lease_kind2" value="G">
+                                                        <label for="lease_kind2">단체</label>
+                                                        <div style="display:none">
+                                                            <input type="radio" class="lease_kind" name="lease_kind" id="lease_kind3" value="">
+                                                            <label for="lease_kind3">없음</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td colspan="2">
+                                                <p class="p_dupvmis vmisChkYn" style=""></p>
                                                 <p class="guide_sty2">* 차량등록이력조회는 임시저장(저장) 후 가능</p>
                                             </td>
                                         </tr>
+                                        <tr class="tr_grp_reqst" style="display: none;" height="60">
+                                            <th><p><label class="reqInput1">*</label>신청구분</p></th>
+                                            <td colspan="5">
+                                                <select name="grp_reqst_se" id="grp_reqst_se" title="구분" class="myselector w10p">
+                                                    <option value="">==선택==</option>
+                                                    <option value="01">공공기관</option>
+                                                    <option value="02">지자체</option>
+                                                    <option value="99">기타</option>
+                                                </select>
+                                            </td>
+                                        </tr>
                                         <tr>
-                                            <th><label class="reqInput1">*</label>성명</th>
+                                            <th>
+                                                <p class="p_birth1" style=""><label class="reqInput1">*</label>성명</p>
+                                                <p class="p_birth2" style="display: none;"><label class="reqInput1">*</label>기관명</p>
+                                            </th>
                                             <td>
-                                                <input type="text" class="text w90p" id="req_nm" name="req_nm" value="" maxlength="50" required>
+                                                <input type="text" class="text w90p" id="req_nm" name="req_nm" value="" maxlength="50" title="성명(기관명)" checknull="true">
                                             </td>
-                                            <th><label class="reqInput1">*</label>생년월일</th>
+                                            <th>
+                                                <p class="p_birth1" style=""><label class="reqInput1">*</label>생년월일</p>
+                                                <p class="p_ceo" style="display: none;"><label class="reqInput1">*</label>대표자</p>
+                                            </th>
                                             <td>
-                                                <input type="text" class="datepickerBirth" style="width: 65%" id="birth1" value="" readonly>
-                                                <input type="hidden" id="birth" name="birth" value="">
+                                                <div class="p_birth1" style="">
+                                                    <input type="text" class="datepickerBirth" style="width: 65%" id="birth1" value="" title="생년월일" readonly>
+                                                </div>
+                                                <div class="p_ceo" style="display: none;">
+                                                    <input type="text" class="text" id="ceo" name="ceo" value="" maxlength="50" title="대표자">
+                                                </div>
+                                                <input type="hidden" class="text" id="birth" name="birth" value="">
                                             </td>
-                                            <th><label class="reqInput1">*</label>성별</th>
+                                            <th>
+                                                <p class="p_birth1" style=""><label class="reqInput1">*</label>성별</p>
+                                            </th>
                                             <td>
-                                                <div class="form-select">
+                                                <div class="form-select p_birth1" style="">
                                                     <input type="radio" name="req_sex" id="req_sex1" value="M">
                                                     <label for="req_sex1">남자</label>
                                                     <input type="radio" name="req_sex" id="req_sex2" value="F">
                                                     <label for="req_sex2">여자</label>
+                                                    <div style="display:none">
+                                                        <input type="radio" name="req_sex" id="req_sex3" value="">
+                                                        <label for="req_sex3">없음</label>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr class="tr_public" style="" id="tr_pri_business">
+                                        <tr class="tr_public" style="" id="tr_pri_business" height="60">
                                             <th>
                                                 <p class="p_pri_busi" style="">개인사업자</p>
                                                 <p class="p_birth2" style="display: none;"><label class="reqInput1">*</label>법인등록번호</p>
@@ -222,7 +271,7 @@
                                             <th>신청차종</th>
                                             <td>
                                                 <div class="form-select w90p">
-                                                    <select name="model_cd" id="model_cd" class="select">
+                                                    <select name="model_cd" id="model_cd" title="신청차종" class="myselector select">
                                                         <option value="">=======선택=======</option>
                                                         <option value="MODEL3LR_C">Model 3 Long Range / 일반승용</option>
                                                         <option value="MODEL3P_C">Model 3 Performance / 일반승용</option>
@@ -235,11 +284,11 @@
                                             </td>
                                             <th>신청대수</th>
                                             <td>
-                                                <input type="text" class="text intCheck" id="req_cnt" name="req_cnt" value="" maxlength="8">
+                                                <input type="text" class="text intCheck" id="req_cnt" name="req_cnt" value="" maxlength="8" title="신청대수" checknull="true">
                                             </td>
                                             <th>출고예정일자</th>
                                             <td>
-                                                <input type="text" class="datepicker" style="width: 65%" id="delivery_sch_day" name="delivery_sch_day" value="" readonly>
+                                                <input type="text" class="datepicker" style="width: 65%" id="delivery_sch_day" name="delivery_sch_day" value="" title="출고예정일자" readonly checknull="true">
                                             </td>
                                         </tr>
                                         <tr>

@@ -208,16 +208,18 @@ function initDynamicFields() {
             $('.p_birth1').hide();
             $('.p_ceo').show();
             $('.tr_grp_reqst').show();
-            // 개인사업자 관련 필드 숨김
+            $('#profit_yn_label').show(); // 비영리단체 체크박스 표시
+            // 개인사업자 체크박스 숨김, 법인등록번호 표시
             $('.p_pri_busi').hide();
-            $('.p_pri_busi_1').hide();
-            $('#tr_pri_business').show(); // tr은 표시하되 개인사업자 부분만 숨김
+            $('.p_pri_busi_1').show(); // 단체일 때는 사업자등록번호, 개인사업장명 항상 표시
+            $('#tr_pri_business').show();
         } else if (reqKind === 'P') {
             // 개인 선택 시
             $('.p_birth1').show();
             $('.p_birth2').hide();
             $('.p_ceo').hide();
             $('.tr_grp_reqst').hide();
+            $('#profit_yn_label').hide(); // 비영리단체 체크박스 숨김
             // 개인사업자 체크박스 표시
             $('.p_pri_busi').show();
             $('#tr_pri_business').show();
@@ -235,6 +237,7 @@ function initDynamicFields() {
             $('.p_birth2').hide();
             $('.p_ceo').hide();
             $('.tr_grp_reqst').hide();
+            $('#profit_yn_label').hide(); // 비영리단체 체크박스 숨김
             // 개인사업자 체크박스 표시
             $('.p_pri_busi').show();
             $('#tr_pri_business').show();
@@ -280,13 +283,26 @@ function initDynamicFields() {
         formatCorporateNumber($(this));
     });
     
+    // 비영리단체 체크박스 변경 시
+    $('#profit_yn1').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('#profit_yn').val('Y');
+        } else {
+            $('#profit_yn').val('N');
+        }
+    });
+    
     // 초기 로드 시에도 신청 유형에 따라 표시/숨김 처리
     const initialReqKind = $('#req_kind').val();
     if (initialReqKind === 'P') {
         // 개인일 때 - 체크박스 해제 상태로 시작
         $('#tr_pri_business').show();
         $('.p_pri_busi').show();
+        $('.p_birth1').show();
         $('.p_birth2').hide();
+        $('.p_ceo').hide();
+        $('.tr_grp_reqst').hide();
+        $('#profit_yn_label').hide();
         $('#pri_business_yn1').prop('checked', false);
         $('#pri_business_yn').val('N');
         $('.p_pri_busi_1').hide();
@@ -294,7 +310,11 @@ function initDynamicFields() {
         // ==선택== 일 때
         $('#tr_pri_business').show();
         $('.p_pri_busi').show();
+        $('.p_birth1').show();
         $('.p_birth2').hide();
+        $('.p_ceo').hide();
+        $('.tr_grp_reqst').hide();
+        $('#profit_yn_label').hide();
         if ($('#pri_business_yn1').is(':checked')) {
             $('.p_pri_busi_1').show();
         } else {
@@ -304,9 +324,15 @@ function initDynamicFields() {
         // 단체일 때
         $('#tr_pri_business').show();
         $('.p_birth2').show();
+        $('.p_birth1').hide();
+        $('.p_ceo').show();
+        $('.tr_grp_reqst').show();
+        $('#profit_yn_label').show();
         $('.p_pri_busi').hide();
-        $('.p_pri_busi_1').hide();
+        $('.p_pri_busi_1').show(); // 단체일 때는 항상 표시
     } else {
+        // ==선택== 기본값
+        $('#profit_yn_label').hide();
         // 기본값: ==선택== 상태로 처리
         $('#tr_pri_business').show();
         $('.p_pri_busi').show();

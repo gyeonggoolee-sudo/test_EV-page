@@ -667,6 +667,103 @@
                             </div>
                         </div>
 
+                        <!-- 리스·렌탈 목적 차량 여부 섹션 -->
+                        <div class="container-fluid mb25" id="div_lease_user">
+                            <h1>리스·렌탈 목적 차량 여부(추가 보조금)</h1>
+                            <div class="table-wrap mb25">
+                                <table id="t_lease_user">
+                                    <colgroup>
+                                        <col width="11%">
+                                        <col width="20%">
+                                        <col width="13%">
+                                        <col width="25%">
+                                        <col width="10%">
+                                        <col width="21%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>리스·렌탈 목적 차량 여부</th>
+                                            <td colspan="5">
+                                                <div class="form-select">
+                                                    <input type="radio" class="ls_user_yn" name="ls_user_yn" id="ls_user_yn1" value="Y">
+                                                    <label for="ls_user_yn1">Y</label>
+                                                    <input type="radio" class="ls_user_yn" name="ls_user_yn" id="ls_user_yn2" value="N" checked="checked">
+                                                    <label for="ls_user_yn2">N</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="tr_lease_user_edit" style="display:none">
+                                            <th>리스·렌탈 이용 유형</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <input type="radio" class="ls_user_kind" name="ls_user_kind" id="ls_user_kind1" value="P">
+                                                    <label for="ls_user_kind1">개인</label>
+                                                    <input type="radio" class="ls_user_kind" name="ls_user_kind" id="ls_user_kind4" value="I">
+                                                    <label for="ls_user_kind4">개인사업자</label>
+                                                    <input type="radio" class="ls_user_kind" name="ls_user_kind" id="ls_user_kind2" value="G">
+                                                    <label for="ls_user_kind2">단체(법인)</label>
+                                                </div>
+                                            </td>
+                                            <th>리스·렌탈 구분(계약기준)*</th>
+                                            <td colspan="3">
+                                                <div class="form-select w50p">
+                                                    <select name="ls_user_type" id="ls_user_type" title="리스·렌탈 구분" class="select">
+                                                        <option value="">==선택==</option>
+                                                        <option value="L">리스</option>
+                                                        <option value="R">렌탈</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>이용자명의 리스·렌탈 여부</th>
+                                            <td colspan="5">
+                                                <div class="form-select">
+                                                    <input type="radio" class="ls_user_nm_chk" name="ls_user_nm_chk" id="ls_user_nm_chk1" value="Y">
+                                                    <label for="ls_user_nm_chk1">Y</label>
+                                                    <input type="radio" class="ls_user_nm_chk" name="ls_user_nm_chk" id="ls_user_nm_chk2" value="N" checked="checked">
+                                                    <label for="ls_user_nm_chk2">N</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="tr_lease_user_edit" style="display:none">
+                                            <th>실제 이용자(계약자) 여부</th>
+                                            <td colspan="5">
+                                                <label><input type="radio" class="cntrctr_yn" name="cntrctr_yn" id="cntrctr_yn1" value="Y" checked="checked">Y</label>
+                                                <label><input type="radio" class="cntrctr_yn" name="cntrctr_yn" id="cntrctr_yn2" value="N">N</label>
+                                            </td>
+                                        </tr>
+                                        <tr class="tr_lease_user_edit" id="tr_cntrctr_yn1" style="display:none">
+                                            <th>이용자명 / 기관명</th>
+                                            <td>
+                                                <input type="text" class="text" id="ls_user_nm" name="ls_user_nm" value="" maxlength="50">
+                                            </td>
+                                            <th>생년월일 / 사업자번호</th>
+                                            <td>
+                                                <input type="text" class="text" id="ls_user_busi_no" name="ls_user_busi_no" value="" maxlength="12" placeholder="000-00-00000">
+                                            </td>
+                                            <th>성별 / 법인번호</th>
+                                            <td>
+                                                <input type="text" class="text" id="ls_user_birth2" name="ls_user_birth2" value="" maxlength="14" placeholder="000000-0000000">
+                                            </td>
+                                        </tr>
+                                        <tr class="tr_lease_user_edit" id="tr_cntrctr_yn2" style="display:none">
+                                            <th>이용자 주소<br>(등록주소지)</th>
+                                            <td colspan="5">
+                                                <input type="text" class="text w100" name="ls_user_zipno" id="ls_user_zipno" value="" maxlength="5" readonly>
+                                                <button type="button" class="type1 btn-black">주소입력</button>
+                                                <input style="width:95%;" type="text" class="text mt5" id="ls_user_addr" name="ls_user_addr" value="" maxlength="200"><br>
+                                                <input style="width:95%;" type="text" class="text mt5" id="ls_user_addr_detail" name="ls_user_addr_detail" value="" maxlength="300">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="container-fluid headdesc">
+                                <p>리스/렌탈사를 구분하는 것이 아닌 차량에 대한 계약 또는 판매상품 기준으로 선택(정확히 입력하지 않을 경우 추가 보조금이 취소될 수 있음)</p>
+                            </div>
+                        </div>
+
                         <!-- 제조수입사 정보 섹션 -->
                         <div class="container-fluid mb25" id="div_seller">
                             <h1>제조수입사 정보</h1>

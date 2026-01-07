@@ -1050,6 +1050,27 @@
         });
 
         function goSave() {
+            // 1. 필수 입력 항목 검증 (checknull="true" 속성)
+            var isValid = true;
+            $('#editForm [checknull="true"]').each(function () {
+                var $el = $(this);
+
+                // 비활성화되었거나 숨겨진 필드는 검사 대상에서 제외
+                if ($el.prop('disabled') || !$el.is(':visible')) {
+                    return true; // continue
+                }
+
+                if ($.trim($el.val()) === "") {
+                    var title = $el.attr('title') || "필수 항목";
+                    alert("[" + title + "] 항목을 입력해주세요.");
+                    $el.focus();
+                    isValid = false;
+                    return false; // break loop
+                }
+            });
+
+            if (!isValid) return;
+
             var msg = "{% if status == 'saved' %}저장하시겠습니까?{% else %}임시저장을 하시겠습니까?{% endif %}";
             if (confirm(msg)) {
                 var url = "/popup/security";

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>무공해차 구매지원시스템</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="header-left">
+            <span class="logo-icon">🚗</span>
+            <span class="logo-text">구매보조금신청</span>
+        </div>
+        <nav class="nav-menu">
+            <div class="nav-item">정보관리</div>
+            <div class="nav-item">지원사업관리</div>
+            <div class="nav-item active">신청관리</div>
+            <div class="nav-item">현황조회</div>
+        </nav>
+        <div class="user-info">
+            <span>이경구 님</span>
+            <button class="user-btn">마이페이지</button>
+            <button class="user-btn">로그아웃</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside>
+            <div class="sidebar-title">신청관리</div>
+            <div class="session-info">
+                <span>남은시간 <span class="timer">59:59</span></span>
+                <button class="extend-btn">시간연장</button>
+            </div>
+            <ul class="side-menu">
+                <li class="side-item">신청관리(전기자동차) 제조사</li>
+                <li class="side-item active">신청서 작성</li>
+                <li class="side-item">입금내역</li>
+                <li class="side-item">택배차 추가보조금 신청관리</li>
+            </ul>
+        </aside>
+
+        <main>
+            <div class="breadcrumb">Home > 신청관리 > 신청서 작성</div>
+            <h1 class="page-title">신청관리(전기자동차) 제조사</h1>
+
+            <div class="step-container">
+                <div class="step active">지자체선택</div>
+                <div class="step">지원신청 등록/보완</div>
+                <div class="step">지원가능확인</div>
+                <div class="step">지급신청 등록/보완</div>
+                <div class="step">지급완료</div>
+            </div>
+
+            <div class="action-card">
+                <button class="btn-blue-large">지자체 선택</button>
+                <p class="guide-text">* 신청서 작성 시 보조금 신청할 지자체를 먼저 선택하여야 합니다.</p>
+            </div>
+
+            <div class="info-box">
+                <p>• 신청서 진행 단계에 따라 업무에 필요한 버튼이 표시됩니다.</p>
+                <p>• [임시저장] 임시저장하고 제출하지 않은 신청서는 24시간 지난 후 야간에 삭제됩니다.</p>
+                <p>• [임시저장] 후 지원신청 제출 서류를 첨부한 후 신청서를 제출해야 해당 지자체 담당자에게 서류가 접수됩니다.</p>
+                <p>• [목록] 버튼을 클릭하면 신청관리 목록 화면으로 이동합니다.</p>
+            </div>
+
+            <div class="footer-btns">
+                <button class="btn btn-primary">임시저장</button>
+                <button class="btn btn-secondary">신청서 작성</button>
+                <button class="btn btn-gray">목록</button>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

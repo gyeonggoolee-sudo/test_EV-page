@@ -12,6 +12,10 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/applyform')
+def apply_form():
     status = request.args.get('status', 'new')
     # 임시 데이터 (실제로는 DB에서 가져오게 됨)
     data = {

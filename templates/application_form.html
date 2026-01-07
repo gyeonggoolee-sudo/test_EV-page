@@ -936,7 +936,7 @@
 
                         <!-- 버튼 영역 -->
                         <div class="order-button-group mb25">
-                            <button type="button" class="btn-blue" onclick="goSave(); return false;">임시저장</button>
+                            <button type="button" class="btn-blue" onclick="goSave(); return false;">{% if status == 'saved' %}저장{% else %}임시저장{% endif %}</button>
                             <button type="submit" class="btn-blue">신청서 작성</button>
                             <button type="button" class="btn-gray allow-edit" onclick="goList(); return false;">목
                                 록</button>
@@ -1013,7 +1013,8 @@
         });
 
         function goSave() {
-            if (confirm("임시저장을 하시겠습니까?")) {
+            var msg = "{% if status == 'saved' %}저장{% else %}임시저장{% endif %}을 하시겠습니까?";
+            if (confirm(msg)) {
                 var url = "/popup/security";
                 var title = "securityPopup";
                 var status = "width=600,height=400,scrollbars=no,resizable=no";
@@ -1031,11 +1032,12 @@
                     data: $('#editForm').serialize(),
                     success: function (response) {
                         if (response.status === 'success') {
-                            alert("데이터가 임시저장되었습니다. 페이지를 새로고침합니다.");
+                            var successMsg = "{% if status == 'saved' %}데이터가 저장되었습니다.{% else %}데이터가 임시저장되었습니다.{% endif %} 페이지를 새로고침합니다.";
+                            alert(successMsg);
                             // 2. 성공 시 페이지 새로고침 (스크롤 위치 무시하고 최상단으로 리다이렉트)
                             window.location.replace('/?status=saved');
                         } else {
-                            alert("임시저장 중 오류가 발생했습니다.");
+                            alert("저장 중 오류가 발생했습니다.");
                         }
                     },
                     error: function () {

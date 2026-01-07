@@ -22,8 +22,8 @@ def apply_form():
     # 세션에서 임시저장된 데이터 가져오기
     data = session.get('draft_data')
     
-    # 데이터가 없을 때만 기본 예시 데이터 설정 (최초 테스트용)
-    if not data and status in ['saved', 'finished']:
+    # 데이터가 아예 없을 때(None)만 기본 예시 데이터 설정 (최초 테스트용)
+    if data is None and status in ['saved', 'finished']:
         data = {
             'req_nm': '이경구',
             'birth': '1990-01-01',

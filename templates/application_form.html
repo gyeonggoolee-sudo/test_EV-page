@@ -371,9 +371,9 @@
                                             <th>보조금신청액</th>
                                             <td>
                                                 <input type="text" class="text intCheck" id="req_total_amt_1"
-                                                    name="req_total_amt_1" value="" maxlength="12" title="신청 총 금액"
+                                                    name="req_total_amt_1" value="{{ data.req_total_amt_1 if data else '' }}" maxlength="12" title="신청 총 금액"
                                                     readonly="readonly" style="width:70%;"> 원
-                                                <input type="hidden" id="req_total_amt" name="req_total_amt" value=""
+                                                <input type="hidden" id="req_total_amt" name="req_total_amt" value="{{ data.req_total_amt if data else '' }}"
                                                     maxlength="12" title="신청 총 금액" readonly="readonly">
                                                 <br>
                                                 <p class="req_total_amt_han"></p>
@@ -568,22 +568,22 @@
                                             <th>사회계층 유형</th>
                                             <td>
                                                 <div class="form-select w70p">
-                                                    <select name="social_kind" id="social_kind" class="select" disabled>
+                                                    <select name="social_kind" id="social_kind" class="select" {% if data and data.social_yn == "Y" %} {% else %}disabled{% endif %}>
                                                         <option value="">=====선택=====</option>
-                                                        <option value="1">국가유공자</option>
-                                                        <option value="2">장애인</option>
-                                                        <option value="3">다자녀가구</option>
-                                                        <option value="4">다문화가족</option>
-                                                        <option value="5">기초생활수급자</option>
-                                                        <option value="6">소상공인</option>
-                                                        <option value="9">기타 등</option>
+                                                        <option value="1" {% if data and data.social_kind == "1" %}selected{% endif %}>국가유공자</option>
+                                                        <option value="2" {% if data and data.social_kind == "2" %}selected{% endif %}>장애인</option>
+                                                        <option value="3" {% if data and data.social_kind == "3" %}selected{% endif %}>다자녀가구</option>
+                                                        <option value="4" {% if data and data.social_kind == "4" %}selected{% endif %}>다문화가족</option>
+                                                        <option value="5" {% if data and data.social_kind == "5" %}selected{% endif %}>기초생활수급자</option>
+                                                        <option value="6" {% if data and data.social_kind == "6" %}selected{% endif %}>소상공인</option>
+                                                        <option value="9" {% if data and data.social_kind == "9" %}selected{% endif %}>기타 등</option>
                                                     </select>
                                                     <select class="select" name="children_cnt" id="children_cnt"
-                                                        style="width: 100px; display: none; margin-left: 5px;">
+                                                        style="width: 100px; {% if data and data.social_kind == "3" %}display: inline-block;{% else %}display: none;{% endif %} margin-left: 5px;">
                                                         <option value="" selected="selected">===선택===</option>
-                                                        <option value="2">2자녀</option>
-                                                        <option value="3">3자녀</option>
-                                                        <option value="4">4자녀 이상</option>
+                                                        <option value="2" {% if data and data.children_cnt == "2" %}selected{% endif %}>2자녀</option>
+                                                        <option value="3" {% if data and data.children_cnt == "3" %}selected{% endif %}>3자녀</option>
+                                                        <option value="4" {% if data and data.children_cnt == "4" %}selected{% endif %}>4자녀 이상</option>
                                                     </select>
                                                 </div>
                                             </td>

@@ -85,7 +85,13 @@ $(document).ready(function () {
         dateFormat: 'yy-mm-dd',
         changeMonth: true,
         changeYear: true,
-        yearRange: 'c-100:c+10'
+        yearRange: 'c-100:c+10',
+        onSelect: function (dateText, inst) {
+            // birth1 필드인 경우 hidden birth 필드 업데이트
+            if (this.id === 'birth1') {
+                $('#birth').val(dateText);
+            }
+        }
     });
 
     // 신청 유형 변경 시 이벤트 처리

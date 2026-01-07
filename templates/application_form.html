@@ -875,7 +875,7 @@
                                                 <p class="guide_sty3" id="file_desc_A">* 첨부파일 없음</p>
                                             </td>
                                             <th>첨부파일 변경일</th>
-                                            <td></td>
+                                            <td id="file_date_A"></td>
                                         </tr>
                                         <tr>
                                             <th>차량 구매계약서</th>
@@ -891,7 +891,7 @@
                                                 <p class="guide_sty3" id="file_desc_B">* 첨부파일 없음</p>
                                             </td>
                                             <th>첨부파일 변경일</th>
-                                            <td></td>
+                                            <td id="file_date_B"></td>
                                         </tr>
                                         <tr>
                                             <th>개인 : 주민등록등본(초본)<br>법인(기업체) : 법인등기부등본 및 사업자등록증</th>
@@ -907,7 +907,7 @@
                                                 <p class="guide_sty3" id="file_desc_C">* 첨부파일 없음</p>
                                             </td>
                                             <th>첨부파일 변경일</th>
-                                            <td></td>
+                                            <td id="file_date_C"></td>
                                         </tr>
                                         <tr>
                                             <th>우선순위 증빙자료</th>
@@ -926,7 +926,7 @@
                                                 </p>
                                             </td>
                                             <th>첨부파일 변경일</th>
-                                            <td></td>
+                                            <td id="file_date_D"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -965,12 +965,17 @@
 
     <script>
         $(document).ready(function () {
-            // 페이지 로드 시 localStorage에서 업로드된 파일 정보 확인 및 UI 업데이트
+            // 페이지 로드 시 localStorage에서 업로드된 파일 정보 및 일시 확인 및 UI 업데이트
             ['A', 'B', 'C', 'D'].forEach(function(type) {
                 var savedFilename = localStorage.getItem('uploaded_file_' + type);
+                var savedDate = localStorage.getItem('uploaded_date_' + type);
+                
                 if (savedFilename) {
                     $('#file_desc_' + type).text("선택된 파일: " + savedFilename);
                     $('#file_desc_' + type).css('color', '#254bb5');
+                }
+                if (savedDate) {
+                    $('#file_date_' + type).text(savedDate);
                 }
             });
 
@@ -1044,13 +1049,29 @@
             window.open(url, title, status);
         }
 
+        // 한국 시간 포맷 생성 함수 (YYYY-MM-DD HH:mm:ss)
+        function getKoreanDateTime() {
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = ('0' + (now.getMonth() + 1)).slice(-2);
+            var day = ('0' + now.getDate()).slice(-2);
+            var hours = ('0' + now.getHours()).slice(-2);
+            var minutes = ('0' + now.getMinutes()).slice(-2);
+            var seconds = ('0' + now.getSeconds()).slice(-2);
+            
+            return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+        }
+
         // 팝업에서 호출할 콜백 (파일 업로드 성공 시)
         function handlePopupResult(type, filename) {
-            // localStorage에 저장 (새로고침 후에도 유지하기 위함)
+            // 현재 일시 생성
+            var uploadTime = getKoreanDateTime();
+
+            // localStorage에 저장 (파일명 및 일시)
             localStorage.setItem('uploaded_file_' + type, filename);
+            localStorage.setItem('uploaded_date_' + type, uploadTime);
             
-            // 메인 페이지를 새로고침하여 실제 페이지가 다시 로드되는 UX 제공
-            // window.location.reload()를 사용하면 현재 쿼리스트링(?status=saved)을 유지하며 새로고침됩니다.
+            // 메인 페이지를 새로고침하여 데이터 반영
             window.location.reload();
         }
     </script>

@@ -18,12 +18,17 @@ def index():
 def apply_form():
     status = request.args.get('status', 'new')
     local_nm = request.args.get('local_nm', '성남시')
-    # 임시 데이터 (실제로는 DB에서 가져오게 됨)
-    data = {
-        'req_nm': '이경구',
-        'birth': '1990-01-01',
-        'req_kind': 'P'
-    } if status in ['saved', 'finished'] else None
+    
+    # 세션에서 임시저장된 데이터 가져오기
+    data = session.get('draft_data')
+    
+    # 데이터가 없을 때만 기본 예시 데이터 설정 (최초 테스트용)
+    if not data and status in ['saved', 'finished']:
+        data = {
+            'req_nm': '이경구',
+            'birth': '1990-01-01',
+            'req_kind': 'P'
+        }
     
     applied_at = ""
     if status == 'finished':

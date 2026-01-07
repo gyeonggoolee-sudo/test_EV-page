@@ -119,7 +119,8 @@
                                             <th>계약일자</th>
                                             <td>
                                                 <input type="text" class="datepicker" style="width: 65%"
-                                                    id="contract_day" name="contract_day" value="" readonly>
+                                                    id="contract_day" name="contract_day"
+                                                    value="{{ data.contract_day if data else '' }}" readonly>
                                             </td>
                                         </tr>
                                         <tr>
@@ -174,7 +175,8 @@
                                                     <label class="p_birth2" id="profit_yn_label"
                                                         style="display: none;">비영리단체<input type="checkbox"
                                                             id="profit_yn1" value=""></label>
-                                                    <input type="hidden" id="profit_yn" name="profit_yn" value="N">
+                                                    <input type="hidden" id="profit_yn" name="profit_yn"
+                                                        value="{{ data.profit_yn if data else 'N' }}">
                                                 </div>
                                             </td>
                                             <th>
@@ -244,19 +246,23 @@
                                                     <input type="text" class="text" id="ceo" name="ceo" value=""
                                                         maxlength="50" title="대표자">
                                                 </div>
-                                                <input type="hidden" class="text" id="birth" name="birth" value="">
+                                                <input type="hidden" class="text" id="birth" name="birth"
+                                                    value="{{ data.birth if data else '' }}">
                                             </td>
                                             <th>
                                                 <p class="p_birth1" style=""><label class="reqInput1">*</label>성별</p>
                                             </th>
                                             <td>
                                                 <div class="form-select p_birth1" style="">
-                                                    <input type="radio" name="req_sex" id="req_sex1" value="M">
+                                                    <input type="radio" name="req_sex" id="req_sex1" value="M" {% if
+                                                        data and data.req_sex=='M' %}checked{% endif %}>
                                                     <label for="req_sex1">남자</label>
-                                                    <input type="radio" name="req_sex" id="req_sex2" value="F">
+                                                    <input type="radio" name="req_sex" id="req_sex2" value="F" {% if
+                                                        data and data.req_sex=='F' %}checked{% endif %}>
                                                     <label for="req_sex2">여자</label>
                                                     <div style="display:none">
-                                                        <input type="radio" name="req_sex" id="req_sex3" value="">
+                                                        <input type="radio" name="req_sex" id="req_sex3" value="" {% if
+                                                            not data or not data.req_sex %}checked{% endif %}>
                                                         <label for="req_sex3">없음</label>
                                                     </div>
                                                 </div>
@@ -272,7 +278,7 @@
                                                 <div class="p_pri_busi" style="">
                                                     <input type="checkbox" id="pri_business_yn1" value="">
                                                     <input type="hidden" id="pri_business_yn" name="pri_business_yn"
-                                                        value="N">
+                                                        value="{{ data.pri_business_yn if data else 'N' }}">
                                                 </div>
                                                 <div class="p_birth2" style="display: none;">
                                                     <input type="text" class="text" id="birth2" name="birth2" value=""
@@ -307,13 +313,25 @@
                                                     <select name="model_cd" id="model_cd" title="신청차종"
                                                         class="myselector select">
                                                         <option value="">=======선택=======</option>
-                                                        <option value="MODEL3LR_C">Model 3 Long Range / 일반승용</option>
-                                                        <option value="MODEL3P_C">Model 3 Performance / 일반승용</option>
-                                                        <option value="MODEL3RWD">Model 3 RWD / 일반승용</option>
-                                                        <option value="NEW_MODELYRWD">New Model Y RWD / 일반승용</option>
-                                                        <option value="NEW_MODELYLR2">New Model Y Long Range(배터리변경) /
+                                                        <option value="MODEL3LR_C" {% if data and
+                                                            data.model_cd=='MODEL3LR_C' %}selected{% endif %}>Model 3
+                                                            Long Range / 일반승용</option>
+                                                        <option value="MODEL3P_C" {% if data and
+                                                            data.model_cd=='MODEL3P_C' %}selected{% endif %}>Model 3
+                                                            Performance / 일반승용</option>
+                                                        <option value="MODEL3RWD" {% if data and
+                                                            data.model_cd=='MODEL3RWD' %}selected{% endif %}>Model 3 RWD
+                                                            / 일반승용</option>
+                                                        <option value="NEW_MODELYRWD" {% if data and
+                                                            data.model_cd=='NEW_MODELYRWD' %}selected{% endif %}>New
+                                                            Model Y RWD / 일반승용</option>
+                                                        <option value="NEW_MODELYLR2" {% if data and
+                                                            data.model_cd=='NEW_MODELYLR2' %}selected{% endif %}>New
+                                                            Model Y Long Range(배터리변경) /
                                                             일반승용</option>
-                                                        <option value="MODEL3LR_C1">Model 3 Long Range(배터리변경) / 일반승용
+                                                        <option value="MODEL3LR_C1" {% if data and
+                                                            data.model_cd=='MODEL3LR_C1' %}selected{% endif %}>Model 3
+                                                            Long Range(배터리변경) / 일반승용
                                                         </option>
                                                     </select>
                                                 </div>
@@ -321,31 +339,34 @@
                                             <th>신청대수</th>
                                             <td>
                                                 <input type="text" class="text intCheck" id="req_cnt" name="req_cnt"
-                                                    value="" maxlength="8" title="신청대수" checknull="true">
+                                                    value="{{ data.req_cnt if data else '' }}" maxlength="8"
+                                                    title="신청대수" checknull="true">
                                             </td>
                                             <th>출고예정일자</th>
                                             <td>
                                                 <input type="text" class="datepicker" style="width: 65%"
-                                                    id="delivery_sch_day" name="delivery_sch_day" value=""
-                                                    title="출고예정일자" readonly checknull="true">
+                                                    id="delivery_sch_day" name="delivery_sch_day"
+                                                    value="{{ data.delivery_sch_day if data else '' }}" title="출고예정일자"
+                                                    readonly checknull="true">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><label class="reqInput1">*</label>주소<br>(등록주소지)</th>
                                             <td colspan="3">
-                                                <input type="text" class="text w100" name="zipno" id="zipno" value=""
-                                                    title="(필수입력)우편번호" readonly="readonly">
+                                                <input type="text" class="text w100" name="zipno" id="zipno"
+                                                    value="{{ data.zipno if data else '' }}" title="(필수입력)우편번호"
+                                                    readonly="readonly">
                                                 <button type="button" class="type1 btn-black"
                                                     onclick="popupAddress(); return false;">
                                                     주소입력
                                                 </button>
 
                                                 <input style="width:95%;" type="text" class="text mt5" id="addr"
-                                                    name="addr" value="" maxlength="200" title="주소(등록주소지)"
-                                                    checknull="true" readonly="readonly"><br>
+                                                    name="addr" value="{{ data.addr if data else '' }}" maxlength="200"
+                                                    title="주소(등록주소지)" checknull="true" readonly="readonly"><br>
                                                 <input style="width:95%;" type="text" class="text mt5" id="addr_detail"
-                                                    name="addr_detail" value="" maxlength="300" title="주소(등록주소지)"
-                                                    checknull="true">
+                                                    name="addr_detail" value="{{ data.addr_detail if data else '' }}"
+                                                    maxlength="300" title="주소(등록주소지)" checknull="true">
                                             </td>
                                             <th>보조금신청액</th>
                                             <td>
@@ -363,21 +384,22 @@
                                             <td colspan="5">
                                                 <div style="width:33%; float:left;">
                                                     <label class="reqInput2">*</label>전화 :
-                                                    <input type="text" class="text" id="phone" name="phone" value=""
-                                                        maxlength="30" title="전화번호" checknull="true"
-                                                        style="width: 70%;">
+                                                    <input type="text" class="text" id="phone" name="phone"
+                                                        value="{{ data.phone if data else '' }}" maxlength="30"
+                                                        title="전화번호" checknull="true" style="width: 70%;">
                                                 </div>
                                                 <div style="width:33%; float:left;">
                                                     <label class="reqInput2">*</label>휴대폰 :
-                                                    <input type="text" class="text" id="mobile" name="mobile" value=""
-                                                        maxlength="13" placeholder="010-0000-0000" title="휴대폰"
-                                                        checknull="true" style="width: 70%;">
+                                                    <input type="text" class="text" id="mobile" name="mobile"
+                                                        value="{{ data.mobile if data else '' }}" maxlength="13"
+                                                        placeholder="010-0000-0000" title="휴대폰" checknull="true"
+                                                        style="width: 70%;">
                                                 </div>
                                                 <div style="width:33%; float:left;">
                                                     <label class="reqInput2">*</label>이메일 :
-                                                    <input type="text" class="text" id="email" name="email" value=""
-                                                        maxlength="500" title="EMAIL" checknull="true"
-                                                        style="width: 70%;">
+                                                    <input type="text" class="text" id="email" name="email"
+                                                        value="{{ data.email if data else '' }}" maxlength="500"
+                                                        title="EMAIL" checknull="true" style="width: 70%;">
                                                 </div>
                                             </td>
                                         </tr>
@@ -510,21 +532,23 @@
                                             <td>
                                                 <div class="form-select">
                                                     <input type="radio" name="improve_fd_yn" id="improve_fd_yn1"
-                                                        value="Y">
+                                                        value="Y" {% if data and data.improve_fd_yn=='Y' %}checked{%
+                                                        endif %}>
                                                     <label for="improve_fd_yn1">Y</label>
                                                     <input type="radio" name="improve_fd_yn" id="improve_fd_yn2"
-                                                        value="N" checked>
+                                                        value="N" {% if not data or data.improve_fd_yn !='Y' %}checked{%
+                                                        endif %}>
                                                     <label for="improve_fd_yn2">N</label>
                                                 </div>
                                             </td>
                                             <th>생애최초 차량 구매자 여부</th>
                                             <td>
                                                 <div class="form-select">
-                                                    <input type="radio" name="first_buy_yn" id="first_buy_yn1"
-                                                        value="Y">
+                                                    <input type="radio" name="first_buy_yn" id="first_buy_yn1" value="Y"
+                                                        {% if data and data.first_buy_yn=='Y' %}checked{% endif %}>
                                                     <label for="first_buy_yn1">Y</label>
                                                     <input type="radio" name="first_buy_yn" id="first_buy_yn2" value="N"
-                                                        checked>
+                                                        {% if not data or data.first_buy_yn !='Y' %}checked{% endif %}>
                                                     <label for="first_buy_yn2">N</label>
                                                 </div>
                                             </td>
@@ -533,10 +557,11 @@
                                             <th>사회계층 여부</th>
                                             <td>
                                                 <div class="form-select">
-                                                    <input type="radio" name="social_yn" id="social_yn1" value="Y">
+                                                    <input type="radio" name="social_yn" id="social_yn1" value="Y" {% if
+                                                        data and data.social_yn=='Y' %}checked{% endif %}>
                                                     <label for="social_yn1">Y</label>
-                                                    <input type="radio" name="social_yn" id="social_yn2" value="N"
-                                                        checked>
+                                                    <input type="radio" name="social_yn" id="social_yn2" value="N" {% if
+                                                        not data or data.social_yn !='Y' %}checked{% endif %}>
                                                     <label for="social_yn2">N</label>
                                                 </div>
                                             </td>
@@ -828,25 +853,26 @@
                                             <th>대리점 연락처</th>
                                             <td>
                                                 <input type="text" class="text" id="seller_phone" name="seller_phone"
-                                                    value="" maxlength="15">
+                                                    value="{{ data.seller_phone if data else '' }}" maxlength="15">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>연락담당<br>성명</th>
                                             <td>
                                                 <input type="text" class="text" id="contact_nm" name="contact_nm"
-                                                    value="" maxlength="50">
+                                                    value="{{ data.contact_nm if data else '' }}" maxlength="50">
                                             </td>
                                             <th>연락담당<br>휴대폰</th>
                                             <td>
                                                 <input type="text" class="text" id="contact_mobile"
-                                                    name="contact_mobile" value="" placeholder="010-0000-0000"
-                                                    maxlength="13">
+                                                    name="contact_mobile"
+                                                    value="{{ data.contact_mobile if data else '' }}"
+                                                    placeholder="010-0000-0000" maxlength="13">
                                             </td>
                                             <th>제조수입사<br>관리(계약)번호</th>
                                             <td>
                                                 <input type="text" class="text" id="seller_mgrid" name="seller_mgrid"
-                                                    value="" maxlength="20">
+                                                    value="{{ data.seller_mgrid if data else '' }}" maxlength="20">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -868,14 +894,16 @@
                                             <th>신청 메모<br>(지자체 전달)</th>
                                             <td>
                                                 <textarea class="textarea" name="req_memo" id="req_memo" rows="5"
-                                                    cols="65" style="width: 79%" placeholder="지자체 전달 사항"></textarea>
+                                                    cols="65" style="width: 79%"
+                                                    placeholder="지자체 전달 사항">{{ data.req_memo if data else '' }}</textarea>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>신청자 메모<br>(지자체 비공개)</th>
                                             <td>
                                                 <textarea class="textarea" name="seller_memo" id="seller_memo" rows="5"
-                                                    cols="65" style="width: 79%" placeholder="신청자 관리 메모"></textarea>
+                                                    cols="65" style="width: 79%"
+                                                    placeholder="신청자 관리 메모">{{ data.seller_memo if data else '' }}</textarea>
                                             </td>
                                         </tr>
                                     </tbody>

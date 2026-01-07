@@ -70,6 +70,11 @@ def attach_popup():
     file_type = request.args.get('type')
     return render_template('attach_popup.html', file_type=file_type)
 
+@app.route('/popup/municipality')
+def municipality_popup():
+    """지자체 선택 팝업창"""
+    return render_template('municipality_popup.html')
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     """파일 업로드 처리"""

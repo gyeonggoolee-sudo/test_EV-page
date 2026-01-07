@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="action-center">
-                    <button class="btn-navy">지자체 선택</button>
+                    <button class="btn-navy" onclick="openMunicipalityPopup()">지자체 선택</button>
                     <p class="sub-text">* 신청서 작성 시 보조금 신청할 지자체를 먼저 선택하여야 합니다.</p>
                 </div>
 
@@ -97,6 +97,15 @@
             document.getElementById('selection-state').classList.add('hidden');
             document.getElementById('next-state').classList.remove('hidden');
             document.getElementById('page-title').innerText = '신청관리(전기자동차) 제조사';
+        }
+
+        function openMunicipalityPopup() {
+            const width = 1200;
+            const height = 800;
+            const left = (window.screen.width / 2) - (width / 2);
+            const top = (window.screen.height / 2) - (height / 2);
+            window.open('/popup/municipality', 'municipalityPopup',
+                `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`);
         }
     </script>
 </body>

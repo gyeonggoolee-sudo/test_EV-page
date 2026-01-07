@@ -12,11 +12,22 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route('/')
 def index():
-    """메인 페이지 - 신청서 작성 폼"""
-    status = request.args.get('status', default='new', type=str)
-    # 세션에서 저장된 데이터 가져오기
-    saved_data = session.get('draft_data', None)
-    return render_template('application_form.html', status=status, data=saved_data)
+    status = request.args.get('status', 'new')
+    # 임시 데이터 (실제로는 DB에서 가져오게 됨)
+    data = {
+        'req_nm': '이경구',
+        'birth': '1990-01-01',
+        'req_kind': 'P'
+    } if status in ['saved', 'finished'] else None
+    
+    applied_at = ""
+    if status == 'finished':
+        from datetime import datetime, timedelta
+        # 한국 시간 계산 (UTC+9)
+        now = datetime.utcnow() + timedelta(hours=9)
+        applied_at = now.strftime('%Y-%m-%d %H:%M:%S')
+        
+    return render_template('application_form.html', status=status, data=data, applied_at=applied_at)
 
 @app.route('/save-draft', methods=['POST'])
 def save_draft():

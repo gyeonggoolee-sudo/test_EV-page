@@ -113,9 +113,9 @@
                                         </tr>
                                         <tr>
                                             <th>신청번호</th>
-                                            <td></td>
+                                            <td>{% if status == 'finished' %}33{% endif %}</td>
                                             <th>신청일자</th>
-                                            <td></td>
+                                            <td>{% if status == 'finished' %}{{ applied_at }}{% endif %}</td>
                                             <th>계약일자</th>
                                             <td>
                                                 <input type="text" class="datepicker" style="width: 65%"
@@ -1013,7 +1013,7 @@
         });
 
         function goSave() {
-            var msg = "{% if status == 'saved' %}저장{% else %}임시저장{% endif %}을 하시겠습니까?";
+            var msg = "{% if status == 'saved' %}저장하시겠습니까?{% else %}임시저장을 하시겠습니까?{% endif %}";
             if (confirm(msg)) {
                 var url = "/popup/security";
                 var title = "securityPopup";
@@ -1032,10 +1032,14 @@
                     data: $('#editForm').serialize(),
                     success: function (response) {
                         if (response.status === 'success') {
-                            var successMsg = "{% if status == 'saved' %}데이터가 저장되었습니다.{% else %}데이터가 임시저장되었습니다.{% endif %} 페이지를 새로고침합니다.";
+                            var successMsg = "{% if status == 'saved' %}데이터가 저장되었습니다.{% else %}데이터가 임시저장되었습니다.{% endif %}";
                             alert(successMsg);
-                            // 2. 성공 시 페이지 새로고침 (스크롤 위치 무시하고 최상단으로 리다이렉트)
-                            window.location.replace('/?status=saved');
+                            
+                            // 현재 상태가 'saved'이면 'finished'로 이동
+                            var nextStatus = "{% if status == 'saved' %}finished{% else %}saved{% endif %}";
+                            
+                            // 2. 성공 시 페이지 이동 (최상단 고정)
+                            window.location.replace('/?status=' + nextStatus);
                         } else {
                             alert("저장 중 오류가 발생했습니다.");
                         }

@@ -19,10 +19,15 @@ def apply_form():
     status = request.args.get('status', 'new')
     local_nm = request.args.get('local_nm', '성남시')
     
-    # 세션에서 임시저장된 데이터 가져오기
-    data = session.get('draft_data')
+    if status == 'new':
+        # 새 신청인 경우 기존 세션 데이터 삭제
+        session.pop('draft_data', None)
+        data = None
+    else:
+        # 세션에서 임시저장된 데이터 가져오기
+        data = session.get('draft_data')
     
-    # 데이터가 아예 없을 때(None)만 기본 예시 데이터 설정 (최초 테스트용)
+    # 데이터가 아예 없을 때(None)만 기본 예시 데이터 설정 (최초 테스트용/status가 saved/finished일 때)
     if data is None and status in ['saved', 'finished']:
         data = {
             'req_nm': '이경구',

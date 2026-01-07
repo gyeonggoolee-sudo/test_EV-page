@@ -965,6 +965,12 @@
 
     <script>
         $(document).ready(function () {
+            // 브라우저가 새로고침 시 이전 스크롤 위치를 복원하는 기능을 끄고 최상단으로 이동
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+            window.scrollTo(0, 0);
+
             // 페이지 로드 시 localStorage에서 업로드된 파일 정보 및 일시 확인 및 UI 업데이트
             ['A', 'B', 'C', 'D'].forEach(function(type) {
                 var savedFilename = localStorage.getItem('uploaded_file_' + type);
@@ -1026,8 +1032,8 @@
                     success: function (response) {
                         if (response.status === 'success') {
                             alert("데이터가 임시저장되었습니다. 페이지를 새로고침합니다.");
-                            // 2. 성공 시 페이지 새로고침
-                            window.location.href = '/?status=saved';
+                            // 2. 성공 시 페이지 새로고침 (스크롤 위치 무시하고 최상단으로 리다이렉트)
+                            window.location.replace('/?status=saved');
                         } else {
                             alert("임시저장 중 오류가 발생했습니다.");
                         }

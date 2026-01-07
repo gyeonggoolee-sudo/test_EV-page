@@ -627,6 +627,17 @@ input[readonly] {
     color: #fff;
 }
 
+.btn-sky {
+    background-color: #3b9df8;
+    color: #fff;
+    border: 1px solid #2b82d9 !important;
+    border-radius: 4px;
+}
+
+.btn-sky:hover {
+    background-color: #2b82d9;
+}
+
 .btn-gray {
     background-color: #666;
     color: #fff;

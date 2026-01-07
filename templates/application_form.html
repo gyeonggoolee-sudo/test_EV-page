@@ -965,6 +965,15 @@
 
     <script>
         $(document).ready(function () {
+            // 페이지 로드 시 localStorage에서 업로드된 파일 정보 확인 및 UI 업데이트
+            ['A', 'B', 'C', 'D'].forEach(function(type) {
+                var savedFilename = localStorage.getItem('uploaded_file_' + type);
+                if (savedFilename) {
+                    $('#file_desc_' + type).text("선택된 파일: " + savedFilename);
+                    $('#file_desc_' + type).css('color', '#254bb5');
+                }
+            });
+
             // 모델별 보조금액 샘플 데이터
             const subsidyData = {
                 'MODEL3LR_C': 1111111,
@@ -1037,10 +1046,12 @@
 
         // 팝업에서 호출할 콜백 (파일 업로드 성공 시)
         function handlePopupResult(type, filename) {
-            // 파일명 업데이트
-            $('#file_desc_' + type).text("선택된 파일: " + filename);
-            $('#file_desc_' + type).css('color', '#254bb5');
-            // 필요하다면 hidden input에 값 설정 등 추가 로직
+            // localStorage에 저장 (새로고침 후에도 유지하기 위함)
+            localStorage.setItem('uploaded_file_' + type, filename);
+            
+            // 메인 페이지를 새로고침하여 실제 페이지가 다시 로드되는 UX 제공
+            // window.location.reload()를 사용하면 현재 쿼리스트링(?status=saved)을 유지하며 새로고침됩니다.
+            window.location.reload();
         }
     </script>
     <script>

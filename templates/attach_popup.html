@@ -16,6 +16,7 @@
 <body>
     <div class="popup-wrap">
         <h1>첨부파일 등록</h1>
+        <!-- 일반적인 폼 전송 방식으로 변경 -->
         <form action="/upload" method="post" enctype="multipart/form-data">
             <input type="hidden" name="file_type" value="{{ file_type }}">
             
@@ -31,7 +32,3 @@
     </div>
 </body>
 </html>
-
-
-
-

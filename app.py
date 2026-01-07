@@ -20,8 +20,9 @@ def apply_form():
     local_nm = request.args.get('local_nm', '성남시')
     
     if status == 'new':
-        # 새 신청인 경우 기존 세션 데이터 삭제
+        # 새 신청인 경우 기존 세션 데이터 및 업로드 파일 정보 삭제
         session.pop('draft_data', None)
+        session.pop('uploaded_files', None)
         data = None
     else:
         # 세션에서 임시저장된 데이터 가져오기

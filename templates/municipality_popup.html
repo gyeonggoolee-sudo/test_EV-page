@@ -178,7 +178,7 @@
                 <td>-</td>
                 <td>-</td>
                 <td>-</td>
-                <td><button class="btn-select">조회</button></td>
+                <td><button class="btn-select" onclick="selectMunicipality('서울특별시')">조회</button></td>
             </tr>
             <tr>
                 <td>26000</td>
@@ -191,7 +191,7 @@
                 <td>-</td>
                 <td>-</td>
                 <td>-</td>
-                <td><button class="btn-select">조회</button></td>
+                <td><button class="btn-select" onclick="selectMunicipality('부산광역시')">조회</button></td>
             </tr>
             <tr>
                 <td>28000</td>
@@ -204,7 +204,7 @@
                 <td>-</td>
                 <td>-</td>
                 <td>-</td>
-                <td><button class="btn-select">조회</button></td>
+                <td><button class="btn-select" onclick="selectMunicipality('인천광역시')">조회</button></td>
             </tr>
             <tr>
                 <td>41130</td>
@@ -217,7 +217,7 @@
                 <td>-</td>
                 <td>-</td>
                 <td>-</td>
-                <td><button class="btn-select">조회</button></td>
+                <td><button class="btn-select" onclick="selectMunicipality('성남시')">조회</button></td>
             </tr>
             <tr>
                 <td>43110</td>
@@ -230,7 +230,7 @@
                 <td>-</td>
                 <td>-</td>
                 <td>-</td>
-                <td><button class="btn-select">조회</button></td>
+                <td><button class="btn-select" onclick="selectMunicipality('청주시')">조회</button></td>
             </tr>
         </tbody>
     </table>
@@ -238,6 +238,18 @@
     <div class="pagination">
         <div class="page-num">1</div>
     </div>
+
+    <script>
+        function selectMunicipality(name) {
+            if (window.opener && !window.opener.closed) {
+                // 부모 창을 /applyform?local_nm=... 으로 이동시킴
+                window.opener.location.href = '/applyform?local_nm=' + encodeURIComponent(name);
+                window.close();
+            } else {
+                alert('부모 창을 찾을 수 없습니다.');
+            }
+        }
+    </script>
 </body>
 
 </html>

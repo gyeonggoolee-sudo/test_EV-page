@@ -17,6 +17,7 @@ def index():
 @app.route('/applyform')
 def apply_form():
     status = request.args.get('status', 'new')
+    local_nm = request.args.get('local_nm', '성남시')
     # 임시 데이터 (실제로는 DB에서 가져오게 됨)
     data = {
         'req_nm': '이경구',
@@ -31,7 +32,7 @@ def apply_form():
         now = datetime.utcnow() + timedelta(hours=9)
         applied_at = now.strftime('%Y-%m-%d %H:%M:%S')
         
-    return render_template('application_form.html', status=status, data=data, applied_at=applied_at)
+    return render_template('application_form.html', status=status, data=data, applied_at=applied_at, local_nm=local_nm)
 
 @app.route('/save-draft', methods=['POST'])
 def save_draft():

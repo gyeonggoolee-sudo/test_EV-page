@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>주소정보연계 | 도로명주소 안내시스템</title>
+    <!-- Font Awesome 아이콘 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- 팝업 전용 스타일 로드 -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/popup_style.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -84,10 +86,15 @@
             <div class="container-fluid">
                 <div class="address-search-wrap">
                     <input type="text" placeholder="검색어 예 : 도로명(반포대로 58), 건물명(독립기념관), 지번(삼성동 25)" name="keyword" id="keyword" onkeydown="if(event.keyCode==13) searchUrlJuso();">
-                    <button type="button" onclick="searchUrlJuso();"></button>
+                    <button type="button" onclick="javascript:$('#currentPage').val(1); searchUrlJuso();">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
             </div>
             <!-- // search wrap -->
+
+            <!-- currentPage hidden field (원본 로직 대응용) -->
+            <input type="hidden" name="currentPage" id="currentPage" value="1">
 
             <!-- list view (초기: 숨김, 검색후: 표시) -->
             <div class="container-fluid popSearchNoResult result-list" style="display:none;">

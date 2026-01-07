@@ -626,6 +626,47 @@
                             </div>
                         </div>
 
+                        <!-- 우선순위 배정·집행 섹션 -->
+                        <div class="container-fluid mb25" id="div_priority">
+                            <h1>우선순위 배정·집행</h1>
+                            <div class="table-wrap mb25">
+                                <table id="t_priority">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="30%">
+                                        <col width="20%">
+                                        <col width="30%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>우선순위 배정·집행 선택</th>
+                                            <td>
+                                                <div class="form-select">
+                                                    <label id="l_priority_type1"><input type="radio" class="priority_type" name="priority_type" id="priority_type1" value="10" checked="checked">우선순위&nbsp;</label>
+                                                    <label id="l_priority_type2" style="display:none;"><input type="radio" class="priority_type" name="priority_type" id="priority_type2" value="20">법인·기관&nbsp;</label>
+                                                    <label id="l_priority_type3" style="display:none;"><input type="radio" class="priority_type" name="priority_type" id="priority_type3" value="30">중소기업&nbsp;</label>
+                                                    <label id="l_priority_type5" style=""><input type="radio" class="priority_type" name="priority_type" id="priority_type5" value="40" disabled="disabled">택시&nbsp;</label>
+                                                    <label id="l_priority_type6" style="display:none;"><input type="radio" class="priority_type" name="priority_type" id="priority_type6" value="50">택배&nbsp;</label>
+                                                    <label id="l_priority_type4"><input type="radio" class="priority_type" name="priority_type" id="priority_type4" value="00">일반</label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button type="button" id="btn_priority" style="display:none;" class="btn-blue" onclick="goPriSave();return false;">우선순위 저장</button>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="container-fluid headdesc">
+                                <p>추가지방비(별도지급) 금액은 보조금 신청액에 포함되지 않습니다.</p>
+                                <p>'우선순위 배정·집행 선택'한 내용에 따라서 '우선순위' 또는 '법인·기관'으로 선택되어 총괄현황에 표시됩니다.</p>
+                                <p>우선순위 항목 : '사회계층 여부', '미세먼지 개선효과가 높은 차량 구매자 여부', '생애최초 차량 구매자 여부'</p>
+                                <p>법인·기관 항목 : 'K-EV100 참여 기업','친환경차 구매목표제 대상 기업' 은 법인·기관 물량으로 처리됨 (미세먼지 개선효과가 높은 차량 구매자 여부로 폐차를 선택하여도 법인·기관 물량으로 처리됨)</p>
+                                <p>택시 : 개인택시, 택시 법인 모두 택시 별도 물량으로 처리됨</p>
+                            </div>
+                        </div>
+
                         <!-- 제조수입사 정보 섹션 -->
                         <div class="container-fluid mb25" id="div_seller">
                             <h1>제조수입사 정보</h1>

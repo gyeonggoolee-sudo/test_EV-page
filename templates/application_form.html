@@ -1096,8 +1096,9 @@
                             // 현재 상태가 'saved'이면 'finished'로 이동
                             var nextStatus = "{% if status == 'saved' %}finished{% else %}saved{% endif %}";
 
-                            // 2. 성공 시 페이지 이동 (최상단 고정)
-                            window.location.replace('/?status=' + nextStatus);
+                            // 2. 성공 시 페이지 이동 (현재 페이지 유지하며 상태만 변경)
+                            var localNm = $('#local_nm').val();
+                            window.location.replace('/applyform?status=' + nextStatus + '&local_nm=' + encodeURIComponent(localNm));
                         } else {
                             alert("저장 중 오류가 발생했습니다.");
                         }

@@ -50,10 +50,10 @@ function deleteJointInfo(button) {
 function deleteJNRow(button) {
     // 가장 가까운 <tr> 요소를 찾아서 삭제합니다.
     $(button).closest('tr').remove();
-    
+
     // 남은 행의 개수를 셉니다.
     var rowCount = $('#jnBody tr').length;
-    
+
     // '공동명의자 수' 입력 필드의 값을 업데이트합니다.
     $('#jn_cnt').val(rowCount);
 
@@ -63,7 +63,7 @@ function deleteJNRow(button) {
         $('#l_jnCount').show();
     } else {
         // 행이 남아있다면, 순번을 다시 정렬합니다.
-        $('#jnBody tr').each(function(index) {
+        $('#jnBody tr').each(function (index) {
             $(this).find('.c_jn_num').text(index + 1);
         });
     }
@@ -79,7 +79,7 @@ function handleFiles(files, type) {
     }
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Datepicker 초기화
     $(".datepicker, .datepickerBirth").datepicker({
         dateFormat: 'yy-mm-dd',
@@ -89,10 +89,10 @@ $(document).ready(function() {
     });
 
     // 신청 유형 변경 시 이벤트 처리
-    $('#req_kind').on('change', function() {
+    $('#req_kind').on('change', function () {
         var selectedValue = $(this).val();
         var previousValue = $(this).data('previous-value');
-        
+
         // 이전 값과 다를 때만 초기화 (처음 로드 시에는 초기화 안 함)
         if (previousValue !== undefined && previousValue !== selectedValue) {
             // 필드 초기화
@@ -104,21 +104,21 @@ $(document).ready(function() {
             $('#busi_no').val(''); // 사업자등록번호
             $('#pri_busi_nm').val(''); // 개인사업장명
             $('#grp_reqst_se').val(''); // 신청구분
-            
+
             // 라디오 버튼 초기화
             $('input[name="req_sex"]').prop('checked', false);
             $('#req_sex3').prop('checked', true); // '없음' 선택
-            
+
             // 체크박스 초기화
             $('#pri_business_yn1').prop('checked', false);
             $('#pri_business_yn').val('N');
             $('#profit_yn1').prop('checked', false);
             $('#profit_yn').val('N');
         }
-        
+
         // 이전 값 저장
         $(this).data('previous-value', selectedValue);
-        
+
         if (selectedValue === 'P') { // 개인
             $('#div_jnInfo').show();
             $('.p_birth1').show();
@@ -150,7 +150,7 @@ $(document).ready(function() {
     });
 
     // 개인사업자 체크박스 변경 시 이벤트 처리
-    $('#pri_business_yn1').on('change', function() {
+    $('#pri_business_yn1').on('change', function () {
         if ($(this).is(':checked')) {
             $('.p_pri_busi_1').show();
             $('#pri_business_yn').val('Y');
@@ -163,7 +163,7 @@ $(document).ready(function() {
     // 페이지 로드 시 초기 상태 설정
     var initialReqKind = $('#req_kind').val();
     $('#req_kind').data('previous-value', initialReqKind); // 초기값 저장
-    
+
     if (initialReqKind === 'P') {
         $('#div_jnInfo').show();
     } else {
@@ -171,7 +171,7 @@ $(document).ready(function() {
     }
 
     // 사회계층 여부' 라디오 버튼 변경 시 이벤트 처리
-    $('input[name="social_yn"]').on('change', function() {
+    $('input[name="social_yn"]').on('change', function () {
         if (this.value === 'Y') {
             $('#social_kind').prop('disabled', false);
         } else {
@@ -186,7 +186,7 @@ $(document).ready(function() {
     }
 
     // '사회계층 유형' 변경 시 이벤트 처리
-    $('#social_kind').on('change', function() {
+    $('#social_kind').on('change', function () {
         if ($(this).val() === '3') {
             $('#children_cnt').show();
         } else {
@@ -200,13 +200,16 @@ $(document).ready(function() {
         $('#children_cnt').hide();
     }
 
-    // '임시저장' 상태일 때 모든 필드를 비활성화
+    // '임시저장' 또는 '지급완료' 상태일 때 모든 필드를 비활성화
     const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.get('status') === 'saved') {
-        // '임시저장' 상태일 때, .allow-edit 클래스가 없는 모든 폼 요소를 비활성화
-        $('#editForm').find('input, select, button, textarea').not('.allow-edit').prop('disabled', true).addClass('noedit');
-        
-        // '목록' 버튼은 항상 활성화
+    const currentStatus = searchParams.get('status');
+    if (currentStatus === 'saved' || currentStatus === 'finished') {
+        // .allow-edit 클래스가 없는 모든 폼 요소를 비활성화하고 .noedit 클래스 추가
+        $('#editForm').find('input, select, button, textarea').not('.allow-edit').each(function () {
+            $(this).prop('disabled', true).addClass('noedit');
+        });
+
+        // 목록 버튼은 명시적으로 활성화 유지 (이미 .allow-edit이 붙어있거나 별도 처리)
         $('.order-button-group .btn-gray').prop('disabled', false).removeClass('noedit');
     }
 
@@ -225,7 +228,7 @@ $(document).ready(function() {
     }
 
     // 조건 변경 시 우선순위 업데이트
-    $('input[name="improve_fd_yn"], input[name="first_buy_yn"], input[name="social_yn"]').on('change', function() {
+    $('input[name="improve_fd_yn"], input[name="first_buy_yn"], input[name="social_yn"]').on('change', function () {
         updatePrioritySelection();
     });
 

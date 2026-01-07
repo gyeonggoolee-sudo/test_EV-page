@@ -46,18 +46,59 @@
 
         <main>
             <div class="breadcrumb">Home > 신청관리 > 신청서 작성</div>
-            <h1 class="page-title">신청서 작성</h1>
+            <h1 id="page-title" class="page-title">신청서 작성</h1>
 
-            <div class="applicationform-main">
+            <!-- Initial State: Car Selection -->
+            <div id="selection-state" class="applicationform-main">
                 <h2>신청서 작성할 차종을 선택하세요.</h2>
                 <p>(무공해차 구매보조금 지원시스템에서 현재 보조금을 지원하는 제조수입사의 차종만 표시됩니다.)</p>
                 <div class="btn-set">
-                    <button class="btn-darksky">전기 승용 신청서 작성하기</button>
+                    <button class="btn-darksky" onclick="showNextStep()">전기 승용 신청서 작성하기</button>
                 </div>
             </div>
 
+            <!-- Next State: Municipality Selection (Initially Hidden) -->
+            <div id="next-state" class="hidden">
+                <div class="step-bar">
+                    <div class="step-item active">지자체선택</div>
+                    <div class="step-arrow">▶</div>
+                    <div class="step-item">지원신청 등록/보완</div>
+                    <div class="step-arrow">▶</div>
+                    <div class="step-item">지원가능확인</div>
+                    <div class="step-arrow">▶</div>
+                    <div class="step-item">지급신청 등록/보완</div>
+                    <div class="step-arrow">▶</div>
+                    <div class="step-item">지급완료</div>
+                </div>
+
+                <div class="action-center">
+                    <button class="btn-navy">지자체 선택</button>
+                    <p class="sub-text">* 신청서 작성 시 보조금 신청할 지자체를 먼저 선택하여야 합니다.</p>
+                </div>
+
+                <div class="control-bar">
+                    <button class="btn-small btn-blue-fill">임시저장</button>
+                    <button class="btn-small btn-sky-fill">신청서 작성</button>
+                    <button class="btn-small btn-gray-fill">목 록</button>
+                </div>
+
+                <div class="info-box">
+                    <p>• 신청서 진행 단계에 따라 업무에 필요한 버튼이 표시됩니다.</p>
+                    <p>• [임시저장] 임시저장하고 제출하지 않은 신청서는 24시간 지난 후 야간에 삭제됩니다.</p>
+                    <p>• [임시저장] 후 지원신청 제출 서류를 첨부한 후 신청서를 제출해야 해당 지자체 담당자에게 서류가 접수됩니다.</p>
+                    <p>• [목록] 버튼을 클릭하면 신청관리 목록 화면으로 이동합니다.</p>
+                </div>
+            </div>
         </main>
     </div>
+
+    <script>
+        function showNextStep() {
+            document.getElementById('selection-state').classList.add('hidden');
+            document.getElementById('next-state').classList.remove('hidden');
+            document.getElementById('page-title').innerText = '신청관리(전기자동차) 제조사';
+        }
+    </script>
 </body>
 
 </html>

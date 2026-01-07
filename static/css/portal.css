@@ -154,6 +154,117 @@ main {
     margin-bottom: 30px;
 }
 
+/* Step Bar (Refined) */
+.step-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 10px;
+}
+
+.step-item {
+    flex: 1;
+    background-color: #f1f1f1;
+    color: #999;
+    padding: 12px 0;
+    text-align: center;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.step-item.active {
+    background-color: #0e424f;
+    color: white;
+}
+
+.step-arrow {
+    color: #ccc;
+    font-size: 12px;
+}
+
+/* Action Center (Municipality Selection State) */
+.action-center {
+    border: 1px solid #e5e5e5;
+    background-color: #fff;
+    padding: 60px 20px;
+    text-align: center;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.btn-navy {
+    background-color: #0e424f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sub-text {
+    margin-top: 15px;
+    color: #333;
+    font-size: 13px;
+}
+
+/* Info Box */
+.info-box {
+    background-color: #f8f8f8;
+    border: 1px solid #eeeeee;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 4px;
+}
+
+.info-box p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+/* Footer Control */
+.control-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-blue-fill {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-sky-fill {
+    background-color: #5bc0de;
+    color: white;
+}
+
+.btn-gray-fill {
+    background-color: #95a5a6;
+    color: white;
+}
+
+/* State Management */
+.hidden {
+    display: none !important;
+}
+
 /* Step Bar */
 .step-container {
     display: flex;

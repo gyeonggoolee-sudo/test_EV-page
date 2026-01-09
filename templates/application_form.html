@@ -122,7 +122,8 @@
                                             <td>
                                                 <input type="text" class="datepicker" style="width: 65%"
                                                     id="contract_day" name="contract_day"
-                                                    value="{{ data.contract_day if data else '' }}" readonly>
+                                                    value="{{ data.contract_day if data else '' }}" title="계약일자"
+                                                    checknull="true" readonly>
                                             </td>
                                         </tr>
                                         <tr>

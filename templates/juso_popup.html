@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -16,13 +17,13 @@
         }
 
         // 검색 시뮬레이션
-        function searchUrlJuso(){
+        function searchUrlJuso() {
             var keyword = $('#keyword').val();
-            if(!keyword) {
+            if (!keyword) {
                 alert('검색어를 입력해주세요.');
                 return;
             }
-            
+
             // 더미 검색 결과 표시
             $('.popSearchNoResult').hide();
             $('.result-list').show();
@@ -34,34 +35,35 @@
             // 상세주소 입력창 표시
             $('.result-list').hide();
             $('#resultData').show();
-            
+
             // 선택한 주소 정보 세팅 (더미)
             var addr = "";
-            if(idx === '1') addr = "서울특별시 성동구 동일로 121 (성수동2가)";
-            else if(idx === '2') addr = "경기도 의정부시 동일로 121 (장암동)";
+            if (idx === '1') addr = "서울특별시 성동구 동일로 121 (성수동2가)";
+            else if (idx === '2') addr = "경기도 의정부시 동일로 121 (장암동)";
             else addr = "서울특별시 중랑구 동일로120길 121-" + idx + " (상봉동)";
-            
+
             $('#addrPart1').text(addr);
             $('#rtAddrDetail').val('');
             $('#rtAddrDetail').focus();
-            
+
             // 전역 변수에 저장해두기 (나중에 부모창 전달용)
             window.selectedAddr = {
-                roadAddrPart1: addr,
-                zipNo: (idx==='1'?'04798':(idx==='2'?'11726':'02091'))
+                // 메인 페이지로 전달되는 주소는 사용자의 검색어($('#keyword')) 전달
+                roadAddrPart1: $('#keyword').val(),
+                zipNo: (idx === '1' ? '04798' : (idx === '2' ? '11726' : '02091'))
             };
         }
 
         // 부모 창으로 전달
-        function setParent(){
+        function setParent() {
             var addrDetail = $('#rtAddrDetail').val();
-            
-            if(window.opener && window.opener.jusoCallBack){
+
+            if (window.opener && window.opener.jusoCallBack) {
                 window.opener.jusoCallBack(
                     window.selectedAddr.roadAddrPart1, // roadFullAddr
                     window.selectedAddr.roadAddrPart1, // roadAddrPart1
                     addrDetail, // addrDetail
-                    "", "", "", 
+                    "", "", "",
                     window.selectedAddr.zipNo // zipNo
                 );
                 window.close();
@@ -74,18 +76,19 @@
 
 <body class="popup-wrap" onload="init();">
 
-	<div class="container mw700">
-		<form name="rtForm" id="rtForm" method="post">
-			<input type="hidden" name="inputYn" id="inputYn" value="Y">
-		</form>
+    <div class="container mw700">
+        <form name="rtForm" id="rtForm" method="post">
+            <input type="hidden" name="inputYn" id="inputYn" value="Y">
+        </form>
 
-		<div class="container-fluid">
+        <div class="container-fluid">
             <h1>우편번호 검색</h1>
-            
+
             <!-- search wrap -->
             <div class="container-fluid">
                 <div class="address-search-wrap">
-                    <input type="text" placeholder="검색어 예 : 도로명(반포대로 58), 건물명(독립기념관), 지번(삼성동 25)" name="keyword" id="keyword" onkeydown="if(event.keyCode==13) searchUrlJuso();">
+                    <input type="text" placeholder="검색어 예 : 도로명(반포대로 58), 건물명(독립기념관), 지번(삼성동 25)" name="keyword"
+                        id="keyword" onkeydown="if(event.keyCode==13) searchUrlJuso();">
                     <button type="button" onclick="javascript:$('#currentPage').val(1); searchUrlJuso();">
                         <i class="fas fa-search"></i>
                     </button>
@@ -142,7 +145,7 @@
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <!-- pagination -->
                     <div class="content-page-nav">
                         <div class="pagination">
@@ -180,13 +183,14 @@
 
                 <div class="content-button-group">
                     <button class="btn-blue" onclick="javascript:setParent();">
-                    주소입력
+                        주소입력
                     </button>
                 </div>
             </div>
             <!-- // view wrap -->
 
-		</div>
-	</div>
+        </div>
+    </div>
 </body>
+
 </html>

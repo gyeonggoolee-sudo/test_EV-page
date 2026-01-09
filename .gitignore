@@ -8,3 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Drafts
+drafts/
+draft*.json

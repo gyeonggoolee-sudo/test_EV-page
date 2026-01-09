@@ -1104,6 +1104,11 @@
                 }
             });
 
+            // 우편번호, 기본주소 클릭 시 주소 팝업 호출
+            $('#zipno, #addr').css('cursor', 'pointer').on('click', function () {
+                popupAddress();
+            });
+
             // 차종 선택 또는 신청대수 입력 시 계산 함수 호출
             $('#model_cd, #req_cnt').on('change keyup', calculateAndDisplaySubsidy);
         });

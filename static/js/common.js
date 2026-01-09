@@ -202,7 +202,9 @@ $(document).ready(function () {
     });
 
     // 페이지 로드 시 '사회계층 유형' 초기 상태 확인
-    if ($('#social_kind').val() !== '3') {
+    if ($('#social_kind').val() === '3') {
+        $('#children_cnt').show();
+    } else {
         $('#children_cnt').hide();
     }
 

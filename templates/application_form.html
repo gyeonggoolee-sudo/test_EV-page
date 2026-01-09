@@ -611,9 +611,7 @@
                                                         <option value="9" {% if data and data.social_kind=="9"
                                                             %}selected{% endif %}>기타 등</option>
                                                     </select>
-                                                    <select class="select" name="children_cnt" id="children_cnt"
-                                                        style="width: 100px; {% if data and data.social_kind == " 3"
-                                                        %}display: inline-block;{% else %}display: none;{% endif %}
+                                                    <select class="select" name="children_cnt" id="children_cnt" style="width: 100px; {% if data and data.social_kind == '3' %}display: inline-block;{% else %}display: none;{% endif %}
                                                         margin-left: 5px;">
                                                         <option value="" selected="selected">===선택===</option>
                                                         <option value="2" {% if data and data.children_cnt=="2"

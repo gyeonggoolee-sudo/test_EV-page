@@ -53,6 +53,12 @@ def save_draft():
     try:
         data = request.form.to_dict()
         
+        # 공동명의자 정보는 중복 키가 존재하므로 리스트로 별도 처리
+        if 'jn_name' in request.form:
+            data['jn_name'] = request.form.getlist('jn_name')
+        if 'jn_birth' in request.form:
+            data['jn_birth'] = request.form.getlist('jn_birth')
+
         # 1. 세션에 저장 (기존 로직 유지)
         session['draft_data'] = data
         

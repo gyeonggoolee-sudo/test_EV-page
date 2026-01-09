@@ -432,14 +432,16 @@
                                             <td>
                                                 <div style="display: flex; align-items: center;">
                                                     <input type="text" class="text intCheck1" name="jn_cnt" id="jn_cnt"
-                                                        value="0" maxlength="8" title="공동명의자 수"
-                                                        style="width: 100px; margin-right: 5px;">
+                                                        value="{{ data.jn_cnt if data else '0' }}" maxlength="8"
+                                                        title="공동명의자 수" style="width: 100px; margin-right: 5px;">
                                                     <button type="button" class="type1 btn-black"
                                                         onclick="createNewJointInfo();return false;"
                                                         style="margin-right: 10px;">
                                                         확인
                                                     </button>
-                                                    <label id="l_jnCount" style="">공동명의자 정보가 없습니다.</label>
+                                                    <label id="l_jnCount"
+                                                        style="{% if data and data.jn_name %}display: none;{% endif %}">공동명의자
+                                                        정보가 없습니다.</label>
                                                 </div>
                                             </td>
                                         </tr>
@@ -448,7 +450,8 @@
                             </div>
 
                             <div class="table-wrap mb25">
-                                <table class="table-case1" id="t_jnInfo" style="display:none;">
+                                <table class="table-case1" id="t_jnInfo"
+                                    style="{% if data and data.jn_name %}display: table;{% else %}display: none;{% endif %}">
                                     <colgroup>
                                         <col width="65px;">
                                         <col width="150px">
@@ -464,9 +467,26 @@
                                         </tr>
                                     </thead>
                                     <tbody id="jnBody">
-
-
-
+                                        {% if data and data.jn_name %}
+                                        {% set jn_names = data.jn_name if data.jn_name is iterable and data.jn_name is
+                                        not string else [data.jn_name] %}
+                                        {% set jn_births = data.jn_birth if data.jn_birth is iterable and data.jn_birth
+                                        is not string else [data.jn_birth] %}
+                                        {% for i in range(jn_names|length) %}
+                                        <tr class="c_jnInfo">
+                                            <td class="c_jn_num">{{ i + 1 }}</td>
+                                            <td><input type="text" class="text c_jn_name" name="jn_name"
+                                                    value="{{ jn_names[i] }}" style="width:150px;" maxlength="40"
+                                                    title="성명"></td>
+                                            <td><input type="text" class="c_jn_birth datepicker" style="width: 130px"
+                                                    name="jn_birth"
+                                                    value="{{ jn_births[i] if jn_births|length > i else '' }}"
+                                                    title="생년월일" readonly="readonly"></td>
+                                            <td><button type="button" class="btn-round btn-base" name="btnJnDel"
+                                                    onclick="deleteJNRow(this);return false;">삭제</button></td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% endif %}
                                     </tbody>
                                 </table>
                             </div>

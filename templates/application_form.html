@@ -1111,7 +1111,9 @@
         function goSave() {
             // 1. 필수 입력 항목 검증 (checknull="true" 속성)
             var isValid = true;
-            $('#editForm [checknull="true"]').each(function () {
+
+            // '계약일자'를 제외한 다른 모든 필수 항목 먼저 검증
+            $('#editForm [checknull="true"]').not('#contract_day').each(function () {
                 var $el = $(this);
 
                 // 비활성화되었거나 숨겨진 필드는 검사 대상에서 제외
@@ -1129,6 +1131,14 @@
             });
 
             if (!isValid) return;
+
+            // 마지막으로 '계약일자' 별도 검증
+            var $contractDay = $('#contract_day');
+            if ($contractDay.is(':visible') && !$contractDay.prop('disabled') && $.trim($contractDay.val()) === "") {
+                alert("[계약일자] 항목을 입력해주세요.");
+                $contractDay.focus();
+                return;
+            }
 
             var msg = "{% if status == 'saved' %}저장하시겠습니까?{% else %}임시저장을 하시겠습니까?{% endif %}";
             if (confirm(msg)) {

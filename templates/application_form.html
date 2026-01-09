@@ -1207,13 +1207,32 @@
                 // AJAX 전송 전, disabled된 필드들도 포함시키기 위해 일시적으로 활성화
                 var $disabledFields = $('#editForm :disabled');
                 $disabledFields.prop('disabled', false);
-                var formData = $('#editForm').serialize();
+
+                // 폼 데이터를 객체로 변환
+                var formDataObj = {};
+                var serializedArray = $('#editForm').serializeArray();
+                $.each(serializedArray, function () {
+                    if (formDataObj[this.name]) {
+                        if (!Array.isArray(formDataObj[this.name])) {
+                            formDataObj[this.name] = [formDataObj[this.name]];
+                        }
+                        formDataObj[this.name].push(this.value || '');
+                    } else {
+                        formDataObj[this.name] = this.value || '';
+                    }
+                });
+
+                // '신청'(saved) 상태일 때만 JSON 저장 플래그 추가
+                if ("{{ status }}" === "saved") {
+                    formDataObj['save_json'] = 'Y';
+                }
+
                 $disabledFields.prop('disabled', true); // 다시 비활성화
 
                 $.ajax({
                     type: 'POST',
                     url: '/save-draft',
-                    data: formData,
+                    data: formDataObj,
                     success: function (response) {
                         if (response.status === 'success') {
                             var successMsg = "{% if status == 'saved' %}데이터가 저장되었습니다.{% else %}데이터가 임시저장되었습니다.{% endif %}";

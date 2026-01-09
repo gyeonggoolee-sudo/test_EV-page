@@ -62,24 +62,26 @@ def save_draft():
         # 1. 세션에 저장 (기존 로직 유지)
         session['draft_data'] = data
         
-        # 2. 로컬 JSON 파일로 저장
-        drafts_dir = 'drafts'
-        os.makedirs(drafts_dir, exist_ok=True)
-        
-        # 성함(req_nm)과 타임스탬프를 이용한 파일명 생성
-        req_nm = data.get('req_nm', 'unknown').strip()
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        filename = f"draft_{req_nm}_{timestamp}.json"
-        
-        file_path = os.path.join(drafts_dir, filename)
-        
-        # JSON 파일 저장 (한글 깨짐 방지)
-        with open(file_path, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+        # 2. 로컬 JSON 파일로 저장 (save_json 플래그가 'Y'인 경우에만)
+        if request.form.get('save_json') == 'Y':
+            drafts_dir = 'drafts'
+            os.makedirs(drafts_dir, exist_ok=True)
             
-        print(f"Draft saved to: {file_path}")
+            # 성함(req_nm)과 타임스탬프를 이용한 파일명 생성
+            req_nm = data.get('req_nm', 'unknown').strip()
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            filename = f"draft_{req_nm}_{timestamp}.json"
+            
+            file_path = os.path.join(drafts_dir, filename)
+            
+            # JSON 파일 저장 (한글 깨짐 방지)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+                
+            print(f"Draft saved to: {file_path}")
+            return jsonify({"status": "success", "file": filename})
         
-        return jsonify({"status": "success", "file": filename})
+        return jsonify({"status": "success"})
     except Exception as e:
         print(f"Error saving draft: {str(e)}")
         return jsonify({"status": "error", "message": str(e)}), 500

@@ -1022,10 +1022,9 @@
                             <button type="button" class="btn-blue allow-edit" onclick="goSave(); return false;">
                                 {% if status == 'saved' %}신청{% else %}임시저장{% endif %}
                             </button>
-                            {% else %}
-                            <button type="button" class="btn-blue noedit" disabled>저장완료</button>
                             {% endif %}
-                            <button type="submit" class="btn-blue allow-edit">신청서 작성</button>
+                            <button type="button" class="btn-blue allow-edit" onclick="goMain(); return false;">신청서
+                                작성</button>
                             <button type="button" class="btn-gray allow-edit" onclick="goList(); return false;">목
                                 록</button>
                         </div>
@@ -1239,6 +1238,13 @@
         }
     </script>
     <script>
+        // 메인 페이지로 이동 (확인창 포함)
+        function goMain() {
+            if (confirm("신청서 작성으로 돌아가시겠습니까?(입력 했던 정보 사라집니다!)")) {
+                window.location.href = "http://192.168.0.27:5000/";
+            }
+        }
+
         // 주소 팝업 열기
         function popupAddress() {
             var url = "/juso/popup";

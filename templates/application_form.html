@@ -1020,7 +1020,7 @@
                         <div class="order-button-group mb25">
                             {% if status != 'finished' %}
                             <button type="button" class="btn-blue allow-edit" onclick="goSave(); return false;">
-                                {% if status == 'saved' %}저장{% else %}임시저장{% endif %}
+                                {% if status == 'saved' %}신청{% else %}임시저장{% endif %}
                             </button>
                             {% else %}
                             <button type="button" class="btn-blue noedit" disabled>저장완료</button>
@@ -1058,6 +1058,14 @@
                 history.scrollRestoration = 'manual';
             }
             window.scrollTo(0, 0);
+
+            // status가 'new'인 경우 localStorage의 파일 업로드 정보 초기화
+            if ("{{ status }}" === "new") {
+                ['A', 'B', 'C', 'D'].forEach(function (type) {
+                    localStorage.removeItem('uploaded_file_' + type);
+                    localStorage.removeItem('uploaded_date_' + type);
+                });
+            }
 
             // 페이지 로드 시 localStorage에서 업로드된 파일 정보 및 일시 확인 및 UI 업데이트
             ['A', 'B', 'C', 'D'].forEach(function (type) {
@@ -1145,12 +1153,17 @@
                 return;
             }
 
-            var msg = "{% if status == 'saved' %}저장하시겠습니까?{% else %}임시저장을 하시겠습니까?{% endif %}";
+            var msg = "{% if status == 'saved' %}신청하시겠습니까?{% else %}임시저장을 하시겠습니까?{% endif %}";
             if (confirm(msg)) {
-                var url = "/popup/security";
-                var title = "securityPopup";
-                var status = "width=600,height=400,scrollbars=no,resizable=no";
-                window.open(url, title, status);
+                if ("{{ status }}" === "saved") {
+                    // 'saved' 상태에서는 보안 팝업 없이 즉시 호출
+                    tempSaveCallback(true);
+                } else {
+                    var url = "/popup/security";
+                    var title = "securityPopup";
+                    var status = "width=600,height=400,scrollbars=no,resizable=no";
+                    window.open(url, title, status);
+                }
             }
         }
 

@@ -1170,11 +1170,16 @@
         // 보안 팝업창에서 호출할 콜백 함수
         function tempSaveCallback(isSuccess) {
             if (isSuccess) {
-                // 1. 폼 데이터를 '/save-draft'로 전송
+                // AJAX 전송 전, disabled된 필드들도 포함시키기 위해 일시적으로 활성화
+                var $disabledFields = $('#editForm :disabled');
+                $disabledFields.prop('disabled', false);
+                var formData = $('#editForm').serialize();
+                $disabledFields.prop('disabled', true); // 다시 비활성화
+
                 $.ajax({
                     type: 'POST',
                     url: '/save-draft',
-                    data: $('#editForm').serialize(),
+                    data: formData,
                     success: function (response) {
                         if (response.status === 'success') {
                             var successMsg = "{% if status == 'saved' %}데이터가 저장되었습니다.{% else %}데이터가 임시저장되었습니다.{% endif %}";

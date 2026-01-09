@@ -1175,6 +1175,19 @@
             }
 
             var msg = "{% if status == 'saved' %}신청하시겠습니까?{% else %}임시저장을 하시겠습니까?{% endif %}";
+
+            // '신청' 시 필수 첨부파일 검사
+            if ("{{ status }}" === "saved") {
+                var fileA = localStorage.getItem('uploaded_file_A');
+                var fileB = localStorage.getItem('uploaded_file_B');
+                var fileC = localStorage.getItem('uploaded_file_C');
+
+                if (!fileA || !fileB || !fileC) {
+                    alert("첨부파일 업로드를 해주세요!");
+                    return;
+                }
+            }
+
             if (confirm(msg)) {
                 if ("{{ status }}" === "saved") {
                     // 'saved' 상태에서는 보안 팝업 없이 즉시 호출

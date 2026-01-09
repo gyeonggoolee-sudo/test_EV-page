@@ -241,3 +241,48 @@ $(document).ready(function () {
     // 페이지 로드 시 초기 상태 설정
     updatePrioritySelection();
 });
+
+/**
+ * '수정'/'저장' 버튼 클릭 핸들러
+ */
+function handleEditSave() {
+    var btn = $('#btnEditSave');
+    var isEditing = btn.text() === '저장';
+
+    if (!isEditing) {
+        // 1. 편집 모드로 전환
+        $('#editForm').find('input, select, textarea, button').not('.allow-edit').each(function () {
+            $(this).prop('disabled', false).removeClass('noedit');
+        });
+
+        // 버튼 텍스트 및 스타일 변경
+        btn.text('저장').removeClass('btn-navy').addClass('btn-blue');
+
+        // 안내 메시지 (선택 사항)
+        console.log("편집 모드로 전환되었습니다.");
+    } else {
+        // 2. 저장 처리
+        if (confirm("수정된 내용을 저장하시겠습니까?")) {
+            // 전송용 데이터 직렬화 (이미 활성화된 상태이므로 그대로 serialize 가능)
+            var formData = $('#editForm').serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: '/save-draft',
+                data: formData,
+                success: function (response) {
+                    if (response.status === 'success') {
+                        alert("데이터가 수정되었습니다.");
+                        // 페이지 새로고침 (새로고침 시 다시 비활성화 상태로 돌아감)
+                        window.location.reload();
+                    } else {
+                        alert("저장 중 오류가 발생했습니다: " + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("서버와 통신 중 오류가 발생했습니다.");
+                }
+            });
+        }
+    }
+}

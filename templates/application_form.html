@@ -1043,7 +1043,8 @@
                                 {% if status == 'saved' %}신청{% else %}임시저장{% endif %}
                             </button>
                             {% if status == 'saved' %}
-                            <button type="button" class="btn-navy allow-edit">수정</button>
+                            <button type="button" id="btnEditSave" class="btn-navy allow-edit"
+                                onclick="handleEditSave(); return false;">수정</button>
                             {% endif %}
                             {% endif %}
                             <button type="button" class="btn-blue allow-edit" onclick="goMain(); return false;">신청서

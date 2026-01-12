@@ -1225,6 +1225,17 @@
                 // '신청'(saved) 상태일 때만 JSON 저장 플래그 추가
                 if ("{{ status }}" === "saved") {
                     formDataObj['save_json'] = 'Y';
+
+                    // 소요 시간 계산
+                    var startTime = localStorage.getItem('process_start_time');
+                    if (startTime) {
+                        var endTime = new Date().getTime();
+                        var seconds = Math.floor((endTime - parseInt(startTime)) / 1000);
+                        formDataObj['process_seconds'] = seconds;
+
+                        // 신청 완료 후 타이머 초기화 (페이지 이동 전)
+                        localStorage.removeItem('process_start_time');
+                    }
                 }
 
                 $disabledFields.prop('disabled', true); // 다시 비활성화

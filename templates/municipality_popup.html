@@ -242,6 +242,9 @@
     <script>
         function selectMunicipality(name) {
             if (window.opener && !window.opener.closed) {
+                // 시작 시간 저장 (지자체 선택 조회 버튼 클릭 시점)
+                localStorage.setItem('process_start_time', new Date().getTime());
+
                 // 부모 창을 /applyform?local_nm=... 으로 이동시킴
                 window.opener.location.href = '/applyform?local_nm=' + encodeURIComponent(name);
                 window.close();

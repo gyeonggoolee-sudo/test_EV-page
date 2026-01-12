@@ -64,21 +64,65 @@ def save_draft():
         
         # 2. 로컬 JSON 파일로 저장 (save_json 플래그가 'Y'인 경우에만)
         if request.form.get('save_json') == 'Y':
+            # 최종 구조화할 딕셔너리 생성
+            structured_data = {}
+            
+            # 섹션별 필드 정의
+            sections = {
+                'management_info': ['local_nm', 'app_step', 'contract_day'],
+                'application_info': [
+                    'req_kind', 'profit_yn', 'grp_reqst_se', 'req_nm', 'birth', 'ceo', 'req_sex', 
+                    'pri_business_yn', 'birth2', 'busi_no', 'pri_busi_nm', 'model_cd', 'req_cnt', 
+                    'delivery_sch_day', 'zipno', 'addr', 'addr_detail', 'req_total_amt', 'phone', 
+                    'mobile', 'email'
+                ],
+                'joint_owner_info': ['jn_cnt', 'jn_name', 'jn_birth'],
+                'condition_info': [
+                    'improve_fd_yn', 'first_buy_yn', 'social_yn', 'social_kind', 'children_cnt', 
+                    'exchange_yn', 'school_bus_yn', 'in_facility_yn', 'disaster_scrap_yn', 'bms_yn'
+                ],
+                'priority_info': ['priority_type'],
+                'lease_rental_info': [
+                    'ls_user_yn', 'ls_user_kind', 'ls_user_type', 'ls_user_nm_chk', 'cntrctr_yn', 
+                    'ls_user_nm', 'ls_user_busi_no', 'ls_user_birth2', 'ls_user_zipno', 
+                    'ls_user_addr', 'ls_user_addr_detail'
+                ],
+                'seller_info': ['seller_phone', 'contact_nm', 'contact_mobile', 'seller_mgrid'],
+                'memo_info': ['req_memo', 'seller_memo']
+            }
+
+            # 섹션별로 데이터 분류
+            for section_name, fields in sections.items():
+                section_dict = {}
+                for field in fields:
+                    if field in data:
+                        section_dict[field] = data[field]
+                if section_dict: # 데이터가 있는 섹션만 추가
+                    structured_data[section_name] = section_dict
+
+            # 소요 시간 처리 (가장 마지막 key로 추가)
+            process_seconds = request.form.get('process_seconds')
+            if process_seconds is not None:
+                try:
+                    structured_data['process_seconds'] = int(process_seconds)
+                except ValueError:
+                    pass
+
             drafts_dir = 'drafts'
             os.makedirs(drafts_dir, exist_ok=True)
             
-            # 성함(req_nm)과 타임스탬프를 이용한 파일명 생성
-            req_nm = data.get('req_nm', 'unknown').strip()
+            # 성함(req_nm)은 application_info 안에 있으므로 경로 맞춰서 가져오기
+            req_nm = structured_data.get('application_info', {}).get('req_nm', 'unknown').strip()
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             filename = f"draft_{req_nm}_{timestamp}.json"
             
             file_path = os.path.join(drafts_dir, filename)
             
-            # JSON 파일 저장 (한글 깨짐 방지)
+            # JSON 파일 저장
             with open(file_path, 'w', encoding='utf-8') as f:
-                json.dump(data, f, ensure_ascii=False, indent=4)
+                json.dump(structured_data, f, ensure_ascii=False, indent=4)
                 
-            print(f"Draft saved to: {file_path}")
+            print(f"Structured draft saved to: {file_path}")
             return jsonify({"status": "success", "file": filename})
         
         return jsonify({"status": "success"})

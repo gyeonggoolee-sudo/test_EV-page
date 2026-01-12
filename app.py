@@ -47,9 +47,28 @@ def apply_form():
         
     return render_template('application_form.html', status=status, data=data, applied_at=applied_at, local_nm=local_nm)
 
+# 기본 DB 설정
+DB_CONFIG = {
+    "host": "192.168.0.92",
+    "database": "postgres",
+    "user": "postgres",
+    "password": "greet1202!@",
+    "port": "5432",
+    "connect_timeout": 3
+}
+
+def get_db_connection():
+    import psycopg2
+    try:
+        conn = psycopg2.connect(**DB_CONFIG)
+        return conn
+    except Exception as e:
+        print(f"Database connection error: {e}")
+        return None
+
 @app.route('/save-draft', methods=['POST'])
 def save_draft():
-    """폼 데이터를 세션에 저장하고 로컬 JSON 파일로도 저장"""
+    """폼 데이터를 세션에 저장하고 로컬 JSON 파일 및 PostgreSQL DB로 저장"""
     try:
         data = request.form.to_dict()
         
@@ -62,7 +81,7 @@ def save_draft():
         # 1. 세션에 저장 (기존 로직 유지)
         session['draft_data'] = data
         
-        # 2. 로컬 JSON 파일로 저장 (save_json 플래그가 'Y'인 경우에만)
+        # 2. 로컬 JSON 파일 및 DB로 저장 (save_json 플래그가 'Y'인 경우에만)
         if request.form.get('save_json') == 'Y':
             # 최종 구조화할 딕셔너리 생성
             structured_data = {}
@@ -100,13 +119,36 @@ def save_draft():
                 if section_dict: # 데이터가 있는 섹션만 추가
                     structured_data[section_name] = section_dict
 
-            # 소요 시간 처리 (가장 마지막 key로 추가)
-            process_seconds = request.form.get('process_seconds')
-            if process_seconds is not None:
+            # 소요 시간 처리
+            process_seconds_val = 0
+            process_seconds_str = request.form.get('process_seconds')
+            if process_seconds_str is not None:
                 try:
-                    structured_data['process_seconds'] = int(process_seconds)
+                    process_seconds_val = int(process_seconds_str)
                 except ValueError:
                     pass
+
+            # 3. PostgreSQL DB 저장
+            writer = structured_data.get('seller_info', {}).get('contact_nm', 'unknown')
+            
+            conn = get_db_connection()
+            if conn:
+                try:
+                    cur = conn.cursor()
+                    insert_query = """
+                        INSERT INTO application_drafts (writer, process_seconds, data)
+                        VALUES (%s, %s, %s)
+                    """
+                    cur.execute(insert_query, (writer, process_seconds_val, json.dumps(structured_data, ensure_ascii=False)))
+                    conn.commit()
+                    cur.close()
+                    conn.close()
+                    print("Data inserted into PostgreSQL successfully.")
+                except Exception as e:
+                    print(f"Error inserting into PostgreSQL: {e}")
+            
+            # JSON 저장 시에는 process_seconds를 포함 (요청 사항에 따라 최하단에 위치)
+            structured_data['process_seconds'] = process_seconds_val
 
             drafts_dir = 'drafts'
             os.makedirs(drafts_dir, exist_ok=True)

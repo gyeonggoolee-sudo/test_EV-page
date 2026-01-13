@@ -104,9 +104,11 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            padding: 30px;
+            padding: 25px;
             border: 1px solid #e1e4e8;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
         }
 
         .empty-state {
@@ -122,9 +124,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             border-bottom: 2px solid #0e424f;
             padding-bottom: 15px;
+            flex-shrink: 0;
         }
 
         .manage-header h2 {
@@ -132,13 +135,32 @@
             color: #0e424f;
         }
 
-        /* 파일 리스트 스타일 */
+        /* 관리 본문 영역 (파일 리스트 + 입력 폼) */
+        .manage-body {
+            display: flex;
+            gap: 25px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* 1. 파일 리스트 섹션 */
         .file-section {
-            margin-top: 20px;
+            flex: 0 0 320px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #eee;
+            padding-right: 20px;
+        }
+
+        /* 2. 데이터 입력 폼 섹션 */
+        .form-section {
+            flex: 1;
+            overflow-y: auto;
+            padding-left: 5px;
         }
 
         .section-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             margin-bottom: 15px;
             color: #333;
@@ -153,13 +175,14 @@
             margin: 0;
             border: 1px solid #eee;
             border-radius: 6px;
+            overflow-y: auto;
         }
 
         .file-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
+            padding: 12px 15px;
             border-bottom: 1px solid #eee;
         }
 
@@ -170,34 +193,73 @@
         .file-info {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            min-width: 0;
         }
 
         .file-icon {
-            font-size: 20px;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .file-content-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
         }
 
         .file-name {
             font-weight: 500;
             color: #444;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .btn-open {
             background-color: #f8f9fa;
             color: #333;
             border: 1px solid #ddd;
-            padding: 6px 16px;
+            padding: 4px 10px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             transition: all 0.2s;
+            flex-shrink: 0;
+            margin-left: 10px;
         }
 
         .btn-open:hover {
             background-color: #0e424f;
             color: white;
             border-color: #0e424f;
+        }
+
+        /* 폼 요소 스타일 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            height: 200px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            box-sizing: border-box;
+            resize: vertical;
         }
 
         .btn-home {
@@ -209,6 +271,13 @@
             cursor: pointer;
             text-decoration: none;
             font-size: 13px;
+        }
+
+        .btn-save {
+            background-color: #0e424f;
+            border: none;
+            padding: 8px 20px;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -235,24 +304,38 @@
             </div>
         </div>
 
-        <!-- 오른쪽: 상세 정보 패널 -->
+        <!-- 오른쪽: 상세 정보 패널 (2분할 구조) -->
         <div class="detail-panel" id="detailPanel">
             <div class="empty-state" id="emptyState">
                 <div style="font-size: 40px; margin-bottom: 15px;">📍</div>
-                <p>지자체를 선택하시면 파일을 확인하고 관리할 수 있습니다.</p>
+                <p>지자체를 선택하시면 상세 설정이 가능합니다.</p>
             </div>
 
-            <div id="manageContent" style="display: none;">
+            <div id="manageContent" style="display: none; height: 100%; flex-direction: column;">
                 <div class="manage-header">
                     <h2 id="selectedRegionName">지자체명</h2>
+                    <button class="btn-home btn-save">설정 저장</button>
                 </div>
 
-                <div class="file-section">
-                    <div class="section-title">
-                        <span>파일 리스트</span>
+                <div class="manage-body">
+                    <!-- 1. 왼쪽: 파일 리스트 -->
+                    <div class="file-section">
+                        <div class="section-title">📁 공고문 파일</div>
+                        <div id="fileListContainer" class="file-list">
+                            <!-- 파일 항목들이 동적으로 생성됨 -->
+                        </div>
                     </div>
-                    <div id="fileListContainer" class="file-list">
-                        <!-- 파일 항목들이 동적으로 생성됨 -->
+
+                    <!-- 2. 오른쪽: 데이터 입력 폼 -->
+                    <div class="form-section">
+                        <div class="section-title">📝 공고 상세 정보 (Bigo)</div>
+                        <div class="form-group">
+                            <label for="bigoText">공고문 비고 내용 수정</label>
+                            <textarea id="bigoText" placeholder="공고문 내용을 불러오는 중..."></textarea>
+                        </div>
+                        <div style="color: #888; font-size: 12px; margin-top: -10px;">
+                            * 위 내용은 'ev_info' 테이블의 'bigo' 칼럼에 반영됩니다.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -281,13 +364,14 @@
             element.classList.add('active');
 
             document.getElementById('emptyState').style.display = 'none';
-            document.getElementById('manageContent').style.display = 'block';
+            document.getElementById('manageContent').style.display = 'flex';
             document.getElementById('selectedRegionName').innerText = name;
 
             try {
                 const response = await fetch(`/api/notice/${id}`);
                 const data = await response.json();
 
+                // 1. 파일 리스트 업데이트
                 const container = document.getElementById('fileListContainer');
                 container.innerHTML = '';
 
@@ -301,21 +385,26 @@
 
                         const item = document.createElement('div');
                         item.className = 'file-item';
-                        // 백슬래시가 자바스크립트 문자열에서 깨지지 않도록 이스케이프 처리
                         const safePath = path.replace(/\\/g, '\\\\');
                         item.innerHTML = `
                             <div class="file-info">
                                 <span class="file-icon">${icon}</span>
-                                <span class="file-name">${key}</span>
-                                <span style="color: #999; font-size: 11px; margin-left: 10px;">(${fileExt})</span>
+                                <div class="file-content-info">
+                                    <span class="file-name">${key}</span>
+                                    <span style="color: #999; font-size: 10px;">${fileExt.toUpperCase()}</span>
+                                </div>
                             </div>
                             <button class="btn-open" onclick="openFile('${safePath}')">열기</button>
                         `;
                         container.appendChild(item);
                     });
                 } else {
-                    container.innerHTML = '<div style="padding: 30px; text-align: center; color: #999;">등록된 파일이 없습니다.</div>';
+                    container.innerHTML = '<div style="padding: 20px; text-align: center; color: #999; font-size: 13px;">등록된 파일이 없습니다.</div>';
                 }
+
+                // 2. 비고(Bigo) 텍스트 업데이트
+                document.getElementById('bigoText').value = data.bigo || '';
+
             } catch (error) {
                 console.error("Error loading details:", error);
             }
@@ -325,11 +414,9 @@
             const fileExt = path.split('.').pop().toLowerCase();
 
             if (fileExt === 'pdf') {
-                // PDF 파일은 서버 엔드포인트를 통해 새 탭에서 열기
                 const url = `/view-pdf?path=${encodeURIComponent(path)}`;
                 window.open(url, '_blank');
             } else if (['hwp', 'hwpx', 'xls', 'xlsx'].includes(fileExt)) {
-                // 한글 및 엑셀 파일은 로컬 실행 모드로 열기
                 try {
                     const response = await fetch(`/open-local?path=${encodeURIComponent(path)}`);
                     const result = await response.json();
@@ -338,7 +425,6 @@
                     }
                 } catch (error) {
                     console.error("Local open error:", error);
-                    alert("서버와 통신 중 오류가 발생했습니다.");
                 }
             } else {
                 alert(`이 파일 형식(${fileExt})은 현재 수동 확인이 필요합니다.`);

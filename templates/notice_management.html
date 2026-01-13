@@ -428,6 +428,67 @@
             font-size: 14px;
         }
 
+        /* 툴팁 스타일 */
+        .tooltip-container {
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            margin-left: 5px;
+            cursor: help;
+        }
+
+        .tooltip-icon {
+            font-size: 11px;
+            color: #999;
+            width: 15px;
+            height: 15px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            font-weight: 700;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 140px;
+            background-color: #444;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 6px;
+            position: absolute;
+            z-index: 10;
+            bottom: 150%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 11px;
+            font-weight: 400;
+            pointer-events: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #444 transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
         /* 라디오 및 체크박스 공통 스타일 */
         .radio-group {
             display: flex;
@@ -665,7 +726,13 @@
                                 <div class="section-title">⚙️ 세부 조건</div>
                                 <div class="form-grid" style="gap: 20px;">
                                     <div class="form-item">
-                                        <label>거주요건</label>
+                                        <label style="display: flex; align-items: center;">
+                                            거주요건
+                                            <span class="tooltip-container">
+                                                <span class="tooltip-icon">?</span>
+                                                <span class="tooltip-text">내용 추가 예정</span>
+                                            </span>
+                                        </label>
                                         <select id="residence_requirement" name="residence_requirement">
                                             <option value="90" selected>90일</option>
                                             <option value="30">30일</option>

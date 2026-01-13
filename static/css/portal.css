@@ -135,6 +135,10 @@ aside {
     font-weight: 700;
 }
 
+.menu-spacer {
+    flex-grow: 1;
+}
+
 /* Content Area */
 main {
     flex: 1;

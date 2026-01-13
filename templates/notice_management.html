@@ -773,7 +773,22 @@
                                         </div>
                                     </div>
                                     <div class="form-item">
-                                        <label>공동명의 조건</label>
+                                        <label style="display: flex; align-items: center;">
+                                            공동명의 조건
+                                            <span class="tooltip-container">
+                                                <span class="tooltip-icon">?</span>
+                                                <span class="tooltip-text">
+                                                    <div style="margin-bottom: 5px;">[검색 키워드]</div>
+                                                    1. <strong>'공동명의'</strong><br>
+                                                    2. <strong>'세대원'</strong>: "동일 세대원(가족)에 한하여..." →
+                                                    <strong>'가족'</strong><br>
+                                                    3. <strong>'거주조건'</strong>: "구성원 모두가 거주조건에..." → <strong>'같은 지역
+                                                        내'</strong><br>
+                                                    4. <strong>'대표자'/'소유자'</strong>: "대표자가 자격 만족..." → <strong>'같이 거주
+                                                        X'</strong>
+                                                </span>
+                                            </span>
+                                        </label>
                                         <select id="joint_owner_type" name="joint_owner_type">
                                             <option value="">-- 선택하세요 --</option>
                                             <option value="FAM_SAME_HH_MAIN_ONLY">등본 상 세대 내 가족(거주요건 대표자만 만족)</option>

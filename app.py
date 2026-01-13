@@ -16,6 +16,10 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 def index():
     return render_template('index.html')
 
+@app.route('/notice-management')
+def notice_management():
+    return render_template('notice_management.html')
+
 @app.route('/applyform')
 def apply_form():
     status = request.args.get('status', 'new')

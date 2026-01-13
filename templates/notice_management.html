@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공고문 관리 - 무공해차 구매지원시스템</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="header-left">
+            <span class="logo-icon">🚗</span>
+            <span class="logo-text">구매보조금신청</span>
+        </div>
+        <nav class="nav-menu">
+            <div class="nav-item">정보관리</div>
+            <div class="nav-item">지원사업관리</div>
+            <div class="nav-item">신청관리</div>
+            <div class="nav-item">현황조회</div>
+        </nav>
+        <div class="user-info">
+            <span>이경구 님</span>
+            <button class="user-btn">마이페이지</button>
+            <button class="user-btn">로그아웃</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside>
+            <div class="sidebar-title">신청관리</div>
+            <div class="session-info">
+                <span>남은시간 <span class="timer">59:59</span></span>
+                <button class="extend-btn">시간연장</button>
+            </div>
+            <ul class="side-menu">
+                <li class="side-item" onclick="location.href='/'">신청관리(전기자동차) 제조사</li>
+                <li class="side-item" onclick="location.href='/'">신청서 작성</li>
+                <li class="side-item">입금내역</li>
+                <li class="side-item">택배차 추가보조금 신청관리</li>
+            </ul>
+            <div class="menu-spacer"></div>
+            <ul class="side-menu">
+                <li class="side-item active" onclick="location.href='/notice-management'">공고문 관리</li>
+            </ul>
+        </aside>
+
+        <main>
+            <div class="breadcrumb">Home > 신청관리 > 공고문 관리</div>
+            <h1 class="page-title">공고문 관리</h1>
+            <div class="content-area">
+                <!-- 하단에 내용이 들어갈 예정 -->
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -453,12 +453,13 @@
 
         .tooltip-text {
             visibility: hidden;
-            width: 190px;
+            width: auto;
+            min-width: 220px;
             background-color: #444;
             color: #fff;
             text-align: left;
             border-radius: 4px;
-            padding: 10px;
+            padding: 10px 14px;
             position: absolute;
             z-index: 10;
             top: 50%;
@@ -468,10 +469,10 @@
             transition: opacity 0.2s;
             font-size: 11px;
             font-weight: 400;
-            line-height: 1.6;
+            line-height: 1.8;
             pointer-events: none;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            white-space: pre-wrap;
+            white-space: nowrap;
         }
 
         .tooltip-text::after {
@@ -731,12 +732,13 @@
                                             거주요건
                                             <span class="tooltip-container">
                                                 <span class="tooltip-icon">?</span>
-                                                <span class="tooltip-text">[검색 키워드]
-                                                    1. <strong>'접수일'</strong>: "접수일 기준 ~개월 이내"
-                                                    2. <strong>'신청일'</strong>: "신청일로부터 ~일 전"
-                                                    3.
-                                                    <strong>'30일'</strong>/<strong>'60일'</strong>/<strong>'90일'</strong>
-                                                    4. <strong>'거주기간'</strong></span>
+                                                <span class="tooltip-text">
+                                                    <div style="margin-bottom: 5px;">[검색 키워드]</div>1.
+                                                    <strong>'접수일'</strong>: "접수일 기준 ~개월 이내"<br>2.
+                                                    <strong>'신청일'</strong>: "신청일로부터 ~일 전"<br>3.
+                                                    <strong>'30일'</strong>/<strong>'60일'</strong>/<strong>'90일'</strong><br>4.
+                                                    <strong>'거주기간'</strong>
+                                                </span>
                                             </span>
                                         </label>
                                         <select id="residence_requirement" name="residence_requirement">

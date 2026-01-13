@@ -3,6 +3,8 @@ from werkzeug.utils import secure_filename
 import os
 import json
 from datetime import datetime
+from flask import send_file, abort
+import urllib.parse
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
@@ -93,6 +95,26 @@ def apply_form():
         applied_at = now.strftime('%Y-%m-%d %H:%M:%S')
         
     return render_template('application_form.html', status=status, data=data, applied_at=applied_at, local_nm=local_nm)
+
+@app.route('/view-pdf')
+def view_pdf():
+    """PDF 파일을 브라우저에서 열기 위한 엔드포인트"""
+    file_path = request.args.get('path')
+    if not file_path:
+        abort(400, description="No file path provided")
+    
+    # 보안: PDF 확장자만 허용
+    if not file_path.lower().endswith('.pdf'):
+        abort(403, description="Only PDF files are allowed to be opened here")
+        
+    if not os.path.exists(file_path):
+        abort(404, description="File not found")
+        
+    try:
+        return send_file(file_path, mimetype='application/pdf')
+    except Exception as e:
+        print(f"Error serving PDF: {e}")
+        abort(500)
 
 # 기본 DB 설정
 DB_CONFIG = {

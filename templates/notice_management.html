@@ -696,7 +696,17 @@
                                 <div class="section-title">⚖️ 서류 조건</div>
                                 <div class="form-grid" style="grid-template-columns: repeat(3, 1fr); gap: 25px;">
                                     <div class="form-item">
-                                        <label>서류 발급일</label>
+                                        <label style="display: flex; align-items: center;">
+                                            서류 발급일
+                                            <span class="tooltip-container">
+                                                <span class="tooltip-icon">?</span>
+                                                <span class="tooltip-text">
+                                                    <div style="margin-bottom: 5px;">[검색 키워드]</div>
+                                                    1. <strong>'발급일'</strong><br>
+                                                    2. <strong>'~이내'</strong>
+                                                </span>
+                                            </span>
+                                        </label>
                                         <div class="inline-input-group">
                                             <input type="number" id="doc_issue_limit" name="doc_issue_limit" value="30"
                                                 min="1">
@@ -704,14 +714,36 @@
                                         </div>
                                     </div>
                                     <div class="form-item">
-                                        <label>원본대조필 여부</label>
+                                        <label style="display: flex; align-items: center;">
+                                            원본대조필 여부
+                                            <span class="tooltip-container">
+                                                <span class="tooltip-icon">?</span>
+                                                <span class="tooltip-text">
+                                                    <div style="margin-bottom: 5px;">[검색 키워드]</div>
+                                                    1. <strong>'원본대조필'</strong><br>
+                                                    2. <strong>'원본'</strong>
+                                                </span>
+                                            </span>
+                                        </label>
                                         <label class="checkbox-item">
                                             <input type="checkbox" id="origin_sealed_yn" name="origin_sealed_yn"> 원본대조필
                                             필수
                                         </label>
                                     </div>
                                     <div class="form-item">
-                                        <label>전자 타이핑 서명</label>
+                                        <label style="display: flex; align-items: center;">
+                                            전자 타이핑 서명
+                                            <span class="tooltip-container">
+                                                <span class="tooltip-icon">?</span>
+                                                <span class="tooltip-text">
+                                                    <div style="margin-bottom: 5px;">[검색 키워드]</div>
+                                                    1. <strong>'타이핑'</strong><br>
+                                                    2. <strong>'자필'</strong><br>
+                                                    3. <strong>'손글씨'</strong><br>
+                                                    4. <strong>'서명'</strong>
+                                                </span>
+                                            </span>
+                                        </label>
                                         <div class="radio-group">
                                             <label class="radio-item">
                                                 <input type="radio" name="elec_sign_yn" value="Y" checked> 가능

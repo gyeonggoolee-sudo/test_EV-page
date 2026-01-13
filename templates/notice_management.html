@@ -377,7 +377,8 @@
             text-align: center;
         }
 
-        .form-item input[type="text"] {
+        .form-item input[type="text"],
+        .form-item select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -385,9 +386,12 @@
             font-size: 14px;
             box-sizing: border-box;
             transition: border-color 0.2s;
+            background-color: white;
+            font-family: inherit;
         }
 
-        .form-item input[type="text"]:focus {
+        .form-item input[type="text"]:focus,
+        .form-item select:focus {
             border-color: #0e424f;
             outline: none;
         }
@@ -538,8 +542,18 @@
                                     </div>
                                     <div class="form-item">
                                         <label>공동명의 조건</label>
-                                        <div style="color: #999; font-size: 13px; font-style: italic; padding: 5px 0;">
-                                            (추후 요청)</div>
+                                        <select id="joint_owner_type" name="joint_owner_type">
+                                            <option value="">-- 선택하세요 --</option>
+                                            <option value="FAM_SAME_HH_MAIN_ONLY">등본 상 세대 내 가족(거주요건 대표자만 만족)</option>
+                                            <option value="FAM_SAME_HH_BOTH">등본 상 세대 내 가족(거주요건 둘 다 만족)</option>
+                                            <option value="FAM_SAME_REGION_NO_LIVE_TOGETHER">같은 지역내/ 가족/ 같이 거주 안해도 공동명의
+                                                가능</option>
+                                            <option value="NON_FAM_SAME_REGION_NO_LIVE_TOGETHER">같은지역내 / 가족 x / 같이거주안해도
+                                                공동명의 가능</option>
+                                            <option value="NON_FAM_OTHER_REGION">타지역/ 가족X / 공동명의 가능</option>
+                                            <option value="FAM_OTHER_REGION">타지역/ 가족O/ 공동명의 가능</option>
+                                            <option value="CHECK_REQD">확인필요</option>
+                                        </select>
                                     </div>
                                     <div class="form-item">
                                         <label>다자녀 조건</label>

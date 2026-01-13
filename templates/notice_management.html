@@ -241,7 +241,27 @@
         .form-container {
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 25px;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0e424f;
+            margin-top: 10px;
+            margin-bottom: -10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-title::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background-color: #0e424f;
+            border-radius: 2px;
         }
 
         .form-group-section {
@@ -478,6 +498,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="category-title">📂 지원신청</div>
 
                             <div class="form-group-section">
                                 <div class="section-title">📄 지자체별 지원신청 추가서류</div>

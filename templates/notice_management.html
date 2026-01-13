@@ -301,13 +301,15 @@
 
                         const item = document.createElement('div');
                         item.className = 'file-item';
+                        // 백슬래시가 자바스크립트 문자열에서 깨지지 않도록 이스케이프 처리
+                        const safePath = path.replace(/\\/g, '\\\\');
                         item.innerHTML = `
                             <div class="file-info">
                                 <span class="file-icon">${icon}</span>
                                 <span class="file-name">${key}</span>
                                 <span style="color: #999; font-size: 11px; margin-left: 10px;">(${fileExt})</span>
                             </div>
-                            <button class="btn-open" onclick="openFile('${path}')">열기</button>
+                            <button class="btn-open" onclick="openFile('${safePath}')">열기</button>
                         `;
                         container.appendChild(item);
                     });

@@ -339,6 +339,44 @@
             font-size: 14px;
         }
 
+        /* 라디오 및 체크박스 공통 스타일 */
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 5px;
+        }
+
+        .radio-item,
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #444;
+            cursor: pointer;
+        }
+
+        .radio-item input,
+        .checkbox-item input {
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .inline-input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inline-input-group input[type="number"] {
+            width: 70px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+
         .form-item input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -449,6 +487,75 @@
                                 <div class="info-text-section">
                                     <p class="info-text">• 지원신청서 및 동의서(각 1p), 구매계약서는 공통 서류입니다.</p>
                                     <p class="info-text">• 추가서류 예) 지방세납세증명서, 동의서만 2p 이상 있을 때, 탄소중립포인트 에너지 가입확인서 등)</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group-section">
+                                <div class="section-title">⚖️ 서류 조건</div>
+                                <div class="form-grid" style="grid-template-columns: repeat(3, 1fr); gap: 25px;">
+                                    <div class="form-item">
+                                        <label>서류 발급일</label>
+                                        <div class="inline-input-group">
+                                            <input type="number" id="doc_issue_limit" name="doc_issue_limit" value="30"
+                                                min="1">
+                                            <span>일 이내</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-item">
+                                        <label>원본대조필 여부</label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" id="origin_sealed_yn" name="origin_sealed_yn"> 원본대조필
+                                            필수
+                                        </label>
+                                    </div>
+                                    <div class="form-item">
+                                        <label>전자 타이핑 서명</label>
+                                        <div class="radio-group">
+                                            <label class="radio-item">
+                                                <input type="radio" name="elec_sign_yn" value="Y" checked> 가능
+                                            </label>
+                                            <label class="radio-item">
+                                                <input type="radio" name="elec_sign_yn" value="N"> 불가능
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group-section">
+                                <div class="section-title">⚙️ 세부 조건</div>
+                                <div class="form-grid" style="gap: 20px;">
+                                    <div class="form-item">
+                                        <label>개인사업자 사업장(사업소재지) 조건</label>
+                                        <div class="radio-group">
+                                            <label class="radio-item">
+                                                <input type="radio" name="private_busi_loc_type" value="ANY" checked> 무관
+                                            </label>
+                                            <label class="radio-item">
+                                                <input type="radio" name="private_busi_loc_type" value="LOCAL"> 지자체 지역
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-item">
+                                        <label>공동명의 조건</label>
+                                        <div style="color: #999; font-size: 13px; font-style: italic; padding: 5px 0;">
+                                            (추후 요청)</div>
+                                    </div>
+                                    <div class="form-item">
+                                        <label>다자녀 조건</label>
+                                        <div class="radio-group">
+                                            <label class="radio-item">
+                                                <input type="radio" name="multi_child_type" value="UNDER_18" checked> 만
+                                                18세 이하
+                                            </label>
+                                            <label class="radio-item">
+                                                <input type="radio" name="multi_child_type" value="UNDER_19"> 만 19세 이하
+                                            </label>
+                                            <label class="radio-item">
+                                                <input type="radio" name="multi_child_type" value="CHECK_REQD"> 확인필요
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

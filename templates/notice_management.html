@@ -238,28 +238,46 @@
         }
 
         /* 폼 요소 스타일 */
-        .form-group {
-            margin-bottom: 20px;
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
         }
 
-        .form-group label {
+        .form-group-section {
+            background-color: #fcfcfc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .form-item label {
             display: block;
-            font-weight: 700;
+            font-weight: 500;
             margin-bottom: 8px;
             color: #555;
             font-size: 14px;
         }
 
-        .form-group textarea {
+        .form-item input[type="text"] {
             width: 100%;
-            height: 200px;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-family: inherit;
             font-size: 14px;
             box-sizing: border-box;
-            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        .form-item input[type="text"]:focus {
+            border-color: #0e424f;
+            outline: none;
         }
 
         .btn-home {
@@ -328,13 +346,19 @@
 
                     <!-- 2. 오른쪽: 데이터 입력 폼 -->
                     <div class="form-section">
-                        <div class="section-title">📝 공고 상세 정보 (Bigo)</div>
-                        <div class="form-group">
-                            <label for="bigoText">공고문 비고 내용 수정</label>
-                            <textarea id="bigoText" placeholder="공고문 내용을 불러오는 중..."></textarea>
-                        </div>
-                        <div style="color: #888; font-size: 12px; margin-top: -10px;">
-                            * 위 내용은 'ev_info' 테이블의 'bigo' 칼럼에 반영됩니다.
+                        <div class="form-container">
+                            <div class="form-group-section">
+                                <div class="section-title">� 접수 정보</div>
+                                <div class="form-grid">
+                                    <div class="form-item">
+                                        <label for="apply_period">접수 기간</label>
+                                        <input type="text" id="apply_period" name="apply_period"
+                                            placeholder="예: 2025.02.04 ~ 2025.12.09">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 향후 추가될 섹션들을 위한 공간 -->
                         </div>
                     </div>
                 </div>

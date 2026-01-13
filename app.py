@@ -44,26 +44,117 @@ def notice_management():
 
 @app.route('/api/notice/<int:region_id>')
 def get_notice_detail(region_id):
-    """특정 지자체의 상세 공고 정보를 가져오는 API"""
+    """특정 지자체의 상세 공고 정보를 가져오는 API (ev_info + 공고문 데이터 조인)"""
     conn = get_db_connection()
     if not conn:
         return jsonify({"error": "DB connection failed"}), 500
     
     try:
         cur = conn.cursor()
-        cur.execute("SELECT file_paths, bigo FROM ev_info WHERE region_id = %s", (region_id,))
+        # ev_info의 파일/비고 정보와 공고문의 설정 정보를 함께 가져옴
+        query = """
+            SELECT 
+                ei.file_paths, ei.bigo,
+                g.notification_apply, g.residence_requirements, g.co_name
+            FROM ev_info ei
+            LEFT JOIN "공고문" g ON ei.region_id = g.region_id
+            WHERE ei.region_id = %s
+        """
+        cur.execute(query, (region_id,))
         row = cur.fetchone()
         cur.close()
         conn.close()
         
         if row:
             return jsonify({
-                "file_paths": row[0],
-                "bigo": row[1]
+                "file_paths": row[0] or {},
+                "bigo": row[1] or "",
+                "config": {
+                    "notification_apply": row[2] or {},
+                    "residence_requirements": row[3] if row[3] is not None else 90,
+                    "co_name": row[4] or {}
+                }
             })
-        return jsonify({"file_paths": {}, "bigo": ""})
+        return jsonify({"file_paths": {}, "bigo": "", "config": None})
     except Exception as e:
+        print(f"Error getting notice detail: {e}")
         return jsonify({"error": str(e)}), 500
+
+@app.route('/api/notice/save', methods=['POST'])
+def save_notice_config():
+    """지자체별 공고문 설정을 저장(UPSERT)하는 API"""
+    try:
+        data = request.json
+        region_id = data.get('region_id')
+        notification_apply = data.get('notification_apply')
+        residence_requirements = data.get('residence_requirements', 90)
+        co_name = data.get('co_name')
+        bigo = data.get('bigo')
+
+        if not region_id:
+            return jsonify({"status": "error", "message": "region_id is required"}), 400
+
+        conn = get_db_connection()
+        if not conn:
+            return jsonify({"status": "error", "message": "DB connection failed"}), 500
+
+        cur = conn.cursor()
+        
+        # 1. "공고문" 테이블 UPSERT (notification_payment, worker_id, checked_status_list 제외)
+        upsert_query = """
+            INSERT INTO "공고문" (
+                region_id, notification_apply, residence_requirements, co_name, updated_at
+            ) VALUES (%s, %s, %s, %s, NOW())
+            ON CONFLICT (region_id) 
+            DO UPDATE SET 
+                notification_apply = EXCLUDED.notification_apply,
+                residence_requirements = EXCLUDED.residence_requirements,
+                co_name = EXCLUDED.co_name,
+                updated_at = NOW();
+        """
+        cur.execute(upsert_query, (
+            region_id, 
+            json.dumps(notification_apply, ensure_ascii=False),
+            residence_requirements,
+            json.dumps(co_name, ensure_ascii=False)
+        ))
+
+        # 2. "ev_info" 테이블의 bigo 업데이트
+        if bigo is not None:
+            update_bigo_query = """
+                UPDATE ev_info 
+                SET bigo = %s, bigo_updated_at = NOW() 
+                WHERE region_id = %s
+            """
+            cur.execute(update_bigo_query, (bigo, region_id))
+
+        # 3. "ev_info" 테이블의 file_paths 내 check_status를 1로 일괄 변경
+        cur.execute("SELECT file_paths FROM ev_info WHERE region_id = %s", (region_id,))
+        row = cur.fetchone()
+        if row and row[0]:
+            file_paths = row[0]
+            updated_files = {}
+            for key, info in file_paths.items():
+                if isinstance(info, dict):
+                    info['check_status'] = 1
+                    updated_files[key] = info
+                else:
+                    # 이전의 단순 문자열 형태인 경우 객체로 변환
+                    updated_files[key] = {"path": info, "check_status": 1}
+            
+            cur.execute(
+                "UPDATE ev_info SET file_paths = %s WHERE region_id = %s",
+                (json.dumps(updated_files, ensure_ascii=False), region_id)
+            )
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({"status": "success", "message": "Settings saved successfully"})
+    except Exception as e:
+        print(f"Error saving notice config: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/applyform')
 def apply_form():

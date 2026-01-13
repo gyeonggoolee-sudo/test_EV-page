@@ -600,7 +600,7 @@
             <div id="manageContent" style="display: none; height: 100%; flex-direction: column;">
                 <div class="manage-header">
                     <h2 id="selectedRegionName">지자체명</h2>
-                    <button class="btn-home btn-save">설정 저장</button>
+                    <button class="btn-home btn-save" onclick="saveSettings()">설정 저장</button>
                 </div>
 
                 <div class="manage-body">
@@ -852,6 +852,14 @@
                                 </div>
                             </div>
 
+                            <div class="form-group-section">
+                                <div class="section-title">📝 기타 비고</div>
+                                <div class="form-item">
+                                    <textarea id="bigoText" name="bigo"
+                                        style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit; resize: vertical;"
+                                        placeholder="기타 참고사항을 입력하세요..."></textarea>
+                                </div>
+                            </div>
                             <!-- 향후 추가될 섹션들을 위한 공간 -->
                         </div>
                     </div>
@@ -861,6 +869,8 @@
     </div>
 
     <script>
+        let currentRegionId = null;
+
         function filterRegions() {
             const input = document.getElementById('regionSearch');
             const filter = input.value.toLowerCase();
@@ -877,6 +887,7 @@
         }
 
         async function selectRegion(element, id, name) {
+            currentRegionId = id;
             const items = document.getElementsByClassName('region-item');
             for (let item of items) { item.classList.remove('active'); }
             element.classList.add('active');
@@ -894,8 +905,12 @@
                 container.innerHTML = '';
 
                 if (data.file_paths && Object.keys(data.file_paths).length > 0) {
-                    Object.entries(data.file_paths).forEach(([key, path]) => {
-                        const fileExt = path.split('.').pop().toLowerCase();
+                    Object.entries(data.file_paths).forEach(([key, fileInfo]) => {
+                        // fileInfo가 객체 형태인 경우와 이전의 문자열 형태인 경우 모두 대응
+                        const filePath = typeof fileInfo === 'object' ? fileInfo.path : fileInfo;
+                        const checkStatus = typeof fileInfo === 'object' ? fileInfo.check_status : 1; // 기본값 1 (확인됨)
+
+                        const fileExt = filePath.split('.').pop().toLowerCase();
                         let icon = '📄';
                         if (['pdf'].includes(fileExt)) icon = '📕';
                         else if (['xls', 'xlsx'].includes(fileExt)) icon = '📗';
@@ -903,7 +918,16 @@
 
                         const item = document.createElement('div');
                         item.className = 'file-item';
-                        const safePath = path.replace(/\\/g, '\\\\');
+                        const safePath = filePath.replace(/\\/g, '\\\\');
+
+                        // check_status가 0이면 '확인필요' 표시, 1이면 '확인완료' 표시
+                        let checkBadge = '';
+                        if (checkStatus === 0) {
+                            checkBadge = '<span style="color: #ff4d4f; margin-right: 8px; font-weight: bold; font-size: 11px; border: 1px solid #ff4d4f; padding: 1px 4px; border-radius: 3px;">확인필요</span>';
+                        } else if (checkStatus === 1) {
+                            checkBadge = '<span style="color: #27ae60; margin-right: 8px; font-weight: bold; font-size: 11px; border: 1px solid #27ae60; padding: 1px 4px; border-radius: 3px;">확인완료</span>';
+                        }
+
                         item.innerHTML = `
                             <div class="file-info">
                                 <span class="file-icon">${icon}</span>
@@ -912,7 +936,10 @@
                                     <span style="color: #999; font-size: 10px;">${fileExt.toUpperCase()}</span>
                                 </div>
                             </div>
-                            <button class="btn-open" onclick="openFile('${safePath}')">열기</button>
+                            <div style="display: flex; align-items: center;">
+                                ${checkBadge}
+                                <button class="btn-open" onclick="openFile('${safePath}')">열기</button>
+                            </div>
                         `;
                         container.appendChild(item);
                     });
@@ -920,7 +947,61 @@
                     container.innerHTML = '<div style="padding: 20px; text-align: center; color: #999; font-size: 13px;">등록된 파일이 없습니다.</div>';
                 }
 
-                // 2. 비고(Bigo) 텍스트 업데이트
+                // 2. 설정 정보(config) 업데이트
+                if (data.config) {
+                    const cfg = data.config;
+                    const na = cfg.notification_apply?.application_docs || {};
+
+                    // 접수 기간
+                    document.getElementById('apply_start').value = na.apply_period?.start || '';
+                    document.getElementById('apply_end').value = na.apply_period?.end || '';
+
+                    // 추가 서류
+                    const docContainer = document.getElementById('addDocContainer');
+                    docContainer.innerHTML = '';
+                    if (na.extra_docs && na.extra_docs.length > 0) {
+                        na.extra_docs.forEach(doc => addDocRow(doc));
+                    } else {
+                        addDocRow(); // 기본 한 줄
+                    }
+
+                    // 서류 조건
+                    document.getElementById('doc_issue_limit').value = na.document_date || '30';
+                    document.getElementById('origin_sealed_yn').checked = na.origin_sealed_yn === 'Y';
+
+                    if (na.elec_sign_yn) {
+                        const radio = document.querySelector(`input[name="elec_sign_yn"][value="${na.elec_sign_yn}"]`);
+                        if (radio) radio.checked = true;
+                    }
+
+                    if (na.multi_child_type) {
+                        const radio = document.querySelector(`input[name="multi_child_type"][value="${na.multi_child_type}"]`);
+                        if (radio) radio.checked = true;
+                    }
+
+                    // 세부 조건
+                    document.getElementById('residence_requirement').value = cfg.residence_requirements || '90';
+
+                    if (na.purchase_entity?.business_location) {
+                        const radio = document.querySelector(`input[name="private_busi_loc_type"][value="${na.purchase_entity.business_location}"]`);
+                        if (radio) radio.checked = true;
+                    }
+
+                    // 공동명의 조건
+                    document.getElementById('joint_owner_type').value = cfg.co_name?.basic_condition || '';
+                } else {
+                    // 설정 데이터가 없는 경우 초기화
+                    document.getElementById('apply_start').value = '';
+                    document.getElementById('apply_end').value = '';
+                    document.getElementById('addDocContainer').innerHTML = '';
+                    addDocRow();
+                    document.getElementById('doc_issue_limit').value = '30';
+                    document.getElementById('origin_sealed_yn').checked = false;
+                    document.getElementById('residence_requirement').value = '90';
+                    document.getElementById('joint_owner_type').value = '';
+                }
+
+                // 3. 비고(Bigo) 텍스트 업데이트
                 document.getElementById('bigoText').value = data.bigo || '';
 
             } catch (error) {
@@ -958,6 +1039,61 @@
                 <button type="button" class="btn-remove" onclick="this.parentElement.remove()">×</button>
             `;
             container.appendChild(row);
+        }
+
+        async function saveSettings() {
+            if (!currentRegionId) {
+                alert("지자체를 선택해주세요.");
+                return;
+            }
+
+            const extraDocs = Array.from(document.getElementsByName('additional_doc'))
+                .map(input => input.value.trim())
+                .filter(val => val !== "");
+
+            const data = {
+                region_id: currentRegionId,
+                residence_requirements: parseInt(document.getElementById('residence_requirement').value),
+                notification_apply: {
+                    application_docs: {
+                        apply_period: {
+                            start: document.getElementById('apply_start').value,
+                            end: document.getElementById('apply_end').value
+                        },
+                        extra_docs: extraDocs,
+                        document_date: document.getElementById('doc_issue_limit').value,
+                        origin_sealed_yn: document.getElementById('origin_sealed_yn').checked ? 'Y' : 'N',
+                        elec_sign_yn: document.querySelector('input[name="elec_sign_yn"]:checked')?.value || 'Y',
+                        multi_child_type: document.querySelector('input[name="multi_child_type"]:checked')?.value || 'UNDER_18',
+                        purchase_entity: {
+                            business_location: document.querySelector('input[name="private_busi_loc_type"]:checked')?.value || 'ANY'
+                        }
+                    }
+                },
+                co_name: {
+                    basic_condition: document.getElementById('joint_owner_type').value
+                },
+                bigo: document.getElementById('bigoText').value
+            };
+
+            try {
+                const response = await fetch('/api/notice/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert("설정이 성공적으로 저장되었습니다.");
+                    location.reload(); // 페이지 새로고침
+                } else {
+                    alert("저장 중 오류가 발생했습니다: " + result.message);
+                }
+            } catch (error) {
+                console.error("Save error:", error);
+                alert("저장 서버와의 통신에 실패했습니다.");
+            }
         }
     </script>
 </body>

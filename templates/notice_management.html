@@ -257,6 +257,21 @@
             gap: 15px;
         }
 
+        .period-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .period-input-group input[type="text"] {
+            flex: 1;
+        }
+
+        .period-separator {
+            font-weight: 700;
+            color: #888;
+        }
+
         .form-item label {
             display: block;
             font-weight: 500;
@@ -348,12 +363,17 @@
                     <div class="form-section">
                         <div class="form-container">
                             <div class="form-group-section">
-                                <div class="section-title">� 접수 정보</div>
+                                <div class="section-title">📅 접수 정보</div>
                                 <div class="form-grid">
                                     <div class="form-item">
-                                        <label for="apply_period">접수 기간</label>
-                                        <input type="text" id="apply_period" name="apply_period"
-                                            placeholder="예: 2025.02.04 ~ 2025.12.09">
+                                        <label>접수 기간</label>
+                                        <div class="period-input-group">
+                                            <input type="text" id="apply_start" name="apply_start"
+                                                placeholder="시작일 (예: 2025.02.04)">
+                                            <span class="period-separator">~</span>
+                                            <input type="text" id="apply_end" name="apply_end"
+                                                placeholder="종료일 (예: 2025.12.09)">
+                                        </div>
                                     </div>
                                 </div>
                             </div>

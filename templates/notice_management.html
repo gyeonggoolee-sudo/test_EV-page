@@ -11,103 +11,187 @@
         body {
             font-family: 'Noto Sans KR', sans-serif;
             margin: 0;
-            padding: 40px;
+            padding: 20px;
             background-color: #f4f7f9;
             color: #333;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 10px;
         }
 
         .page-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 20px;
             color: #0e424f;
+            margin: 0;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            min-height: 0;
+            /* flex 자식의 overflow 처리를 위해 필요 */
+        }
+
+        /* 왼쪽 리스트 패널 */
+        .side-panel {
+            width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e1e4e8;
+        }
+
+        .search-area {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-area input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .region-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .region-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #f9f9f9;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .region-item:hover {
+            background-color: #f0f7f9;
+        }
+
+        .region-item.active {
+            background-color: #eef7f9;
+            border-left: 4px solid #0e424f;
+            font-weight: 700;
+            color: #0e424f;
+        }
+
+        .region-name {
+            font-size: 15px;
+        }
+
+        /* 오른쪽 상세 패널 */
+        .detail-panel {
+            flex: 1;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            border: 1px solid #e1e4e8;
+            overflow-y: auto;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .manage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
             border-bottom: 2px solid #0e424f;
             padding-bottom: 15px;
         }
 
-        .content {
-            font-size: 16px;
-            line-height: 1.6;
+        .manage-header h2 {
+            margin: 0;
+            color: #0e424f;
         }
 
-        .search-bar {
-            margin-bottom: 20px;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        .region-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .region-card {
-            background-color: #fff;
-            border: 1px solid #eee;
-            padding: 15px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.2s;
-        }
-
-        .region-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
-        }
-
-        .region-name {
-            font-weight: 500;
-            font-size: 15px;
-        }
-
-        .btn-manage {
-            background-color: #0e424f;
+        .btn-home {
+            background-color: #666;
             color: white;
             border: none;
-            padding: 5px 12px;
+            padding: 8px 15px;
             border-radius: 4px;
             cursor: pointer;
+            text-decoration: none;
             font-size: 13px;
-        }
-
-        .btn-manage:hover {
-            background-color: #0a333d;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="header-section">
         <h1 class="page-title">공고문 관리</h1>
-        <div class="content">
-            <div class="search-bar">
-                <input type="text" id="regionSearch" placeholder="지자체명을 입력하세요..." onkeyup="filterRegions()">
+        <a href="/" class="btn-home">메인으로 돌아가기</a>
+    </div>
+
+    <div class="main-layout">
+        <!-- 왼쪽: 지자체 리스트 -->
+        <div class="side-panel">
+            <div class="search-area">
+                <input type="text" id="regionSearch" placeholder="지자체 검색..." onkeyup="filterRegions()">
             </div>
             <div class="region-list" id="regionList">
                 {% for id, name in regions %}
-                <div class="region-card" data-name="{{ name }}">
+                <div class="region-item" data-name="{{ name }}" onclick="selectRegion(this, {{ id }}, '{{ name }}')">
                     <span class="region-name">{{ name }}</span>
-                    <button class="btn-manage" onclick="manageNotice({{ id }}, '{{ name }}')">관리</button>
+                    <span style="color: #ccc; font-size: 12px;">ID: {{ id }}</span>
                 </div>
                 {% endfor %}
+            </div>
+        </div>
+
+        <!-- 오른쪽: 상세 정보 패널 -->
+        <div class="detail-panel" id="detailPanel">
+            <div class="empty-state" id="emptyState">
+                <div style="font-size: 40px; margin-bottom: 15px;">📍</div>
+                <p>지자체를 선택하시면 공고문 정보를 확인하고 수정할 수 있습니다.</p>
+            </div>
+
+            <div id="manageContent" style="display: none;">
+                <div class="manage-header">
+                    <h2 id="selectedRegionName">지자체명</h2>
+                    <div class="action-buttons">
+                        <button class="btn-home" style="background-color: #0e424f;">저장하기</button>
+                    </div>
+                </div>
+
+                <div class="form-placeholder">
+                    <p>이곳에 지자체별 상세 공고문 설정 UI가 들어갈 예정입니다.</p>
+                    <!-- 향후 interactivity를 위한 폼 요소들 배치 -->
+                </div>
             </div>
         </div>
     </div>
@@ -116,20 +200,35 @@
         function filterRegions() {
             const input = document.getElementById('regionSearch');
             const filter = input.value.toLowerCase();
-            const cards = document.getElementsByClassName('region-card');
+            const items = document.getElementsByClassName('region-item');
 
-            for (let i = 0; i < cards.length; i++) {
-                const name = cards[i].getAttribute('data-name');
+            for (let i = 0; i < items.length; i++) {
+                const name = items[i].getAttribute('data-name');
                 if (name.toLowerCase().indexOf(filter) > -1) {
-                    cards[i].style.display = "";
+                    items[i].style.display = "";
                 } else {
-                    cards[i].style.display = "none";
+                    items[i].style.display = "none";
                 }
             }
         }
 
-        function manageNotice(id, name) {
-            alert(name + '(ID: ' + id + ') 공고문 관리 기능을 준비 중입니다.');
+        function selectRegion(element, id, name) {
+            // 모든 아이템에서 active 제거
+            const items = document.getElementsByClassName('region-item');
+            for (let item of items) {
+                item.classList.remove('active');
+            }
+
+            // 클릭한 아이템에 active 추가
+            element.classList.add('active');
+
+            // 상세 패널 업데이트
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('manageContent').style.display = 'block';
+            document.getElementById('selectedRegionName').innerText = name + ' 공고문 설정';
+
+            // 실제 데이터 로딩 로직이 여기에 추가될 예정
+            console.log("Selected Region ID:", id);
         }
     </script>
 </body>

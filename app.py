@@ -116,6 +116,24 @@ def view_pdf():
         print(f"Error serving PDF: {e}")
         abort(500)
 
+@app.route('/open-local')
+def open_local():
+    """파일을 서버 환경의 기본 프로그램으로 열기 (로컬 실행)"""
+    file_path = request.args.get('path')
+    if not file_path:
+        return jsonify({"status": "error", "message": "No path provided"}), 400
+        
+    if not os.path.exists(file_path):
+        return jsonify({"status": "error", "message": "File not found"}), 404
+        
+    try:
+        # Windows 환경에서 파일 연결 프로그램 실행
+        os.startfile(file_path)
+        return jsonify({"status": "success", "message": "File opened successfully"})
+    except Exception as e:
+        print(f"Error opening local file: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 # 기본 DB 설정
 DB_CONFIG = {
     "host": "192.168.0.92",

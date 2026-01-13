@@ -321,23 +321,27 @@
             }
         }
 
-        function openFile(path) {
+        async function openFile(path) {
             const fileExt = path.split('.').pop().toLowerCase();
 
             if (fileExt === 'pdf') {
                 // PDF 파일은 서버 엔드포인트를 통해 새 탭에서 열기
                 const url = `/view-pdf?path=${encodeURIComponent(path)}`;
                 window.open(url, '_blank');
+            } else if (['hwp', 'hwpx', 'xls', 'xlsx'].includes(fileExt)) {
+                // 한글 및 엑셀 파일은 로컬 실행 모드로 열기
+                try {
+                    const response = await fetch(`/open-local?path=${encodeURIComponent(path)}`);
+                    const result = await response.json();
+                    if (result.status === 'error') {
+                        alert("파일을 여는 중 오류가 발생했습니다: " + result.message);
+                    }
+                } catch (error) {
+                    console.error("Local open error:", error);
+                    alert("서버와 통신 중 오류가 발생했습니다.");
+                }
             } else {
-                // 다른 확장자는 아직 준비 중
-                const typeMap = {
-                    'hwp': '한글',
-                    'hwpx': '한글',
-                    'xls': '엑셀',
-                    'xlsx': '엑셀'
-                };
-                const typeName = typeMap[fileExt] || fileExt;
-                alert(`${typeName} 파일 열기 기능은 현재 준비 중입니다. PDF 파일만 즉시 확인 가능합니다.`);
+                alert(`이 파일 형식(${fileExt})은 현재 수동 확인이 필요합니다.`);
             }
         }
     </script>

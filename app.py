@@ -23,14 +23,45 @@ def notice_management():
     if conn:
         try:
             cur = conn.cursor()
-            cur.execute("SELECT region_id, region FROM region_metadata ORDER BY region")
+            # region_metadata와 ev_info를 조인하여 file_paths 정보를 함께 가져옴
+            query = """
+                SELECT rm.region_id, rm.region, ei.file_paths 
+                FROM region_metadata rm
+                LEFT JOIN ev_info ei ON rm.region_id = ei.region_id
+                ORDER BY rm.region
+            """
+            cur.execute(query)
             regions = cur.fetchall()
             cur.close()
             conn.close()
         except Exception as e:
             print(f"Error fetching regions: {e}")
     
+    # regions 구조: [(id, name, file_paths_json), ...]
     return render_template('notice_management.html', regions=regions)
+
+@app.route('/api/notice/<int:region_id>')
+def get_notice_detail(region_id):
+    """특정 지자체의 상세 공고 정보를 가져오는 API"""
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({"error": "DB connection failed"}), 500
+    
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT file_paths, bigo FROM ev_info WHERE region_id = %s", (region_id,))
+        row = cur.fetchone()
+        cur.close()
+        conn.close()
+        
+        if row:
+            return jsonify({
+                "file_paths": row[0],
+                "bigo": row[1]
+            })
+        return jsonify({"file_paths": {}, "bigo": ""})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/applyform')
 def apply_form():

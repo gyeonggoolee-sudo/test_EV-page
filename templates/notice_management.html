@@ -38,6 +38,59 @@
             font-size: 16px;
             line-height: 1.6;
         }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .region-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .region-card {
+            background-color: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .region-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .region-name {
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .btn-manage {
+            background-color: #0e424f;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-manage:hover {
+            background-color: #0a333d;
+        }
     </style>
 </head>
 
@@ -45,9 +98,40 @@
     <div class="container">
         <h1 class="page-title">공고문 관리</h1>
         <div class="content">
-            <p>공고문 관리 페이지의 새로운 레이아웃입니다.</p>
+            <div class="search-bar">
+                <input type="text" id="regionSearch" placeholder="지자체명을 입력하세요..." onkeyup="filterRegions()">
+            </div>
+            <div class="region-list" id="regionList">
+                {% for id, name in regions %}
+                <div class="region-card" data-name="{{ name }}">
+                    <span class="region-name">{{ name }}</span>
+                    <button class="btn-manage" onclick="manageNotice({{ id }}, '{{ name }}')">관리</button>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
+
+    <script>
+        function filterRegions() {
+            const input = document.getElementById('regionSearch');
+            const filter = input.value.toLowerCase();
+            const cards = document.getElementsByClassName('region-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                const name = cards[i].getAttribute('data-name');
+                if (name.toLowerCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        function manageNotice(id, name) {
+            alert(name + '(ID: ' + id + ') 공고문 관리 기능을 준비 중입니다.');
+        }
+    </script>
 </body>
 
 </html>

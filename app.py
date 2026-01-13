@@ -18,7 +18,19 @@ def index():
 
 @app.route('/notice-management')
 def notice_management():
-    return render_template('notice_management.html')
+    conn = get_db_connection()
+    regions = []
+    if conn:
+        try:
+            cur = conn.cursor()
+            cur.execute("SELECT region_id, region FROM region_metadata ORDER BY region")
+            regions = cur.fetchall()
+            cur.close()
+            conn.close()
+        except Exception as e:
+            print(f"Error fetching regions: {e}")
+    
+    return render_template('notice_management.html', regions=regions)
 
 @app.route('/applyform')
 def apply_form():

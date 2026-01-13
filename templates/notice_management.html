@@ -244,59 +244,66 @@
             border-top: 1px dashed #eee;
         }
 
-        .upload-zone {
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
+        .upload-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
             background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 8px;
             transition: all 0.2s;
-            cursor: pointer;
         }
 
-        .upload-zone:hover {
+        .upload-row:hover {
             border-color: #0e424f;
             background-color: #f0f7f9;
         }
 
-        .upload-icon {
-            font-size: 30px;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .upload-text {
+        .upload-label {
             font-size: 13px;
-            color: #666;
-            margin-bottom: 5px;
-            display: block;
+            font-weight: 500;
+            color: #444;
+            display: flex;
+            flex-direction: column;
         }
 
-        .upload-subtext {
+        .upload-label .sub {
             font-size: 11px;
             color: #999;
+            font-weight: 400;
         }
 
-        .uploaded-file-list {
-            margin-top: 15px;
-        }
-
-        .uploaded-file-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 12px;
-            background: #fff;
-            border: 1px solid #eee;
+        .btn-upload-small {
+            background-color: white;
+            color: #0e424f;
+            border: 1px solid #0e424f;
+            padding: 4px 10px;
             border-radius: 4px;
-            margin-bottom: 5px;
             font-size: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-upload-small:hover {
+            background-color: #0e424f;
+            color: white;
+        }
+
+        .uploaded-info {
+            font-size: 12px;
+            color: #27ae60;
+            display: none;
+            /* 파일 선택 전에는 숨김 */
         }
 
         .btn-delete-file {
             color: #ff4d4f;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
+            margin-left: 5px;
         }
 
         /* 폼 요소 스타일 */
@@ -541,20 +548,47 @@
                             <!-- 파일 항목들이 동적으로 생성됨 -->
                         </div>
 
-                        <!-- PDF 변환 업로드 섹션 (한글 파일 존재 시 동적으로 노출 조정 가능) -->
+                        <!-- PDF 변환 업로드 섹션 -->
                         <div id="pdfUploadSection" class="upload-section">
                             <div class="section-title">📤 PDF 변환 파일 업로드</div>
                             <div style="font-size: 12px; color: #666; margin-bottom: 15px; line-height: 1.5;">
-                                ⚠️ 한글(HWP, HWPX) 파일이 있을 경우, <strong>PDF로 변환하여</strong> 아래에 업로드해주세요. (원본 한글 파일 개수만큼 필요)
+                                ⚠️ 한글 파일을 PDF로 변환하여 각각 업로드해 주세요.
                             </div>
-                            <div class="upload-zone" onclick="document.getElementById('pdfInput').click()">
-                                <span class="upload-icon">📄</span>
-                                <span class="upload-text">파일을 클릭하거나 여기로 드래그하세요</span>
-                                <span class="upload-subtext">(PDF 파일만 업로드 가능)</span>
-                                <input type="file" id="pdfInput" style="display: none;" accept=".pdf" multiple>
+
+                            <!-- 1. 지원신청서 -->
+                            <div class="upload-row">
+                                <div class="upload-label">
+                                    지원신청서 <span class="sub">- 1p</span>
+                                </div>
+                                <div id="status_apply" class="uploaded-info">업로드됨 <span class="btn-delete-file">×</span>
+                                </div>
+                                <button type="button" class="btn-upload-small"
+                                    onclick="document.getElementById('input_apply').click()">파일 선택</button>
+                                <input type="file" id="input_apply" style="display: none;" accept=".pdf">
                             </div>
-                            <div id="uploadedPdfList" class="uploaded-file-list">
-                                <!-- 업로드된 파일 목록 UI 예시 (비어있음) -->
+
+                            <!-- 2. (기본) 동의서 -->
+                            <div class="upload-row">
+                                <div class="upload-label">
+                                    (기본) 동의서 <span class="sub">- 1p</span>
+                                </div>
+                                <div id="status_agreement" class="uploaded-info">업로드됨 <span
+                                        class="btn-delete-file">×</span></div>
+                                <button type="button" class="btn-upload-small"
+                                    onclick="document.getElementById('input_agreement').click()">파일 선택</button>
+                                <input type="file" id="input_agreement" style="display: none;" accept=".pdf">
+                            </div>
+
+                            <!-- 3. 그 외 지자체 추가서류 -->
+                            <div class="upload-row">
+                                <div class="upload-label">
+                                    그 외 지자체 추가서류
+                                </div>
+                                <div id="status_extra" class="uploaded-info">업로드됨 <span class="btn-delete-file">×</span>
+                                </div>
+                                <button type="button" class="btn-upload-small"
+                                    onclick="document.getElementById('input_extra').click()">파일 선택</button>
+                                <input type="file" id="input_extra" style="display: none;" accept=".pdf" multiple>
                             </div>
                         </div>
                     </div>

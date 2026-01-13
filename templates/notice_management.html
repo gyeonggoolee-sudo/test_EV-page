@@ -272,6 +272,65 @@
             color: #888;
         }
 
+        /* 추가 서류 스타일 */
+        .add-doc-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .add-doc-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .add-doc-row input {
+            flex: 1;
+        }
+
+        .btn-remove {
+            background: none;
+            border: none;
+            color: #ff4d4f;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 5px;
+        }
+
+        .btn-add-item {
+            background-color: white;
+            color: #0e424f;
+            border: 1px dashed #0e424f;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .btn-add-item:hover {
+            background-color: #f0f7f9;
+        }
+
+        .info-text-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 3px solid #ddd;
+        }
+
+        .info-text {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
         .form-item label {
             display: block;
             font-weight: 500;
@@ -363,7 +422,7 @@
                     <div class="form-section">
                         <div class="form-container">
                             <div class="form-group-section">
-                                <div class="section-title">📅 접수 정보</div>
+                                <div class="section-title">접수 정보</div>
                                 <div class="form-grid">
                                     <div class="form-item">
                                         <label>접수 기간</label>
@@ -375,6 +434,21 @@
                                                 placeholder="종료일 (예: 2025.12.09)">
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group-section">
+                                <div class="section-title">📄 지자체별 지원신청 추가서류</div>
+                                <div id="addDocContainer" class="add-doc-list">
+                                    <div class="add-doc-row">
+                                        <input type="text" name="additional_doc" placeholder="추가서류 명칭 입력 (예: 지방세납세증명서)">
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-add-item" onclick="addDocRow()">+ 항목 추가</button>
+
+                                <div class="info-text-section">
+                                    <p class="info-text">• 지원신청서 및 동의서(각 1p), 구매계약서는 공통 서류입니다.</p>
+                                    <p class="info-text">• 추가서류 예) 지방세납세증명서, 동의서만 2p 이상 있을 때, 탄소중립포인트 에너지 가입확인서 등)</p>
                                 </div>
                             </div>
 
@@ -473,6 +547,17 @@
             } else {
                 alert(`이 파일 형식(${fileExt})은 현재 수동 확인이 필요합니다.`);
             }
+        }
+
+        function addDocRow(value = "") {
+            const container = document.getElementById('addDocContainer');
+            const row = document.createElement('div');
+            row.className = 'add-doc-row';
+            row.innerHTML = `
+                <input type="text" name="additional_doc" value="${value}" placeholder="추가서류 명칭 입력">
+                <button type="button" class="btn-remove" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(row);
         }
     </script>
 </body>

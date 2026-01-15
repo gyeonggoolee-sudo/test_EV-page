@@ -26,11 +26,19 @@ def notice_management():
         try:
             cur = conn.cursor()
             # region_metadata와 ev_info를 조인하여 file_paths 정보를 함께 가져옴
+            # 미확인 파일(check_status=0) 개수를 계산하여 정렬 기준으로 사용
             query = """
                 SELECT rm.region_id, rm.region, ei.file_paths 
                 FROM region_metadata rm
                 LEFT JOIN ev_info ei ON rm.region_id = ei.region_id
-                ORDER BY rm.region
+                ORDER BY (
+                    SELECT count(*) 
+                    FROM jsonb_each(CASE 
+                        WHEN ei.file_paths IS NULL OR jsonb_typeof(ei.file_paths) != 'object' THEN '{}'::jsonb 
+                        ELSE ei.file_paths 
+                    END) AS f(key, val)
+                    WHERE (val->>'check_status')::int = 0
+                ) DESC, rm.region
             """
             cur.execute(query)
             regions = cur.fetchall()

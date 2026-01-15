@@ -135,13 +135,14 @@ def save_notice_config():
             json.dumps(co_name, ensure_ascii=False)
         ))
 
-        # 2. "ev_info" 테이블 업데이트 (bigo, notice_total, notice_priority)
+        # 2. "ev_info" 테이블 업데이트 (bigo, notice_total, notice_priority, updated_at)
         update_ev_info_query = """
             UPDATE ev_info 
             SET bigo = %s, 
                 notice_total = %s, 
                 notice_priority = %s,
-                bigo_updated_at = NOW() 
+                bigo_updated_at = timezone('Asia/Seoul', now()),
+                updated_at = timezone('Asia/Seoul', now())
             WHERE region_id = %s
         """
         cur.execute(update_ev_info_query, (bigo, notice_total, notice_priority, region_id))

@@ -557,13 +557,18 @@
             cursor: pointer;
             text-decoration: none;
             font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .btn-save {
-            background-color: #0e424f;
-            border: none;
-            padding: 8px 20px;
-            font-weight: 500;
+        .btn-refresh {
+            background-color: #27ae60;
+            margin-right: 8px;
+        }
+
+        .btn-refresh:hover {
+            background-color: #219150;
         }
     </style>
 </head>
@@ -571,7 +576,12 @@
 <body>
     <div class="header-section">
         <h1 class="page-title">공고문 관리</h1>
-        <a href="/" class="btn-home">메인으로 돌아가기</a>
+        <div style="display: flex; align-items: center;">
+            <button onclick="location.reload()" class="btn-home btn-refresh">
+                <span style="font-size: 14px;">🔄</span> 새로고침
+            </button>
+            <a href="/" class="btn-home">메인으로 돌아가기</a>
+        </div>
     </div>
 
     <div class="main-layout">

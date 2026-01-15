@@ -55,7 +55,8 @@ def get_notice_detail(region_id):
         query = """
             SELECT 
                 ei.file_paths, ei.bigo,
-                g.notification_apply, g.residence_requirements, g.co_name
+                g.notification_apply, g.residence_requirements, g.co_name,
+                ei.notice_total, ei.notice_priority
             FROM ev_info ei
             LEFT JOIN "공고문" g ON ei.region_id = g.region_id
             WHERE ei.region_id = %s
@@ -73,6 +74,10 @@ def get_notice_detail(region_id):
                     "notification_apply": row[2] or {},
                     "residence_requirements": row[3] if row[3] is not None else 90,
                     "co_name": row[4] or {}
+                },
+                "notice_info": {
+                    "total": row[5] or 0,
+                    "priority": row[6] or 0
                 }
             })
         return jsonify({"file_paths": {}, "bigo": "", "config": None})
@@ -90,6 +95,8 @@ def save_notice_config():
         residence_requirements = data.get('residence_requirements', 90)
         co_name = data.get('co_name')
         bigo = data.get('bigo')
+        notice_total = data.get('notice_total')
+        notice_priority = data.get('notice_priority')
 
         if not region_id:
             return jsonify({"status": "error", "message": "region_id is required"}), 400
@@ -100,7 +107,8 @@ def save_notice_config():
 
         cur = conn.cursor()
         
-        # 1. "공고문" 테이블 UPSERT (notification_payment, worker_id, checked_status_list 제외)
+        # 1. "공고문" 테이블 UPSERT
+        # ... (생략된 기존 쿼리 로직 유지)
         upsert_query = """
             INSERT INTO "공고문" (
                 region_id, notification_apply, residence_requirements, co_name, updated_at
@@ -119,14 +127,16 @@ def save_notice_config():
             json.dumps(co_name, ensure_ascii=False)
         ))
 
-        # 2. "ev_info" 테이블의 bigo 업데이트
-        if bigo is not None:
-            update_bigo_query = """
-                UPDATE ev_info 
-                SET bigo = %s, bigo_updated_at = NOW() 
-                WHERE region_id = %s
-            """
-            cur.execute(update_bigo_query, (bigo, region_id))
+        # 2. "ev_info" 테이블 업데이트 (bigo, notice_total, notice_priority)
+        update_ev_info_query = """
+            UPDATE ev_info 
+            SET bigo = %s, 
+                notice_total = %s, 
+                notice_priority = %s,
+                bigo_updated_at = NOW() 
+            WHERE region_id = %s
+        """
+        cur.execute(update_ev_info_query, (bigo, notice_total, notice_priority, region_id))
 
         # 3. "ev_info" 테이블의 file_paths 내 check_status를 1로 일괄 변경
         cur.execute("SELECT file_paths FROM ev_info WHERE region_id = %s", (region_id,))
@@ -206,6 +216,89 @@ def view_pdf():
     except Exception as e:
         print(f"Error serving PDF: {e}")
         abort(500)
+
+@app.route('/api/notice/upload', methods=['POST'])
+def upload_notice_pdf():
+    """공고문 PDF 파일을 업로드하고 지정된 경로에 저장하며 DB를 업데이트함"""
+    try:
+        region_id = request.form.get('region_id')
+        file_type = request.form.get('file_type') # 'apply', 'agreement', 'extra'
+        file = request.files.get('file')
+
+        if not all([region_id, file_type, file]):
+            return jsonify({"status": "error", "message": "Missing required fields"}), 400
+
+        # 1. 지자체명 조회
+        conn = get_db_connection()
+        if not conn:
+            return jsonify({"status": "error", "message": "DB connection failed"}), 500
+        
+        cur = conn.cursor()
+        cur.execute("SELECT region FROM region_metadata WHERE region_id = %s", (region_id,))
+        row = cur.fetchone()
+        if not row:
+            cur.close()
+            conn.close()
+            return jsonify({"status": "error", "message": "Region not found"}), 404
+        
+        region_name = row[0]
+        
+        # 2. 저장 경로 구성
+        # \\DESKTOP-KEHQ34D\Users\com\Desktop\GreetLounge\26q1\공고문\[지자체명]\[폴더명]
+        base_path = r'\\DESKTOP-KEHQ34D\Users\com\Desktop\GreetLounge\26q1\공고문'
+        
+        folder_map = {
+            'apply': '지원신청서',
+            'agreement': '(기본)동의서',
+            'extra': '그외지자체추가서류'
+        }
+        folder_name = folder_map.get(file_type, '기타')
+        
+        save_dir = os.path.join(base_path, region_name, folder_name)
+        os.makedirs(save_dir, exist_ok=True)
+        
+        filename = file.filename
+        if not filename:
+            return jsonify({"status": "error", "message": "No filename provided"}), 400
+            
+        # 보안을 위해 경로 구분자 제거 (한글 유지를 위해 secure_filename 대신 사용)
+        filename = os.path.basename(filename)
+        dest_path = os.path.join(save_dir, filename)
+        file.save(dest_path)
+        
+        # 3. DB (ev_info.file_paths) 업데이트
+        # 기존 file_paths 가져오기
+        cur.execute("SELECT file_paths FROM ev_info WHERE region_id = %s", (region_id,))
+        row = cur.fetchone()
+        file_paths = row[0] if row and row[0] else {}
+        
+        # 파일 정보 업데이트 (키는 폴더명 또는 파일 구분자로 사용)
+        file_key = folder_name
+        file_paths[file_key] = {
+            "path": dest_path,
+            "check_status": 1 # 업로드 시 바로 확인된 것으로 간주하거나 0으로 설정 가능
+        }
+        
+        cur.execute(
+            "UPDATE ev_info SET file_paths = %s WHERE region_id = %s",
+            (json.dumps(file_paths, ensure_ascii=False), region_id)
+        )
+        
+        conn.commit()
+        cur.close()
+        conn.close()
+        
+        return jsonify({
+            "status": "success", 
+            "message": f"{folder_name} 업로드 완료",
+            "file_path": dest_path
+        })
+        
+    except Exception as e:
+        print(f"Error in upload_notice_pdf: {e}")
+        if 'conn' in locals() and conn:
+            conn.close()
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/open-local')
 def open_local():

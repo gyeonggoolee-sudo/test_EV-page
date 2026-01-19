@@ -237,6 +237,26 @@
             border-color: #0e424f;
         }
 
+        .btn-copy {
+            background-color: #fff;
+            color: #666;
+            border: 1px solid #ddd;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            margin-left: 5px;
+        }
+
+        .btn-copy:hover {
+            background-color: #f8f9fa;
+            border-color: #999;
+            color: #333;
+        }
+
         /* PDF 업로드 섹션 스타일 */
         .upload-section {
             margin-top: 25px;
@@ -955,6 +975,7 @@
                             </div>
                             <div style="display: flex; align-items: center;">
                                 ${checkBadge}
+                                <button class="btn-copy" onclick="copyPath('${safePath}')" title="경로 복사">경로복사</button>
                                 <button class="btn-open" onclick="openFile('${safePath}')">열기</button>
                             </div>
                         `;
@@ -1047,19 +1068,32 @@
             if (fileExt === 'pdf') {
                 const url = `/view-pdf?path=${encodeURIComponent(path)}`;
                 window.open(url, '_blank');
-            } else if (['hwp', 'hwpx', 'xls', 'xlsx'].includes(fileExt)) {
-                try {
-                    const response = await fetch(`/open-local?path=${encodeURIComponent(path)}`);
-                    const result = await response.json();
-                    if (result.status === 'error') {
-                        alert("파일을 여는 중 오류가 발생했습니다: " + result.message);
-                    }
-                } catch (error) {
-                    console.error("Local open error:", error);
-                }
             } else {
-                alert(`이 파일 형식(${fileExt})은 현재 수동 확인이 필요합니다.`);
+                // HWP, XLS 등 모든 파일을 클라이언트에서 다운로드/열기 가능하도록 함
+                const url = `/download-file?path=${encodeURIComponent(path)}`;
+                window.open(url, '_blank');
             }
+        }
+
+        function copyPath(path) {
+            // navigator.clipboard 를 사용하여 클립보드에 복사
+            navigator.clipboard.writeText(path).then(() => {
+                alert("파일 경로가 클립보드에 복사되었습니다.\n탐색기 주소창에 붙여넣어 해당 파일로 바로 이동할 수 있습니다.");
+            }).catch(err => {
+                console.error('클립보드 복사 실패:', err);
+                // 대비책: 임시 textarea 생성
+                const textArea = document.createElement("textarea");
+                textArea.value = path;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert("파일 경로가 클립보드에 복사되었습니다.");
+                } catch (e) {
+                    alert("경로 복사에 실패했습니다. 직접 복사해주세요.");
+                }
+                document.body.removeChild(textArea);
+            });
         }
 
         function addDocRow(value = "") {
@@ -1176,17 +1210,17 @@
         }
 
         // 1. 지원신청서 업로드 리스너
-        document.getElementById('input_apply').addEventListener('change', function() {
+        document.getElementById('input_apply').addEventListener('change', function () {
             handleNoticeFileUpload(this, 'apply', 'status_apply');
         });
 
         // 2. (기본) 동의서 업로드 리스너
-        document.getElementById('input_agreement').addEventListener('change', function() {
+        document.getElementById('input_agreement').addEventListener('change', function () {
             handleNoticeFileUpload(this, 'agreement', 'status_agreement');
         });
 
         // 3. 그 외 지자체 추가서류 업로드 리스너
-        document.getElementById('input_extra').addEventListener('change', function() {
+        document.getElementById('input_extra').addEventListener('change', function () {
             handleNoticeFileUpload(this, 'extra', 'status_extra');
         });
     </script>

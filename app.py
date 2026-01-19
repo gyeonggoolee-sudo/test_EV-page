@@ -309,23 +309,31 @@ def upload_notice_pdf():
             conn.close()
         return jsonify({"status": "error", "message": str(e)}), 500
 
-@app.route('/open-local')
-def open_local():
-    """파일을 서버 환경의 기본 프로그램으로 열기 (로컬 실행)"""
+@app.route('/download-file')
+def download_file_api():
+    """파일을 클라이언트로 전송하여 다운로드하거나 브라우저에서 열 수 있게 함"""
     file_path = request.args.get('path')
     if not file_path:
-        return jsonify({"status": "error", "message": "No path provided"}), 400
+        abort(400, description="No file path provided")
         
     if not os.path.exists(file_path):
-        return jsonify({"status": "error", "message": "File not found"}), 404
+        abort(404, description="File not found")
         
     try:
-        # Windows 환경에서 파일 연결 프로그램 실행
-        os.startfile(file_path)
-        return jsonify({"status": "success", "message": "File opened successfully"})
+        # 파일명 추출 (한글 지원을 위해 별도 처리 가능)
+        filename = os.path.basename(file_path)
+        # as_attachment=True로 설정하면 브라우저에서 바로 열리지 않고 다운로드됨
+        # PDF 등은 브라우저에서 바로 열리도록 False로 설정하되 원하면 수정 가능
+        return send_file(file_path, as_attachment=True, download_name=filename)
     except Exception as e:
-        print(f"Error opening local file: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
+        print(f"Error sending file: {e}")
+        abort(500)
+
+@app.route('/open-local')
+def open_local():
+    """기존 호환성을 유지하되, 모든 파일에 대해 다운로드/열기 가능하도록 안내함"""
+    # 사실상 /download-file과 동일하게 사용하거나 클라이언트 측에서 안내 처리
+    return download_file_api()
 
 # 기본 DB 설정
 DB_CONFIG = {

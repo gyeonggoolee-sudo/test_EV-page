@@ -691,7 +691,7 @@
                         <div class="form-container">
                             <div class="form-group-section">
                                 <div class="section-title">접수 정보</div>
-                                <div class="form-grid" style="grid-template-columns: repeat(2, 1fr); gap: 30px;">
+                                <div class="form-grid" style="grid-template-columns: repeat(3, 1fr); gap: 30px;">
                                     <div class="form-item">
                                         <label>공고대수</label>
                                         <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -721,6 +721,22 @@
                                                 <span style="font-size: 13px; color: #666; width: 50px;">종료일:</span>
                                                 <input type="text" id="apply_end" name="apply_end"
                                                     placeholder="2025.12.31">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-item">
+                                        <label>원본 발송 여부</label>
+                                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                                            <label class="checkbox-item">
+                                                <input type="checkbox" id="send_original_yn" name="send_original_yn"
+                                                    onchange="toggleOriginalAddress()"> 원본 발송 (예)
+                                            </label>
+                                            <div class="inline-input-group" id="original_address_group"
+                                                style="opacity: 0.5;">
+                                                <span style="font-size: 13px; color: #666; min-width: 60px;">발송
+                                                    주소:</span>
+                                                <input type="text" id="original_address" name="original_address"
+                                                    placeholder="주소를 입력하세요" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -1012,6 +1028,12 @@
                         if (radio) radio.checked = true;
                     }
 
+                    // 원본 발송 여부
+                    const sendOriginal = na.send_original_yn === 'Y';
+                    document.getElementById('send_original_yn').checked = sendOriginal;
+                    document.getElementById('original_address').value = na.original_address || '';
+                    toggleOriginalAddress();
+
 
                     // 세부 조건
                     document.getElementById('residence_requirement').value = cfg.residence_requirements || '90';
@@ -1031,6 +1053,9 @@
                     addDocRow();
                     document.getElementById('doc_issue_limit').value = '30';
                     document.getElementById('origin_sealed_yn').checked = false;
+                    document.getElementById('send_original_yn').checked = false;
+                    document.getElementById('original_address').value = '';
+                    toggleOriginalAddress();
                     document.getElementById('residence_requirement').value = '90';
                     document.getElementById('joint_owner_type').value = '';
                 }
@@ -1060,6 +1085,16 @@
             } catch (error) {
                 console.error("Error loading details:", error);
             }
+        }
+
+        function toggleOriginalAddress() {
+            const isChecked = document.getElementById('send_original_yn').checked;
+            const addressInput = document.getElementById('original_address');
+            const addressGroup = document.getElementById('original_address_group');
+
+            addressInput.disabled = !isChecked;
+            addressGroup.style.opacity = isChecked ? "1" : "0.5";
+            if (!isChecked) addressInput.value = "";
         }
 
         async function openFile(path) {
@@ -1130,6 +1165,8 @@
                         document_date: document.getElementById('doc_issue_limit').value,
                         origin_sealed_yn: document.getElementById('origin_sealed_yn').checked ? 'Y' : 'N',
                         elec_sign_yn: document.querySelector('input[name="elec_sign_yn"]:checked')?.value || 'Y',
+                        send_original_yn: document.getElementById('send_original_yn').checked ? 'Y' : 'N',
+                        original_address: document.getElementById('original_address').value,
                         purchase_entity: {
                             business_location: document.querySelector('input[name="private_busi_loc_type"]:checked')?.value || 'ANY'
                         }

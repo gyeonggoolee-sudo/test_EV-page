@@ -683,6 +683,9 @@
                                     onclick="document.getElementById('input_extra').click()">파일 선택</button>
                                 <input type="file" id="input_extra" style="display: none;" accept=".pdf" multiple>
                             </div>
+
+                            <!-- 동적으로 추가될 한글 변환 PDF 섹션 -->
+                            <div id="dynamicPdfContainer"></div>
                         </div>
                     </div>
 
@@ -1082,6 +1085,37 @@
                     }
                 });
 
+                // 5. 동적 한글 변환 PDF 업로드 항목 생성
+                const dynamicContainer = document.getElementById('dynamicPdfContainer');
+                dynamicContainer.innerHTML = '';
+
+                if (data.file_paths) {
+                    Object.entries(data.file_paths).forEach(([key, info]) => {
+                        const path = typeof info === 'object' ? info.path : info;
+                        const fileExt = path.split('.').pop().toLowerCase();
+
+                        if (['hwp', 'hwpx'].includes(fileExt)) {
+                            const hwpKey = key;
+                            const pdfKey = `${hwpKey}_PDF`;
+                            const isUploaded = !!data.file_paths[pdfKey];
+
+                            const row = document.createElement('div');
+                            row.className = 'upload-row';
+                            row.innerHTML = `
+                                    <div class="upload-label">
+                                        ${hwpKey} <span class="sub">- PDF 변환</span>
+                                    </div>
+                                    <div id="status_${hwpKey}" class="uploaded-info" style="display: ${isUploaded ? 'block' : 'none'};">
+                                        업로드됨 <span class="btn-delete-file">×</span>
+                                    </div>
+                                    <button type="button" class="btn-upload-small" onclick="document.getElementById('input_${hwpKey}').click()">파일 선택</button>
+                                    <input type="file" id="input_${hwpKey}" style="display: none;" accept=".pdf" onchange="handleNoticeFileUpload(this, 'hwp_pdf', 'status_${hwpKey}', '${hwpKey}')">
+                                `;
+                            dynamicContainer.appendChild(row);
+                        }
+                    });
+                }
+
             } catch (error) {
                 console.error("Error loading details:", error);
             }
@@ -1201,7 +1235,7 @@
         }
 
         // 공통 파일 업로드 처리 함수
-        async function handleNoticeFileUpload(input, fileType, statusId) {
+        async function handleNoticeFileUpload(input, fileType, statusId, hwpKey = null) {
             const file = input.files[0];
             if (!file) return;
 
@@ -1215,6 +1249,9 @@
             formData.append('region_id', currentRegionId);
             formData.append('file_type', fileType);
             formData.append('file', file);
+            if (hwpKey) {
+                formData.append('hwp_key', hwpKey);
+            }
 
             try {
                 const statusDiv = document.getElementById(statusId);

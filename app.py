@@ -231,8 +231,9 @@ def upload_notice_pdf():
     """공고문 PDF 파일을 업로드하고 지정된 경로에 저장하며 DB를 업데이트함"""
     try:
         region_id = request.form.get('region_id')
-        file_type = request.form.get('file_type') # 'apply', 'agreement', 'extra'
+        file_type = request.form.get('file_type') # 'apply', 'agreement', 'extra' 또는 동적 항목 키
         file = request.files.get('file')
+        hwp_key = request.form.get('hwp_key') # 동적 업로드 시 원본 한글 파일의 키 이름
 
         if not all([region_id, file_type, file]):
             return jsonify({"status": "error", "message": "Missing required fields"}), 400
@@ -252,40 +253,46 @@ def upload_notice_pdf():
         
         region_name = row[0]
         
-        # 2. 저장 경로 구성
-        # \\DESKTOP-KEHQ34D\Users\com\Desktop\GreetLounge\26q1\공고문\[지자체명]\[폴더명]
+        # 2. 저장 경로 및 파일명 구성
         base_path = r'\\DESKTOP-KEHQ34D\Users\com\Desktop\GreetLounge\26q1\공고문'
         
-        folder_map = {
-            'apply': '지원신청서',
-            'agreement': '(기본)동의서',
-            'extra': '그외지자체추가서류'
-        }
-        folder_name = folder_map.get(file_type, '기타')
-        
-        save_dir = os.path.join(base_path, region_name, folder_name)
-        os.makedirs(save_dir, exist_ok=True)
-        
-        filename = file.filename
-        if not filename:
-            return jsonify({"status": "error", "message": "No filename provided"}), 400
+        if file_type == 'hwp_pdf' and hwp_key:
+            # 동적 한글 변환 PDF: \\...\\공고문\\[지역]\\{지역}_{항목명}.pdf
+            save_dir = os.path.join(base_path, region_name)
+            os.makedirs(save_dir, exist_ok=True)
+            filename = f"{region_name}_{hwp_key}.pdf"
+            file_key = f"{hwp_key}_PDF" # DB 저장용 키
+            display_folder_name = f"{hwp_key} (PDF)"
+        else:
+            # 기존 고정 항목: \\...\\공고문\\[지역]\\[폴더명]\\...
+            folder_map = {
+                'apply': '지원신청서',
+                'agreement': '(기본)동의서',
+                'extra': '그외지자체추가서류'
+            }
+            folder_name = folder_map.get(file_type, '기타')
+            save_dir = os.path.join(base_path, region_name, folder_name)
+            os.makedirs(save_dir, exist_ok=True)
             
-        # 보안을 위해 경로 구분자 제거 (한글 유지를 위해 secure_filename 대신 사용)
-        filename = os.path.basename(filename)
+            filename = file.filename
+            if not filename:
+                return jsonify({"status": "error", "message": "No filename provided"}), 400
+            filename = os.path.basename(filename)
+            file_key = folder_name
+            display_folder_name = folder_name
+
         dest_path = os.path.join(save_dir, filename)
         file.save(dest_path)
         
         # 3. DB (ev_info.file_paths) 업데이트
-        # 기존 file_paths 가져오기
         cur.execute("SELECT file_paths FROM ev_info WHERE region_id = %s", (region_id,))
         row = cur.fetchone()
         file_paths = row[0] if row and row[0] else {}
         
-        # 파일 정보 업데이트 (키는 폴더명 또는 파일 구분자로 사용)
-        file_key = folder_name
+        # 파일 정보 업데이트
         file_paths[file_key] = {
             "path": dest_path,
-            "check_status": 1 # 업로드 시 바로 확인된 것으로 간주하거나 0으로 설정 가능
+            "check_status": 1
         }
         
         cur.execute(
@@ -299,7 +306,7 @@ def upload_notice_pdf():
         
         return jsonify({
             "status": "success", 
-            "message": f"{folder_name} 업로드 완료",
+            "message": f"{display_folder_name} 업로드 완료",
             "file_path": dest_path
         })
         

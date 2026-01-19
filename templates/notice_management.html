@@ -928,6 +928,26 @@
                             </div>
 
                             <div class="form-group-section">
+                                <div class="section-title">⚖️ 지급 기타 정보</div>
+                                <div class="form-grid" style="grid-template-columns: repeat(2, 1fr); gap: 25px;">
+                                    <div class="form-item">
+                                        <label>지급신청서류 원본대조필 여부</label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" id="payment_origin_sealed_yn"
+                                                name="payment_origin_sealed_yn"> 원본대조필 필수
+                                        </label>
+                                    </div>
+                                    <div class="form-item">
+                                        <label>지급신청서 고객 작성 여부</label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" id="payment_customer_write_yn"
+                                                name="payment_customer_write_yn"> 고객 직접 작성
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group-section">
                                 <div class="section-title">📝 기타 비고</div>
                                 <div class="form-item">
                                     <textarea id="bigoText" name="bigo"
@@ -1051,6 +1071,10 @@
                         addDocRow('paymentDocContainer', '', 'payment_doc');
                     }
 
+                    // 지급 기타 정보
+                    document.getElementById('payment_origin_sealed_yn').checked = np.origin_sealed_yn === 'Y';
+                    document.getElementById('payment_customer_write_yn').checked = np.customer_write_yn === 'Y';
+
                     // 서류 조건
                     document.getElementById('doc_issue_limit').value = na.document_date || '30';
                     document.getElementById('origin_sealed_yn').checked = na.origin_sealed_yn === 'Y';
@@ -1085,6 +1109,8 @@
                     addDocRow('addDocContainer', '', 'additional_doc');
                     document.getElementById('paymentDocContainer').innerHTML = '';
                     addDocRow('paymentDocContainer', '', 'payment_doc');
+                    document.getElementById('payment_origin_sealed_yn').checked = false;
+                    document.getElementById('payment_customer_write_yn').checked = false;
                     document.getElementById('doc_issue_limit').value = '30';
                     document.getElementById('origin_sealed_yn').checked = false;
                     document.getElementById('send_original_yn').checked = false;
@@ -1243,7 +1269,9 @@
                 },
                 notification_payment: {
                     payment_docs: {
-                        extra_docs: paymentDocs
+                        extra_docs: paymentDocs,
+                        origin_sealed_yn: document.getElementById('payment_origin_sealed_yn').checked ? 'Y' : 'N',
+                        customer_write_yn: document.getElementById('payment_customer_write_yn').checked ? 'Y' : 'N'
                     }
                 },
                 co_name: {

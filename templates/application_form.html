@@ -316,26 +316,21 @@
                                                     <select name="model_cd" id="model_cd" title="신청차종"
                                                         class="myselector select">
                                                         <option value="">=======선택=======</option>
-                                                        <option value="MODEL3LR_C" {% if data and
-                                                            data.model_cd=='MODEL3LR_C' %}selected{% endif %}>Model 3
-                                                            Long Range / 일반승용</option>
-                                                        <option value="MODEL3P_C" {% if data and
-                                                            data.model_cd=='MODEL3P_C' %}selected{% endif %}>Model 3
-                                                            Performance / 일반승용</option>
-                                                        <option value="MODEL3RWD" {% if data and
-                                                            data.model_cd=='MODEL3RWD' %}selected{% endif %}>Model 3 RWD
-                                                            / 일반승용</option>
-                                                        <option value="NEW_MODELYRWD" {% if data and
-                                                            data.model_cd=='NEW_MODELYRWD' %}selected{% endif %}>New
-                                                            Model Y RWD / 일반승용</option>
-                                                        <option value="NEW_MODELYLR2" {% if data and
-                                                            data.model_cd=='NEW_MODELYLR2' %}selected{% endif %}>New
-                                                            Model Y Long Range(배터리변경) /
-                                                            일반승용</option>
-                                                        <option value="MODEL3LR_C1" {% if data and
-                                                            data.model_cd=='MODEL3LR_C1' %}selected{% endif %}>Model 3
-                                                            Long Range(배터리변경) / 일반승용
-                                                        </option>
+                                                        <option value="Model 3 Performance" {% if data and
+                                                            data.model_cd=='Model 3 Performance' %}selected{% endif %}>
+                                                            Model 3 Performance</option>
+                                                        <option value="Model 3 Standard RWD" {% if data and
+                                                            data.model_cd=='Model 3 Standard RWD' %}selected{% endif %}>
+                                                            Model 3 Standard RWD</option>
+                                                        <option value="Model Y Premium RWD" {% if data and
+                                                            data.model_cd=='Model Y Premium RWD' %}selected{% endif %}>
+                                                            Model Y Premium RWD</option>
+                                                        <option value="Model 3 Premium Long Range RWD" {% if data and
+                                                            data.model_cd=='Model 3 Premium Long Range RWD' %}selected{%
+                                                            endif %}>Model 3 Premium Long Range RWD</option>
+                                                        <option value="Model Y Premium Long Range" {% if data and
+                                                            data.model_cd=='Model Y Premium Long Range' %}selected{%
+                                                            endif %}>Model Y Premium Long Range</option>
                                                     </select>
                                                 </div>
                                             </td>
@@ -1104,12 +1099,11 @@
 
             // 모델별 보조금액 샘플 데이터
             const subsidyData = {
-                'MODEL3LR_C': 1111111,
-                'MODEL3P_C': 2222222,
-                'MODEL3RWD': 3333333,
-                'NEW_MODELYRWD': 4444444,
-                'NEW_MODELYLR2': 5555555,
-                'MODEL3LR_C1': 6666666
+                'Model 3 Performance': 2222222,
+                'Model 3 Standard RWD': 3333333,
+                'Model Y Premium RWD': 4444444,
+                'Model 3 Premium Long Range RWD': 1111111,
+                'Model Y Premium Long Range': 5555555
             };
 
             function calculateAndDisplaySubsidy() {

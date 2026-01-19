@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 
 # 업로드 폴더 설정 (공유 폴더 경로)
-UPLOAD_FOLDER = r'\\DESKTOP-KEHQ34D\Users\com\Desktop\GreetLounge\25q4_test\uploaded_file'
+UPLOAD_FOLDER = r'\\DESKTOP-KEHQ34D\Users\com\Desktop\GreetLounge\26q1\uploaded_file'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 

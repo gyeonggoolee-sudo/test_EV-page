@@ -755,7 +755,8 @@
                                         <input type="text" name="additional_doc" placeholder="추가서류 명칭 입력 (예: 지방세납세증명서)">
                                     </div>
                                 </div>
-                                <button type="button" class="btn-add-item" onclick="addDocRow()">+ 항목 추가</button>
+                                <button type="button" class="btn-add-item"
+                                    onclick="addDocRow('addDocContainer', '', 'additional_doc')">+ 항목 추가</button>
 
                                 <div class="info-text-section">
                                     <p class="info-text">• 지원신청서 및 동의서(각 1p), 구매계약서는 공통 서류입니다.</p>
@@ -909,6 +910,22 @@
                             </div>
 
                             <div class="form-group-section">
+                                <div class="section-title">💸 지자체별 지급신청 추가서류</div>
+                                <div id="paymentDocContainer" class="add-doc-list">
+                                    <div class="add-doc-row">
+                                        <input type="text" name="payment_doc" placeholder="추가서류 명칭 입력">
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-add-item"
+                                    onclick="addDocRow('paymentDocContainer', '', 'payment_doc')">+ 항목 추가</button>
+
+                                <div class="info-text-section">
+                                    <p class="info-text">• 1) 지급신청서(제조사) 2) 세금계산서 3) 자동차등록증 4) 통장사본(제조사) 5) 사업자등록증(제조사)
+                                        위 서류 제외</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group-section">
                                 <div class="section-title">📝 기타 비고</div>
                                 <div class="form-item">
                                     <textarea id="bigoText" name="bigo"
@@ -1013,13 +1030,23 @@
                     document.getElementById('apply_start').value = na.apply_period?.start || '';
                     document.getElementById('apply_end').value = na.apply_period?.end || '';
 
-                    // 추가 서류
+                    // 추가 서류 (지원신청)
                     const docContainer = document.getElementById('addDocContainer');
                     docContainer.innerHTML = '';
                     if (na.extra_docs && na.extra_docs.length > 0) {
-                        na.extra_docs.forEach(doc => addDocRow(doc));
+                        na.extra_docs.forEach(doc => addDocRow('addDocContainer', doc, 'additional_doc'));
                     } else {
-                        addDocRow(); // 기본 한 줄
+                        addDocRow('addDocContainer', '', 'additional_doc');
+                    }
+
+                    // 추가 서류 (지급신청)
+                    const payDocContainer = document.getElementById('paymentDocContainer');
+                    payDocContainer.innerHTML = '';
+                    const np = cfg.notification_payment?.payment_docs || {};
+                    if (np.extra_docs && np.extra_docs.length > 0) {
+                        np.extra_docs.forEach(doc => addDocRow('paymentDocContainer', doc, 'payment_doc'));
+                    } else {
+                        addDocRow('paymentDocContainer', '', 'payment_doc');
                     }
 
                     // 서류 조건
@@ -1053,7 +1080,9 @@
                     document.getElementById('apply_start').value = '';
                     document.getElementById('apply_end').value = '';
                     document.getElementById('addDocContainer').innerHTML = '';
-                    addDocRow();
+                    addDocRow('addDocContainer', '', 'additional_doc');
+                    document.getElementById('paymentDocContainer').innerHTML = '';
+                    addDocRow('paymentDocContainer', '', 'payment_doc');
                     document.getElementById('doc_issue_limit').value = '30';
                     document.getElementById('origin_sealed_yn').checked = false;
                     document.getElementById('send_original_yn').checked = false;
@@ -1165,12 +1194,12 @@
             });
         }
 
-        function addDocRow(value = "") {
-            const container = document.getElementById('addDocContainer');
+        function addDocRow(containerId, value = "", inputName = "additional_doc") {
+            const container = document.getElementById(containerId);
             const row = document.createElement('div');
             row.className = 'add-doc-row';
             row.innerHTML = `
-                <input type="text" name="additional_doc" value="${value}" placeholder="추가서류 명칭 입력">
+                <input type="text" name="${inputName}" value="${value}" placeholder="추가서류 명칭 입력">
                 <button type="button" class="btn-remove" onclick="this.parentElement.remove()">×</button>
             `;
             container.appendChild(row);
@@ -1183,6 +1212,10 @@
             }
 
             const extraDocs = Array.from(document.getElementsByName('additional_doc'))
+                .map(input => input.value.trim())
+                .filter(val => val !== "");
+
+            const paymentDocs = Array.from(document.getElementsByName('payment_doc'))
                 .map(input => input.value.trim())
                 .filter(val => val !== "");
 
@@ -1204,6 +1237,11 @@
                         purchase_entity: {
                             business_location: document.querySelector('input[name="private_busi_loc_type"]:checked')?.value || 'ANY'
                         }
+                    }
+                },
+                notification_payment: {
+                    payment_docs: {
+                        extra_docs: paymentDocs
                     }
                 },
                 co_name: {

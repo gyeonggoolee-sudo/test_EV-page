@@ -64,7 +64,8 @@ def get_notice_detail(region_id):
             SELECT 
                 ei.file_paths, ei.bigo,
                 g.notification_apply, g.residence_requirements, g.co_name,
-                ei.notice_total, ei.notice_priority
+                ei.notice_total, ei.notice_priority,
+                g.notification_payment
             FROM ev_info ei
             LEFT JOIN "공고문" g ON ei.region_id = g.region_id
             WHERE ei.region_id = %s
@@ -81,7 +82,8 @@ def get_notice_detail(region_id):
                 "config": {
                     "notification_apply": row[2] or {},
                     "residence_requirements": row[3] if row[3] is not None else 90,
-                    "co_name": row[4] or {}
+                    "co_name": row[4] or {},
+                    "notification_payment": row[7] or {}
                 },
                 "notice_info": {
                     "total": row[5] or 0,
@@ -102,6 +104,7 @@ def save_notice_config():
         notification_apply = data.get('notification_apply')
         residence_requirements = data.get('residence_requirements', 90)
         co_name = data.get('co_name')
+        notification_payment = data.get('notification_payment')
         bigo = data.get('bigo')
         notice_total = data.get('notice_total')
         notice_priority = data.get('notice_priority')
@@ -116,23 +119,24 @@ def save_notice_config():
         cur = conn.cursor()
         
         # 1. "공고문" 테이블 UPSERT
-        # ... (생략된 기존 쿼리 로직 유지)
         upsert_query = """
             INSERT INTO "공고문" (
-                region_id, notification_apply, residence_requirements, co_name, updated_at
-            ) VALUES (%s, %s, %s, %s, NOW())
+                region_id, notification_apply, residence_requirements, co_name, notification_payment, updated_at
+            ) VALUES (%s, %s, %s, %s, %s, NOW())
             ON CONFLICT (region_id) 
             DO UPDATE SET 
                 notification_apply = EXCLUDED.notification_apply,
                 residence_requirements = EXCLUDED.residence_requirements,
                 co_name = EXCLUDED.co_name,
+                notification_payment = EXCLUDED.notification_payment,
                 updated_at = NOW();
         """
         cur.execute(upsert_query, (
             region_id, 
             json.dumps(notification_apply, ensure_ascii=False),
             residence_requirements,
-            json.dumps(co_name, ensure_ascii=False)
+            json.dumps(co_name, ensure_ascii=False),
+            json.dumps(notification_payment, ensure_ascii=False)
         ))
 
         # 2. "ev_info" 테이블 업데이트 (bigo, notice_total, notice_priority, updated_at)

@@ -64,7 +64,7 @@ def get_notice_detail(region_id):
             SELECT 
                 ei.file_paths, ei.bigo,
                 g.notification_apply, g.residence_requirements, g.co_name,
-                ei.notice_total, ei.notice_priority,
+                ei.notice_general, ei.notice_priority,
                 g.notification_payment
             FROM ev_info ei
             LEFT JOIN "공고문" g ON ei.region_id = g.region_id
@@ -106,7 +106,7 @@ def save_notice_config():
         co_name = data.get('co_name')
         notification_payment = data.get('notification_payment')
         bigo = data.get('bigo')
-        notice_total = data.get('notice_total')
+        notice_general = data.get('notice_general')
         notice_priority = data.get('notice_priority')
 
         if not region_id:
@@ -139,17 +139,17 @@ def save_notice_config():
             json.dumps(notification_payment, ensure_ascii=False)
         ))
 
-        # 2. "ev_info" 테이블 업데이트 (bigo, notice_total, notice_priority, updated_at)
+        # 2. "ev_info" 테이블 업데이트 (bigo, notice_general, notice_priority, updated_at)
         update_ev_info_query = """
             UPDATE ev_info 
             SET bigo = %s, 
-                notice_total = %s, 
+                notice_general = %s, 
                 notice_priority = %s,
                 bigo_updated_at = timezone('Asia/Seoul', now()),
                 updated_at = timezone('Asia/Seoul', now())
             WHERE region_id = %s
         """
-        cur.execute(update_ev_info_query, (bigo, notice_total, notice_priority, region_id))
+        cur.execute(update_ev_info_query, (bigo, notice_general, notice_priority, region_id))
 
         # 3. "ev_info" 테이블의 file_paths 내 check_status를 1로 일괄 변경
         cur.execute("SELECT file_paths FROM ev_info WHERE region_id = %s", (region_id,))

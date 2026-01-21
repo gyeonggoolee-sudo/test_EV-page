@@ -259,7 +259,7 @@ def upload_notice_pdf():
         
         # 2. 저장 경로 및 파일명 구성
         base_path = r'\\DESKTOP-KEHQ34D\Users\com\Desktop\GreetLounge\26q1\공고문'
-        today_str = datetime.now().strftime('%m-%d')
+        today_str = datetime.now().strftime('%m%d')
         
         # '본공고 1' 여부 확인 (수동 업로드 또는 한글 변환 대상이 '본공고 1'인 경우)
         is_main_notice = (file_type == 'main_notice') or (file_type == 'hwp_pdf' and hwp_key == '본공고 1')

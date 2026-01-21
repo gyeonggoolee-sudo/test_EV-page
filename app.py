@@ -5,9 +5,13 @@ import json
 from datetime import datetime
 from flask import send_file, abort
 import urllib.parse
+from services.ai_extractor import AIExtractor
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
+
+# AI 서비스 초기화
+ai_extractor = AIExtractor()
 
 # 업로드 폴더 설정 (공유 폴더 경로)
 UPLOAD_FOLDER = r'\\DESKTOP-KEHQ34D\Users\com\Desktop\GreetLounge\26q1\uploaded_file'
@@ -178,6 +182,19 @@ def save_notice_config():
     except Exception as e:
         print(f"Error saving notice config: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/notice/extract-ai', methods=['POST'])
+def extract_ai_info():
+    """업로드된 이미지를 받아 AI 추출 결과를 반환하는 API"""
+    if 'image' not in request.files:
+        return jsonify({"status": "error", "message": "No image file provided"}), 400
+    
+    file = request.files['image']
+    if file.filename == '':
+        return jsonify({"status": "error", "message": "No selected file"}), 400
+        
+    result = ai_extractor.extract_from_image(file)
+    return jsonify(result)
 
 @app.route('/applyform')
 def apply_form():

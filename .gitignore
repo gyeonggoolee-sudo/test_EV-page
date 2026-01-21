@@ -12,3 +12,7 @@ wheels/
 # Drafts
 drafts/
 draft*.json
+
+# Environment variables
+.env
+

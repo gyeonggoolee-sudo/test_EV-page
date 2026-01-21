@@ -612,9 +612,11 @@
             </div>
             <div class="region-list" id="regionList">
                 {% for id, name, file_paths in regions %}
-                <div class="region-item" data-name="{{ name }}" onclick="selectRegion(this, {{ id }}, '{{ name }}')">
+                <div class="region-item" data-id="{{ id }}" data-name="{{ name }}"
+                    onclick="selectRegion(this, {{ id }}, '{{ name }}')">
                     <span class="region-name">{{ name }}</span>
-                    <span style="color: #999; font-size: 11px;">파일 {{ file_paths|length if file_paths else 0 }}개</span>
+                    <span style="color: #999; font-size: 11px;">파일 <span class="file-count">{{ file_paths|length if
+                            file_paths else 0 }}</span>개</span>
                 </div>
                 {% endfor %}
             </div>
@@ -983,6 +985,9 @@
 
         async function selectRegion(element, id, name) {
             currentRegionId = id;
+            localStorage.setItem('selectedRegionId', id);
+            localStorage.setItem('selectedRegionName', name);
+
             const items = document.getElementsByClassName('region-item');
             for (let item of items) { item.classList.remove('active'); }
             element.classList.add('active');
@@ -1141,6 +1146,17 @@
                         statusDiv.style.display = 'none';
                     }
                 });
+
+                // 4.1 사이드바 파일 개수 동기화
+                if (data.file_paths) {
+                    const activeItem = document.querySelector('.region-item.active');
+                    if (activeItem) {
+                        const countSpan = activeItem.querySelector('.file-count');
+                        if (countSpan) {
+                            countSpan.innerText = Object.keys(data.file_paths).length;
+                        }
+                    }
+                }
 
                 // 5. 동적 한글 변환 PDF 업로드 항목 생성
                 const dynamicContainer = document.getElementById('dynamicPdfContainer');
@@ -1315,7 +1331,11 @@
                 const result = await response.json();
                 if (result.status === 'success') {
                     alert("설정이 성공적으로 저장되었습니다.");
-                    location.reload(); // 페이지 새로고침
+                    // 페이지 전체를 새로고침하는 대신 현재 선택된 지자체 정보를 다시 로드함
+                    const activeItem = document.querySelector('.region-item.active');
+                    if (activeItem) {
+                        selectRegion(activeItem, currentRegionId, document.getElementById('selectedRegionName').innerText);
+                    }
                 } else {
                     alert("저장 중 오류가 발생했습니다: " + result.message);
                 }
@@ -1387,6 +1407,21 @@
         // 3. 그 외 지자체 추가서류 업로드 리스너
         document.getElementById('input_extra').addEventListener('change', function () {
             handleNoticeFileUpload(this, 'extra', 'status_extra');
+        });
+
+        // 페이지 로드 시 마지막으로 선택했던 지자체 자동 선택
+        window.addEventListener('DOMContentLoaded', () => {
+            const lastId = localStorage.getItem('selectedRegionId');
+            const lastName = localStorage.getItem('selectedRegionName');
+
+            if (lastId && lastName) {
+                const targetItem = document.querySelector(`.region-item[data-id="${lastId}"]`);
+                if (targetItem) {
+                    // 리스트가 길 경우를 대비해 스크롤 이동
+                    targetItem.scrollIntoView({ block: 'center' });
+                    selectRegion(targetItem, parseInt(lastId), lastName);
+                }
+            }
         });
     </script>
 </body>

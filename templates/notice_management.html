@@ -1646,6 +1646,8 @@
                 if (result.status === 'success') {
                     // 5. 결과 표시
                     resultArea.value = result.text;
+                    resultArea.readOnly = false;
+                    resultArea.removeAttribute('readonly'); // 확실하게 속성 제거
                 } else {
                     resultArea.value = "오류가 발생했습니다: " + (result.message || "알 수 없는 오류");
                 }

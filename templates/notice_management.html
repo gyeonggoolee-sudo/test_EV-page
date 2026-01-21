@@ -1147,7 +1147,8 @@
                 dynamicContainer.innerHTML = '';
 
                 if (data.file_paths) {
-                    // [추가] '본공고1'이 없는 경우 수동 업로드 UI 표시
+                    // [수정] '본공고1' 키가 아예 없거나, 값이 비어있는 경우에만 수동 업로드 UI 표시
+                    // 이미 '본공고1'이라는 이름의 파일(한글/PDF 무관)이 있다면 수집된 것으로 간주
                     if (!data.file_paths['본공고1']) {
                         const mainNoticeRow = document.createElement('div');
                         mainNoticeRow.className = 'upload-row';

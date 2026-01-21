@@ -673,6 +673,76 @@
             padding: 25px;
             overflow-y: auto;
         }
+
+        /* 3:7 Split Layout */
+        .ai-modal-content {
+            display: flex;
+            height: 100%;
+            gap: 0;
+        }
+
+        .ai-left-area {
+            flex: 0 0 30%;
+            border-right: 1px solid #eee;
+            padding-right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ai-right-area {
+            flex: 1;
+            padding-left: 25px;
+            background-color: #fafafa;
+        }
+
+        /* Paste Zone */
+        .paste-zone {
+            flex: 1;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            background-color: #fcfcfc;
+            transition: all 0.2s;
+            position: relative;
+            min-height: 200px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .paste-zone:hover,
+        .paste-zone.dragover {
+            border-color: #6366f1;
+            background-color: #f5f6ff;
+            color: #6366f1;
+        }
+
+        .paste-zone.has-image {
+            border-style: solid;
+        }
+
+        #pastePreview {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+            object-fit: contain;
+        }
+
+        .paste-hint {
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .paste-hint i {
+            display: block;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-style: normal;
+        }
     </style>
 </head>
 
@@ -1058,7 +1128,34 @@
                 <button class="btn-modal-close" onclick="closeAIModal()">×</button>
             </div>
             <div class="modal-body" id="modalContent">
-                <!-- AI 추출 결과 또는 설정이 들어갈 공간 -->
+                <div class="ai-modal-content">
+                    <!-- 3: Left Area (Paste) -->
+                    <div class="ai-left-area">
+                        <div class="section-title" style="margin-bottom: 5px;">🖼️ 공고문/서류 스크린샷</div>
+                        <p style="font-size: 12px; color: #777; margin: 0 0 10px 0;">클립보드에 복사한 이미지를 아래 영역에 붙여넣어 주세요
+                            (Ctrl+V)</p>
+
+                        <div id="pasteZone" class="paste-zone" tabindex="0">
+                            <div class="paste-hint" id="pasteHint">
+                                <i>📋</i>
+                                <span>여기에 마우스 클릭 후<br>이미지 붙여넣기</span>
+                            </div>
+                            <img id="pastePreview" src="" alt="Pasted Image Preview">
+                        </div>
+
+                        <button class="btn-add-item" style="margin-top: 10px; border-style: solid;"
+                            onclick="clearPastedImage()">초기화</button>
+                    </div>
+
+                    <!-- 7: Right Area (Results/Fields) -->
+                    <div class="ai-right-area">
+                        <!-- 여기에 추출 정보 UI가 올 예정 -->
+                        <div
+                            style="display: flex; align-items: center; justify-content: center; height: 100%; color: #bbb;">
+                            왼쪽에서 이미지를 분석하면 추출 결과가 여기에 표시됩니다.
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1383,6 +1480,49 @@
 
         function closeAIModal() {
             document.getElementById('aiModal').style.display = 'none';
+        }
+
+        // --- AI Extraction Image Paste Logic ---
+
+        // 붙여넣기 이벤트 리스너
+        document.addEventListener('paste', function (e) {
+            // 모달이 열려있을 때만 작동
+            const modal = document.getElementById('aiModal');
+            if (modal.style.display !== 'flex') return;
+
+            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    const blob = items[i].getAsFile();
+                    const reader = new FileReader();
+
+                    reader.onload = function (event) {
+                        const img = document.getElementById('pastePreview');
+                        const hint = document.getElementById('pasteHint');
+                        const zone = document.getElementById('pasteZone');
+
+                        img.src = event.target.result;
+                        img.style.display = 'block';
+                        hint.style.display = 'none';
+                        zone.classList.add('has-image');
+                    };
+
+                    reader.readAsDataURL(blob);
+                    break;
+                }
+            }
+        });
+
+        function clearPastedImage() {
+            const img = document.getElementById('pastePreview');
+            const hint = document.getElementById('pasteHint');
+            const zone = document.getElementById('pasteZone');
+
+            img.src = "";
+            img.style.display = 'none';
+            hint.style.display = 'block';
+            zone.classList.remove('has-image');
         }
 
         async function saveSettings() {

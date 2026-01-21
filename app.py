@@ -272,7 +272,8 @@ def upload_notice_pdf():
             folder_map = {
                 'apply': '지원신청서',
                 'agreement': '(기본)동의서',
-                'extra': '그외지자체추가서류'
+                'extra': '그외지자체추가서류',
+                'main_notice': '본공고1'
             }
             folder_name = folder_map.get(file_type, '기타')
             save_dir = os.path.join(base_path, region_name, folder_name)

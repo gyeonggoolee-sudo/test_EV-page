@@ -1147,6 +1147,28 @@
                 dynamicContainer.innerHTML = '';
 
                 if (data.file_paths) {
+                    // [추가] '본공고1'이 없는 경우 수동 업로드 UI 표시
+                    if (!data.file_paths['본공고1']) {
+                        const mainNoticeRow = document.createElement('div');
+                        mainNoticeRow.className = 'upload-row';
+                        mainNoticeRow.style.border = '1px solid #ffccc7'; // 강조를 위한 연한 빨간색 테두리
+                        mainNoticeRow.style.backgroundColor = '#fff2f0';
+                        mainNoticeRow.innerHTML = `
+                            <div class="upload-label">
+                                <span style="color: #cf1322; font-weight: 700;">본공고1 (미수집)</span>
+                                <span class="sub" style="color: #cf1322;">- 수동 PDF 업로드 가능</span>
+                            </div>
+                            <div id="status_main_notice" class="uploaded-info">
+                                업로드됨 <span class="btn-delete-file">×</span>
+                            </div>
+                            <button type="button" class="btn-upload-small" style="border-color: #cf1322; color: #cf1322;" 
+                                onclick="document.getElementById('input_main_notice').click()">파일 선택</button>
+                            <input type="file" id="input_main_notice" style="display: none;" accept=".pdf" 
+                                onchange="handleNoticeFileUpload(this, 'main_notice', 'status_main_notice', '본공고1')">
+                        `;
+                        dynamicContainer.appendChild(mainNoticeRow);
+                    }
+
                     Object.entries(data.file_paths).forEach(([key, info]) => {
                         const path = typeof info === 'object' ? info.path : info;
                         const fileExt = path.split('.').pop().toLowerCase();

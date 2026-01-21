@@ -261,16 +261,16 @@ def upload_notice_pdf():
         base_path = r'\\DESKTOP-KEHQ34D\Users\com\Desktop\GreetLounge\26q1\공고문'
         today_str = datetime.now().strftime('%m-%d')
         
-        # '본공고1' 여부 확인 (수동 업로드 또는 한글 변환 대상이 '본공고1'인 경우)
-        is_main_notice = (file_type == 'main_notice') or (file_type == 'hwp_pdf' and hwp_key == '본공고1')
+        # '본공고 1' 여부 확인 (수동 업로드 또는 한글 변환 대상이 '본공고 1'인 경우)
+        is_main_notice = (file_type == 'main_notice') or (file_type == 'hwp_pdf' and hwp_key == '본공고 1')
         
         if is_main_notice:
-            # '본공고1' 특수 처리: 지역 폴더에 직접 저장 및 파일명 형식 지정
+            # '본공고 1' 특수 처리: 지역 폴더에 직접 저장 및 파일명 형식 지정
             save_dir = os.path.join(base_path, region_name)
             os.makedirs(save_dir, exist_ok=True)
             filename = f"{region_name}_2026년 전기자동차 민간보급사업 공고_{today_str}.pdf"
-            file_key = '본공고1'
-            display_folder_name = '본공고1'
+            file_key = '본공고 1'
+            display_folder_name = '본공고 1'
         elif file_type == 'hwp_pdf' and hwp_key:
             # 그 외 동적 한글 변환 PDF
             save_dir = os.path.join(base_path, region_name)

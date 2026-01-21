@@ -1147,16 +1147,16 @@
                 dynamicContainer.innerHTML = '';
 
                 if (data.file_paths) {
-                    // [수정] '본공고1' 키가 아예 없거나, 값이 비어있는 경우에만 수동 업로드 UI 표시
-                    // 이미 '본공고1'이라는 이름의 파일(한글/PDF 무관)이 있다면 수집된 것으로 간주
-                    if (!data.file_paths['본공고1']) {
+                    // [수정] '본공고 1' 키가 아예 없거나, 값이 비어있는 경우에만 수동 업로드 UI 표시
+                    // 이미 '본공고 1'이라는 이름의 파일(한글/PDF 무관)이 있다면 수집된 것으로 간주
+                    if (!data.file_paths['본공고 1']) {
                         const mainNoticeRow = document.createElement('div');
                         mainNoticeRow.className = 'upload-row';
                         mainNoticeRow.style.border = '1px solid #ffccc7'; // 강조를 위한 연한 빨간색 테두리
                         mainNoticeRow.style.backgroundColor = '#fff2f0';
                         mainNoticeRow.innerHTML = `
                             <div class="upload-label">
-                                <span style="color: #cf1322; font-weight: 700;">본공고1 (미수집)</span>
+                                <span style="color: #cf1322; font-weight: 700;">본공고 1 (미수집)</span>
                                 <span class="sub" style="color: #cf1322;">- 수동 PDF 업로드 가능</span>
                             </div>
                             <div id="status_main_notice" class="uploaded-info">
@@ -1165,7 +1165,7 @@
                             <button type="button" class="btn-upload-small" style="border-color: #cf1322; color: #cf1322;" 
                                 onclick="document.getElementById('input_main_notice').click()">파일 선택</button>
                             <input type="file" id="input_main_notice" style="display: none;" accept=".pdf" 
-                                onchange="handleNoticeFileUpload(this, 'main_notice', 'status_main_notice', '본공고1')">
+                                onchange="handleNoticeFileUpload(this, 'main_notice', 'status_main_notice', '본공고 1')">
                         `;
                         dynamicContainer.appendChild(mainNoticeRow);
                     }

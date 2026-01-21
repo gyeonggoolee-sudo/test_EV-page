@@ -259,21 +259,32 @@ def upload_notice_pdf():
         
         # 2. 저장 경로 및 파일명 구성
         base_path = r'\\DESKTOP-KEHQ34D\Users\com\Desktop\GreetLounge\26q1\공고문'
+        today_str = datetime.now().strftime('%m-%d')
         
-        if file_type == 'hwp_pdf' and hwp_key:
-            # 동적 한글 변환 PDF: \\...\\공고문\\[지역]\\{지역}_{항목명}.pdf
+        # '본공고1' 여부 확인 (수동 업로드 또는 한글 변환 대상이 '본공고1'인 경우)
+        is_main_notice = (file_type == 'main_notice') or (file_type == 'hwp_pdf' and hwp_key == '본공고1')
+        
+        if is_main_notice:
+            # '본공고1' 특수 처리: 폴더 고정 및 파일명 형식 지정
+            folder_name = '본공고1'
+            save_dir = os.path.join(base_path, region_name, folder_name)
+            os.makedirs(save_dir, exist_ok=True)
+            filename = f"{region_name}_2026년 전기자동차 민간보급사업 공고_{today_str}.pdf"
+            file_key = '본공고1'
+            display_folder_name = '본공고1'
+        elif file_type == 'hwp_pdf' and hwp_key:
+            # 그 외 동적 한글 변환 PDF
             save_dir = os.path.join(base_path, region_name)
             os.makedirs(save_dir, exist_ok=True)
             filename = f"{region_name}_{hwp_key}.pdf"
-            file_key = f"{hwp_key}_PDF" # DB 저장용 키
+            file_key = f"{hwp_key}_PDF"
             display_folder_name = f"{hwp_key} (PDF)"
         else:
-            # 기존 고정 항목: \\...\\공고문\\[지역]\\[폴더명]\\...
+            # 기타 고정 항목 (apply, agreement, extra 등)
             folder_map = {
                 'apply': '지원신청서',
                 'agreement': '(기본)동의서',
-                'extra': '그외지자체추가서류',
-                'main_notice': '본공고1'
+                'extra': '그외지자체추가서류'
             }
             folder_name = folder_map.get(file_type, '기타')
             save_dir = os.path.join(base_path, region_name, folder_name)

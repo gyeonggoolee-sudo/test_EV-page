@@ -265,9 +265,8 @@ def upload_notice_pdf():
         is_main_notice = (file_type == 'main_notice') or (file_type == 'hwp_pdf' and hwp_key == '본공고1')
         
         if is_main_notice:
-            # '본공고1' 특수 처리: 폴더 고정 및 파일명 형식 지정
-            folder_name = '본공고1'
-            save_dir = os.path.join(base_path, region_name, folder_name)
+            # '본공고1' 특수 처리: 지역 폴더에 직접 저장 및 파일명 형식 지정
+            save_dir = os.path.join(base_path, region_name)
             os.makedirs(save_dir, exist_ok=True)
             filename = f"{region_name}_2026년 전기자동차 민간보급사업 공고_{today_str}.pdf"
             file_key = '본공고1'

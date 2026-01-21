@@ -1223,14 +1223,24 @@
                     <!-- 7: Right Area (Results/Fields) -->
                     <div class="ai-right-area">
                         <div class="ai-result-section">
-                            <div class="section-title" style="margin-bottom: 5px;">📋 추출 예상 텍스트 및 결과</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <div class="section-title" style="margin-bottom: 0;">📋 추출 예상 텍스트 및 결과</div>
+                                <div class="radio-group" style="margin-top: 0; gap: 15px;">
+                                    <label class="radio-item" style="font-size: 13px;">
+                                        <input type="radio" name="extractType" value="apply" checked onchange="updateSampleText()"> 지원신청서
+                                    </label>
+                                    <label class="radio-item" style="font-size: 13px;">
+                                        <input type="radio" name="extractType" value="priority" onchange="updateSampleText()"> 우선순위
+                                    </label>
+                                </div>
+                            </div>
                             <textarea class="ai-result-textarea" readonly id="aiResultText">
 ● 공통 : 지원신청서, 구매계약서
 ※ 개인, 개인사업자, 법인 등의 증빙자료는 신청일 기준 30일 이내 서류여야 함
 
 ① (개인) 주민등록등본 또는 초본(전입일 확인 가능한 서류)
 ② (개인사업자) 주민등록등본, 사업자등록증명원
-③ (법인) 법인등기부등본
+③ (법인) 법인등기부본
 ④ (외국인) 국내거소사실확인서 또는 외국인등록증 등(체류기간 2년 이상 확인 가능 서류)</textarea>
                         </div>
                         <div class="ai-footer-section">
@@ -1607,6 +1617,33 @@
             zone.classList.remove('has-image');
         }
 
+        function updateSampleText() {
+            const selectedType = document.querySelector('input[name="extractType"]:checked').value;
+            const resultArea = document.getElementById('aiResultText');
+            
+            // AI 결과가 이미 출력된 상태(readonly가 해제된 상태)라면 예시 텍스트로 덮어쓰지 않음
+            if (!resultArea.readOnly) return;
+
+            if (selectedType === 'priority') {
+                resultArea.value = `● 다자녀가구(만 18세 이하 자녀 2명 이상) - 주민등록등본 또는 가족관계증명서
+● 생애최초 차량 구매자 - 지방세 세목별 과세증명서 (조건: 전 생애 자동차세 과세 사실이 없어야 하며 취득세(차량), 등록세(차량), 자동차세(자동차) 세목 필수 선택)
+● 취약계층(장애인) - 장애인증 사본
+● 취약계층(차상위) - 차상위 계층 증명서, 기초생활 수급자 증명서
+● 독립유공자(상이·독립유공자) - 국가유공자 등록증 또는 그 외 증빙가능한 서류
+● 소상공인 - 사업자등록증, 소상공인 확인서 (발급처: 중소기업현황정보시스템)
+● 노후경유차(이미지 내 노후 전기차) 대체 구매자 - 말소 사실 기재된 자동차등록원부(갑) 또는 자동차 말소등록사실증명서
+● 전환지원금 - 차량등록원부(갑부), (폐차)자동차말소사실증명서, (매도)가족관계증명서`;
+            } else {
+                resultArea.value = `● 공통 : 지원신청서, 구매계약서
+※ 개인, 개인사업자, 법인 등의 증빙자료는 신청일 기준 30일 이내 서류여야 함
+
+① (개인) 주민등록등본 또는 초본(전입일 확인 가능한 서류)
+② (개인사업자) 주민등록등본, 사업자등록증명원
+③ (법인) 법인등기부본
+④ (외국인) 국내거소사실확인서 또는 외국인등록증 등(체류기간 2년 이상 확인 가능 서류)`;
+            }
+        }
+
         async function startExtraction() {
             const img = document.getElementById('pastePreview');
             const btn = document.querySelector('.btn-extract-main');
@@ -1634,6 +1671,10 @@
                 // 3. FormData 생성
                 const formData = new FormData();
                 formData.append('image', blob, 'pasted_image.png');
+                
+                // 선택된 추출 타입(지원신청서/우선순위) 확인
+                const selectedType = document.querySelector('input[name="extractType"]:checked').value;
+                formData.append('type', selectedType);
 
                 // 4. API 호출
                 const response = await fetch('/api/notice/extract-ai', {

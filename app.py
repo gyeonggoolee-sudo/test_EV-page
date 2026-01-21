@@ -193,7 +193,8 @@ def extract_ai_info():
     if file.filename == '':
         return jsonify({"status": "error", "message": "No selected file"}), 400
         
-    result = ai_extractor.extract_from_image(file)
+    doc_type = request.form.get('type', 'apply') # 기본값은 'apply'
+    result = ai_extractor.extract_from_image(file, doc_type)
     return jsonify(result)
 
 @app.route('/applyform')

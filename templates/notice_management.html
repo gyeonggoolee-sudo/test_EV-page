@@ -590,6 +590,15 @@
         .btn-refresh:hover {
             background-color: #219150;
         }
+
+        .btn-ai {
+            background-color: #6366f1;
+            margin-right: 8px;
+        }
+
+        .btn-ai:hover {
+            background-color: #4f46e5;
+        }
     </style>
 </head>
 
@@ -632,7 +641,10 @@
             <div id="manageContent" style="display: none; height: 100%; flex-direction: column;">
                 <div class="manage-header">
                     <h2 id="selectedRegionName">지자체명</h2>
-                    <button class="btn-home btn-save" onclick="saveSettings()">저장</button>
+                    <div style="display: flex; align-items: center;">
+                        <button class="btn-home btn-ai" onclick="runAIExtraction()">AI 추출</button>
+                        <button class="btn-home btn-save" onclick="saveSettings()">저장</button>
+                    </div>
                 </div>
 
                 <div class="manage-body">
@@ -1270,6 +1282,14 @@
                 <button type="button" class="btn-remove" onclick="this.parentElement.remove()">×</button>
             `;
             container.appendChild(row);
+        }
+
+        async function runAIExtraction() {
+            if (!currentRegionId) {
+                alert("지자체를 선택해 주세요.");
+                return;
+            }
+            alert("AI 추출 기능을 준비 중입니다. (지자체 ID: " + currentRegionId + ")");
         }
 
         async function saveSettings() {

@@ -33,3 +33,10 @@ Stores contact information for the departments in charge of each region.
 - **department**: (text) Name of the responsible department.
 - **phone**: (text) Primary contact number.
 - **phone_extra**: (text) Additional or alternative contact number.
+
+## 5. ev_notice_ai_extract
+Stores AI-extracted information from regional notices.
+- **region_id**: (int) Primary Key, References region_metadata.
+- **apply_documents_text**: (text) AI extracted text for application documents.
+- **priority_text**: (text) AI extracted text for priority conditions.
+- **updated_at**: (timestamp) Last update time.

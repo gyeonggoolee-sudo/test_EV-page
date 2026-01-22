@@ -197,6 +197,47 @@ def extract_ai_info():
     result = ai_extractor.extract_from_image(file, doc_type)
     return jsonify(result)
 
+@app.route('/api/notice/save-ai-extract', methods=['POST'])
+def save_ai_extract():
+    """AI 추출 결과를 테이블에 저장(UPSERT)하는 API"""
+    try:
+        data = request.json
+        region_id = data.get('region_id')
+        extract_type = data.get('type') # 'apply' or 'priority'
+        text = data.get('text')
+
+        if not all([region_id, extract_type, text]):
+            return jsonify({"status": "error", "message": "Missing required fields"}), 400
+
+        conn = get_db_connection()
+        if not conn:
+            return jsonify({"status": "error", "message": "DB connection failed"}), 500
+
+        cur = conn.cursor()
+        
+        column_name = "apply_documents_text" if extract_type == 'apply' else "priority_text"
+        
+        # UPSERT 로직: region_id가 충돌하면 해당 컬럼만 업데이트
+        upsert_query = f"""
+            INSERT INTO ev_notice_ai_extract (
+                region_id, {column_name}, updated_at
+            ) VALUES (%s, %s, NOW())
+            ON CONFLICT (region_id) 
+            DO UPDATE SET 
+                {column_name} = EXCLUDED.{column_name},
+                updated_at = NOW();
+        """
+        cur.execute(upsert_query, (region_id, text))
+        
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({"status": "success", "message": "AI extraction result saved successfully"})
+    except Exception as e:
+        print(f"Error saving AI extract: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 @app.route('/applyform')
 def apply_form():
     status = request.args.get('status', 'new')
